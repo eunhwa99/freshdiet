@@ -46,7 +46,6 @@ public class ListViewAdapter extends BaseAdapter {
             view=inflater.inflate(R.layout.plannerlist, viewGroup, false);
         }
 
-        ImageView iconImage=(ImageView)view.findViewById(R.id.listImage);
         TextView nameText=(TextView)view.findViewById(R.id.nameText);
 
         // Data Set(listViewItemList)에서 position에 위치한 데이터 참조 획득
@@ -59,11 +58,4 @@ public class ListViewAdapter extends BaseAdapter {
         listViewItemList.add(name);
     }
 
-   /* public void addItem(Drawable icon, String name){
-        ListViewItem item=new ListViewItem();
-        item.setIcon(icon);
-        item.setName(name);
-
-        listViewItemList.add(item);
-    }*/
 }

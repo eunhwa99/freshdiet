@@ -2,6 +2,7 @@ package com.example.freshdiet;
 
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
@@ -80,9 +81,23 @@ public class Piechart extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                ListViewItem item=(ListViewItem)adapterView.getItemAtPosition(i);
+                String name=(String)adapterView.getItemAtPosition(i);
 
-               // String name=item.getName();
+                //String name=item.getName();
+                switch(name){
+                    case "공부": case "식사": case "숙면":
+                        Intent intent=new Intent(getApplicationContext(), Popup.class);
+                        startActivity(intent);
+                        break;
+                    case "운동":
+                        break;
+                    case "취미/여가":
+                        break;
+
+                    case "기타":
+                        break;
+
+                }
             }
         });
 
