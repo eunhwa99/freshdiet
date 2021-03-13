@@ -28,9 +28,9 @@ public class Piechart extends AppCompatActivity {
     PieChart pieChart;
     int[] colorArray=new int[] {Color.LTGRAY, Color.BLUE, Color.RED};
 
-    TextView startTime, endTime;
-    ListView listView;
-    ListViewAdapter adapter;
+    private TextView startTime, endTime;
+    private ListView listView;
+    private ListViewAdapter adapter;
 
     ArrayList<String> listArray=new ArrayList<>(Arrays.asList("공부","운동","취미/여가","식사","숙면","기타"));
 
@@ -70,7 +70,7 @@ public class Piechart extends AppCompatActivity {
         return datavalue;
     }
 
-    public void initListView(){
+    private void initListView(){
         adapter=new ListViewAdapter();
 
         // 리스트뷰 참조 및 Adpater 달기
@@ -84,14 +84,16 @@ public class Piechart extends AppCompatActivity {
                 String name=(String)adapterView.getItemAtPosition(i);
 
                 //String name=item.getName();
+                Intent intent;
                 switch(name){
                     case "공부": case "식사": case "숙면":
-                        Intent intent=new Intent(getApplicationContext(), Popup.class);
+                        intent=new Intent(getApplicationContext(), Popup.class);
                         startActivity(intent);
                         break;
-                    case "운동":
-                        break;
-                    case "취미/여가":
+                    case "운동": case "취미/여가":
+                        intent=new Intent(getApplicationContext(), TodoList.class);
+                        intent.putExtra("todo", name);
+                        startActivityForResult(intent,1004);
                         break;
 
                     case "기타":
@@ -100,6 +102,8 @@ public class Piechart extends AppCompatActivity {
                 }
             }
         });
+
+
 
         ArrayList<String> templist=PreferenceManager.getArrayList(getApplicationContext(),"activity_list");
         if(templist.size()==0){
@@ -112,6 +116,22 @@ public class Piechart extends AppCompatActivity {
             adapter.addItem(name);
         }
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        switch (requestCode) {
+            case 1004:
+                if (resultCode == RESULT_OK) {
+                    // 계획표 추가
+                } else {
+
+                }
+                break;
+        }
+    }
+
 
     public void pickTime(View v){
         TimePickerDialog timePicker;
