@@ -25,44 +25,23 @@ public class MakePlan extends AppCompatActivity {
     private TextView startTime, endTime;
     private ListView listView;
     private ListViewAdapter adapter;
+    String curname;
 
     ArrayList<String> listArray=new ArrayList<>(Arrays.asList("공부","운동","취미/여가","식사","숙면","기타"));
+    static ArrayList<String> timeArray=new ArrayList<>();
+    public static int starthour,startmin,endhour, endmin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.makeplan);
 
-        //pieChart=(PieChart)findViewById(R.id.piechart);
         startTime=(TextView)findViewById(R.id.startTime);
         endTime=(TextView)findViewById(R.id.endTime);
 
         initListView();
-
-     /*   PieDataSet pieDataSet = new PieDataSet(data1(), "Fresh Diary" );
-        pieDataSet.setColors(colorArray); //색 지정
-
-        PieData pieData=new PieData(pieDataSet); // grouping the data set from entry to chart
-        pieChart.setDrawEntryLabels(true);
-        pieData.setDrawValues(true); //showing the value of the entries, default true if not set
-        pieData.setValueTextSize(30);
-
-        pieChart.setDrawHoleEnabled(false); //가운데 원형 뚫는 것
-        pieChart.setRotationEnabled(false); //원형차트 고정
-
-        pieChart.setData(pieData);
-        pieChart.invalidate();*/
-
     }
 
-/*    private ArrayList<PieEntry> data1(){
-        ArrayList<PieEntry> datavalue=new ArrayList<>();
-
-        datavalue.add(new PieEntry(30, "하이"));
-        datavalue.add(new PieEntry(30, "하이2"));
-        datavalue.add(new PieEntry(30, "하이3"));
-        return datavalue;
-    }*/
 
     private void initListView(){
         adapter=new ListViewAdapter();
@@ -75,18 +54,19 @@ public class MakePlan extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                String name=(String)adapterView.getItemAtPosition(i);
+                 curname=(String)adapterView.getItemAtPosition(i);
 
                 //String name=item.getName();
                 Intent intent;
-                switch(name){
+                switch(curname){
                     case "공부": case "식사": case "숙면":
                         intent=new Intent(getApplicationContext(), Popup.class);
                         startActivity(intent);
+                        addSchedule();
                         break;
                     case "운동": case "취미/여가":
                         intent=new Intent(getApplicationContext(), TodoList.class);
-                        intent.putExtra("todo", name);
+                        intent.putExtra("todo", curname);
                         startActivityForResult(intent,1004);
                         break;
 
@@ -119,11 +99,46 @@ public class MakePlan extends AppCompatActivity {
             case 1004:
                 if (resultCode == RESULT_OK) {
                     // 계획표 추가
+                    addSchedule();
                 } else {
 
                 }
                 break;
         }
+    }
+
+    public void addSchedule(){
+        String[] starttime= startTime.getText().toString().split(":");
+        String[] endtime=endTime.getText().toString().split(":");
+
+        int[] start=new int[2];
+        int[] end=new int[2];
+
+        for(int i=0;i<2;i++){
+            if(starttime[i]=="00"){
+                start[i]=12;
+            }
+            else if(Integer.parseInt(starttime[i])>12){
+                start[i]=Integer.parseInt(starttime[i])-12;
+            }
+            else{
+                start[i]=Integer.parseInt(starttime[i]);
+            }
+
+            if(endtime[i]=="00"){
+                end[i]=12;
+            }
+            else if(Integer.parseInt(endtime[i])>12){
+                end[i]=Integer.parseInt(endtime[i])-12;
+            }
+            else{
+                end[i]=Integer.parseInt(endtime[i]);
+            }
+
+        }
+       starthour=start[0]; startmin=start[1];
+        endhour=end[0]; endmin=end[1];
+
     }
 
 
@@ -149,6 +164,7 @@ public class MakePlan extends AppCompatActivity {
                 setTime=hour+":"+min;
                 TextView tv = (TextView) v;
                 tv.setText(setTime);
+
             }
         }, Integer.parseInt(time_tmp[0]), Integer.parseInt(time_tmp[1]), false);
         timePicker.setButton(TimePickerDialog.BUTTON_NEGATIVE, "삭제", new DialogInterface.OnClickListener(){

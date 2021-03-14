@@ -7,8 +7,11 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
+
+import java.util.ArrayList;
 
 public class ClockView extends View {
     private int height, width, radius;
@@ -19,6 +22,8 @@ public class ClockView extends View {
     private int[] numbers={1,2,3,4,5,6,7,8,9,10,11,12};
     private Rect rect=new Rect();
     private RectF rectF=new RectF();
+    private ArrayList<String> getTime;
+
 
 
     public ClockView(Context context) {
@@ -37,9 +42,11 @@ public class ClockView extends View {
     protected void onDraw(Canvas canvas){
 
         canvas.drawColor(Color.GRAY);
-
+        //getTime=MakePlan.timeArray;
         drawCircle(canvas);
-        fillCircle(canvas, 12*60, 4*60);
+
+        Log.i("시간", MakePlan.starthour+" "+MakePlan.endhour);
+        fillCircle(canvas, MakePlan.starthour*60+MakePlan.startmin, MakePlan.endhour*60+MakePlan.endmin);
         drawCenter(canvas);
         drawNumeral(canvas);
 
@@ -57,8 +64,6 @@ public class ClockView extends View {
                 getResources().getDisplayMetrics());
         int min = Math.min(height, width);
         radius = min / 2 - padding;
-      //  handTruncation = min / 20;
-       // hourHandTruncation = min / 7;
         paint = new Paint(); // Paint 선언 --> 도화지+색연필 준비
         isInit = true;
     }
@@ -75,6 +80,7 @@ public class ClockView extends View {
         paint.setStyle(Paint.Style.STROKE);
         paint.setAntiAlias(true); // antialias 적용 안하면 계단 현상, 적용하면 부드러워짐
         canvas.drawCircle(width / 2, height / 2, radius + padding - 80, paint);
+
     }
 
     private void drawCenter(Canvas canvas) {
@@ -89,6 +95,7 @@ public class ClockView extends View {
         for(int number:numbers){
             String tmp=String.valueOf(number);
             paint.getTextBounds(tmp,0,tmp.length(),rect);
+           // Log.i("위치", String.valueOf(rect.left)+" "+ String.valueOf(rect.right)+" "+String.valueOf(rect.top));
             double angle=Math.PI/6*(number-3);
             int x = (int) (width / 2 + Math.cos(angle) * radius - rect.width() / 2);
             int y = (int) (height / 2 + Math.sin(angle) * radius + rect.height() / 2);
@@ -97,13 +104,17 @@ public class ClockView extends View {
     }
 
     // 시간 받아서 원 채우기
-    public void fillCircle(Canvas canvas, int start, int end){
+    private void fillCircle(Canvas canvas, int start, int end){
         int starthour=start/60, startmin=start%60;
+     //   int endhour=end/60, endmin=end%60;
 
+      //  if(starthour>endhour)
+
+        Log.i("시간2", starthour+" "+end);
         float distance=Math.abs(end-start);
         float angle= 0.0f, offset=0.0f;
         switch(starthour){
-            case 12:
+            case 0:
                 offset= 270.0f;
                 break;
             case 1:
@@ -140,12 +151,13 @@ public class ClockView extends View {
                 offset=240.0f;
                 break;
         }
-        angle=offset+distance*0.5f;
+        offset=offset+startmin*0.5f;
+        angle=distance*0.5f;
+        rectF.set(width/2-(radius+padding-80), height/2-(radius+padding-80), width/2+(radius+padding-80), height/2+(radius+padding-80));
 
         paint.setColor(Color.BLUE);
         paint.setStyle(Paint.Style.FILL);
         canvas.drawArc(rectF, offset, angle, true, paint);
-
     }
 
 }
