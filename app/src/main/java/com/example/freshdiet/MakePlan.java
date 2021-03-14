@@ -14,17 +14,11 @@ import android.widget.TimePicker;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.github.mikephil.charting.charts.PieChart;
-import com.github.mikephil.charting.components.Description;
-import com.github.mikephil.charting.data.PieData;
-import com.github.mikephil.charting.data.PieDataSet;
-import com.github.mikephil.charting.data.PieEntry;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class Piechart extends AppCompatActivity {
+public class MakePlan extends AppCompatActivity {
     PieChart pieChart;
     int[] colorArray=new int[] {Color.LTGRAY, Color.BLUE, Color.RED};
 
@@ -37,15 +31,15 @@ public class Piechart extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.piechart);
+        setContentView(R.layout.makeplan);
 
-        pieChart=(PieChart)findViewById(R.id.piechart);
+        //pieChart=(PieChart)findViewById(R.id.piechart);
         startTime=(TextView)findViewById(R.id.startTime);
         endTime=(TextView)findViewById(R.id.endTime);
 
         initListView();
 
-        PieDataSet pieDataSet = new PieDataSet(data1(), "Fresh Diary" );
+     /*   PieDataSet pieDataSet = new PieDataSet(data1(), "Fresh Diary" );
         pieDataSet.setColors(colorArray); //색 지정
 
         PieData pieData=new PieData(pieDataSet); // grouping the data set from entry to chart
@@ -57,18 +51,18 @@ public class Piechart extends AppCompatActivity {
         pieChart.setRotationEnabled(false); //원형차트 고정
 
         pieChart.setData(pieData);
-        pieChart.invalidate();
+        pieChart.invalidate();*/
 
     }
 
-    private ArrayList<PieEntry> data1(){
+/*    private ArrayList<PieEntry> data1(){
         ArrayList<PieEntry> datavalue=new ArrayList<>();
 
         datavalue.add(new PieEntry(30, "하이"));
         datavalue.add(new PieEntry(30, "하이2"));
         datavalue.add(new PieEntry(30, "하이3"));
         return datavalue;
-    }
+    }*/
 
     private void initListView(){
         adapter=new ListViewAdapter();
@@ -107,7 +101,7 @@ public class Piechart extends AppCompatActivity {
 
         ArrayList<String> templist=PreferenceManager.getArrayList(getApplicationContext(),"activity_list");
         if(templist.size()==0){
-            PreferenceManager.setArrayList(Piechart.this, "activity_list",listArray);
+            PreferenceManager.setArrayList(MakePlan.this, "activity_list",listArray);
         }
         else listArray=templist;
 

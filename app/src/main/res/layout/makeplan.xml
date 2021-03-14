@@ -3,17 +3,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Piechart"
+    tools:context=".MakePlan"
     android:orientation="vertical"
     >
 
-    <com.github.mikephil.charting.charts.PieChart
+  <!--  <com.github.mikephil.charting.charts.PieChart
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:id="@+id/piechart">
 
-    </com.github.mikephil.charting.charts.PieChart>
+    </com.github.mikephil.charting.charts.PieChart>-->
+
+    <com.example.freshdiet.ClockView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -79,6 +84,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/memo_border"
+                android:descendantFocusability="blocksDescendants"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
                 android:layout_marginBottom="10dp"/>

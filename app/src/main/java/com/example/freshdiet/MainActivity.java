@@ -22,14 +22,14 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void gotoMenu(View v){
+    public void gotoMenu(View v){
         Intent intent;
         switch(v.getId()){
             case R.id.profilebtn:
                 break;
             case R.id.calendarbtn:
                 intent=new Intent(getApplicationContext(), Calendar.class);
-
+                startActivity(intent);
                 break;
             case R.id.caloriebtn:
                 break;

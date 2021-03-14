@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CalendarView;
-import android.widget.EditText;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -62,7 +61,7 @@ public class Calendar extends AppCompatActivity {
         ) {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(getApplicationContext(), Piechart.class);
+                Intent intent=new Intent(getApplicationContext(), MakePlan.class);
                 startActivity(intent);
 
             }
