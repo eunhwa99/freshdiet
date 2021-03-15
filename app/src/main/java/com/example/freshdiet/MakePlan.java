@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -25,11 +26,12 @@ public class MakePlan extends AppCompatActivity {
     private ListViewAdapter adapter;
     private Button colorbtn;
     private String curname, memotext, detail;
+    private String curDate; //현재 날짜
 
     ArrayList<String> listArray=new ArrayList<>(Arrays.asList("공부","운동","취미/여가","식사","숙면","기타"));
     static ArrayList<String> timeArray=new ArrayList<>();
     public static int starthour,startmin,endhour, endmin;
-    int color;
+    int color=Color.BLUE;
     private final static int COLOR_ACTIVITY = 1, POPUP_ACTIVITY=2, NOPOPUP_ACTIVITY=3;
 
 
@@ -42,6 +44,9 @@ public class MakePlan extends AppCompatActivity {
         endTime=(TextView)findViewById(R.id.endTime);
         colorbtn=findViewById(R.id.colorbtn);
 
+        Intent intent=getIntent();
+        curDate=intent.getStringExtra("selectedDay");
+
         colorbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -50,11 +55,11 @@ public class MakePlan extends AppCompatActivity {
                     intent.putExtra("oldColor",color);
                 }
                 startActivityForResult(intent, COLOR_ACTIVITY);
-
             }
         });
 
         initListView();
+        getData(); // preference에 저장된 데이터 가지고 오기
     }
 
 
@@ -78,7 +83,6 @@ public class MakePlan extends AppCompatActivity {
                     case "공부": case "식사": case "숙면":
                         intent=new Intent(getApplicationContext(), Popup.class);
                         startActivityForResult(intent,POPUP_ACTIVITY);
-
                         break;
                     case "운동": case "취미/여가":
                         intent=new Intent(getApplicationContext(), TodoList.class);
@@ -116,9 +120,7 @@ public class MakePlan extends AppCompatActivity {
                 if (resultCode == RESULT_OK) {
                     memotext=data.getStringExtra("EditText"); // 메모 내용 가지고 오기
                     // 계획표 추가
-                    addSchedule();
-                } else {
-
+                    addSchedule(memotext,memotext, 0);
                 }
                 break;
             case NOPOPUP_ACTIVITY:
@@ -126,9 +128,7 @@ public class MakePlan extends AppCompatActivity {
                    memotext=data.getStringExtra("EditText");
                    detail=data.getStringExtra("todo"); // detail 아무것도 없으면 표시 X
                     // 계획표 추가
-                    addSchedule();
-                } else {
-
+                    addSchedule(memotext, detail, 1);
                 }
                 break;
             case COLOR_ACTIVITY:
@@ -140,7 +140,17 @@ public class MakePlan extends AppCompatActivity {
         }
     }
 
-    public void addSchedule(){
+    public void addSchedule(String memo, String nopop, int what){
+
+        if(startTime.getText().toString().equals("--:--")){
+            Toast.makeText(getApplicationContext(),"시작 시간을 입력하세요!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if(endTime.getText().toString().equals("--:--")){
+            Toast.makeText(getApplicationContext(),"종료 시간을 입력하세요!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         String[] starttime= startTime.getText().toString().split(":");
         String[] endtime=endTime.getText().toString().split(":");
 
@@ -148,7 +158,7 @@ public class MakePlan extends AppCompatActivity {
         int[] end=new int[2];
 
         for(int i=0;i<2;i++){
-            if(starttime[i]=="00"){
+            if(starttime[i].equals("00")){
                 start[i]=12;
             }
             else if(Integer.parseInt(starttime[i])>12){
@@ -158,7 +168,7 @@ public class MakePlan extends AppCompatActivity {
                 start[i]=Integer.parseInt(starttime[i]);
             }
 
-            if(endtime[i]=="00"){
+            if(endtime[i].equals("00")){
                 end[i]=12;
             }
             else if(Integer.parseInt(endtime[i])>12){
@@ -171,6 +181,14 @@ public class MakePlan extends AppCompatActivity {
         }
        starthour=start[0]; startmin=start[1];
         endhour=end[0]; endmin=end[1];
+
+        if(what==0){
+            timeArray.add(starthour+":"+startmin+":"+endhour+":"+endmin+":"+curname+":"+memo+":"+color);
+        }
+        else if(what==1){
+            timeArray.add(starthour+":"+startmin+":"+endhour+":"+endmin+":"+curname+":"+nopop+":"+memo+":"+color);
+        }
+        saveData();
 
     }
 
@@ -208,5 +226,15 @@ public class MakePlan extends AppCompatActivity {
             }
         });
         timePicker.show();
+
+    }
+
+    public void getData(){
+        ArrayList<String> temp=PreferenceManager.getArrayList(MakePlan.this,curDate);
+
+        timeArray=temp;
+    }
+    public void saveData(){
+        PreferenceManager.setArrayList(MakePlan.this, curDate, timeArray);
     }
 }

@@ -22,8 +22,6 @@ public class ClockView extends View {
     private int[] numbers={1,2,3,4,5,6,7,8,9,10,11,12};
     private Rect rect=new Rect();
     private RectF rectF=new RectF();
-    private ArrayList<String> getTime;
-
 
 
     public ClockView(Context context) {
@@ -44,11 +42,16 @@ public class ClockView extends View {
         canvas.drawColor(Color.GRAY);
         //getTime=MakePlan.timeArray;
         drawCircle(canvas);
-
-        Log.i("시간", MakePlan.starthour+" "+MakePlan.endhour);
-        fillCircle(canvas, MakePlan.starthour*60+MakePlan.startmin, MakePlan.endhour*60+MakePlan.endmin);
         drawCenter(canvas);
         drawNumeral(canvas);
+        for(int i=0;i<MakePlan.timeArray.size();i++) {
+            String[] temp=MakePlan.timeArray.get(i).split(":");
+            int length=temp.length;
+            for(int j=0;j<length;j++) {
+                fillCircle(canvas, Integer.parseInt(temp[0]) * 60 + Integer.parseInt(temp[1]), Integer.parseInt(temp[2]) * 60 + Integer.parseInt(temp[3]), Integer.parseInt(temp[length-1]));
+            }
+
+        }
 
         postInvalidateDelayed(500);
         invalidate();
@@ -104,11 +107,8 @@ public class ClockView extends View {
     }
 
     // 시간 받아서 원 채우기
-    private void fillCircle(Canvas canvas, int start, int end){
+    private void fillCircle(Canvas canvas, int start, int end, int color){
         int starthour=start/60, startmin=start%60;
-     //   int endhour=end/60, endmin=end%60;
-
-      //  if(starthour>endhour)
 
         Log.i("시간2", starthour+" "+end);
         float distance=Math.abs(end-start);
@@ -155,7 +155,7 @@ public class ClockView extends View {
         angle=distance*0.5f;
         rectF.set(width/2-(radius+padding-80), height/2-(radius+padding-80), width/2+(radius+padding-80), height/2+(radius+padding-80));
 
-        paint.setColor(Color.BLUE);
+        paint.setColor(color);
         paint.setStyle(Paint.Style.FILL);
         canvas.drawArc(rectF, offset, angle, true, paint);
     }

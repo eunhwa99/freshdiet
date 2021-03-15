@@ -20,8 +20,8 @@ public class Calendar extends AppCompatActivity {
     public String str=null;
     public CalendarView calendarView;
     public TextView diaryTextView,calendarText;
-    public ScrollView scrollText;
     public Button addbtn;
+    private String selectedDay;
 
 
     @Override
@@ -46,10 +46,9 @@ public class Calendar extends AppCompatActivity {
             @Override
             public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
                 diaryTextView.setVisibility(View.VISIBLE);
-
                 diaryTextView.setText(String.format("%d / %d / %d",year,month+1,dayOfMonth));
-
-                checkDay(year,month,dayOfMonth,userID);
+                selectedDay=diaryTextView.getText().toString();
+              //  checkDay(year,month,dayOfMonth,userID);
             }
         });
 
@@ -62,6 +61,7 @@ public class Calendar extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent=new Intent(getApplicationContext(), MakePlan.class);
+                intent.putExtra("selectedDay",selectedDay);
                 startActivity(intent);
 
             }
