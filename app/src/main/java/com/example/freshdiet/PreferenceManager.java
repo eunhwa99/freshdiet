@@ -59,6 +59,15 @@ public class PreferenceManager {
         editor.commit();
     }
 
+    public static void setBooleanArray(Context context, String key, boolean[] array){
+        SharedPreferences prefs = getPreferences(context);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putInt(key, array.length);
+        for(int i=0;i<array.length;i++)
+            editor.putBoolean(key+i, array[i]);
+        editor.commit();
+    }
+
     public static void setArrayList(Context context, String key, ArrayList<String> values){
         SharedPreferences prefs = PreferenceManager.getPreferences(context);
         SharedPreferences.Editor editor = prefs.edit();
@@ -103,6 +112,16 @@ public class PreferenceManager {
         SharedPreferences prefs = getPreferences(context);
         float value = prefs.getFloat(key, DEFAULT_VALUE_FLOAT);
         return value;
+    }
+
+    public static boolean[] getBooleanArray(Context context, String key){
+        SharedPreferences prefs = getPreferences(context);
+        int size=prefs.getInt(key, 0);
+        boolean array[] = new boolean[size];
+        for(int i=0;i<size;i++)
+            array[i] = prefs.getBoolean(key+ i, false);
+
+        return array;
     }
 
     public static ArrayList<String> getArrayList(Context context, String key) {

@@ -21,10 +21,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
- * 1. 원 다시 그리기 (24시간으로)
  * 2. 원위에 할일 적기
  * 3. 원 선택시 수정 할 수 있도록
- * 4. 시간 안겹치게 수정
  */
 public class MakePlan extends AppCompatActivity {
     private TextView startTime, endTime;
@@ -40,6 +38,7 @@ public class MakePlan extends AppCompatActivity {
     int color=Color.BLUE;
     private final static int COLOR_ACTIVITY = 1, POPUP_ACTIVITY=2, NOPOPUP_ACTIVITY=3;
 
+    private boolean[] checkArray=new boolean[24*60+1];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,7 +103,6 @@ public class MakePlan extends AppCompatActivity {
         });
 
 
-
         ArrayList<String> templist=PreferenceManager.getArrayList(getApplicationContext(),"activity_list");
         if(templist.size()==0){
             PreferenceManager.setArrayList(MakePlan.this, "activity_list",listArray);
@@ -164,38 +162,139 @@ public class MakePlan extends AppCompatActivity {
         int[] end=new int[2];
 
         for(int i=0;i<2;i++){
-            if(starttime[i].equals("00")){
-                start[i]=12;
+            switch(starttime[i]){
+                case "00":
+                    start[i]=0;
+                    break;
+                case "01":
+                    start[i]=1;
+                    break;
+                case "02":
+                    start[i]=2;
+                    break;
+                case "03":
+                    start[i]=3;
+                    break;
+                case "04":
+                    start[i]=4;
+                    break;
+                    case "05":
+                    start[i]=5;
+                    break;
+                    case "06":
+                    start[i]=6;
+                    break;
+                case "07":
+                    start[i]=7;
+                    break;
+                case "08":
+                    start[i]=8;
+                    break;
+                case "09":
+                    start[i]=9;
+                    break;
+                    default:
+                    start[i]=Integer.parseInt(starttime[i]);
+                    break;
             }
-            else if(Integer.parseInt(starttime[i])>12){
-                start[i]=Integer.parseInt(starttime[i])-12;
-            }
-            else{
-                start[i]=Integer.parseInt(starttime[i]);
-            }
-
-            if(endtime[i].equals("00")){
-                end[i]=12;
-            }
-            else if(Integer.parseInt(endtime[i])>12){
-                end[i]=Integer.parseInt(endtime[i])-12;
-            }
-            else{
-                end[i]=Integer.parseInt(endtime[i]);
+            switch(endtime[i]){
+                case "00":
+                    end[i]=0;
+                    break;
+                case "01":
+                    end[i]=1;
+                    break;
+                case "02":
+                    end[i]=2;
+                    break;
+                case "03":
+                    end[i]=3;
+                    break;
+                case "04":
+                    end[i]=4;
+                    break;
+                case "05":
+                    end[i]=5;
+                    break;
+                case "06":
+                    end[i]=6;
+                    break;
+                case "07":
+                    end[i]=7;
+                    break;
+                case "08":
+                    end[i]=8;
+                    break;
+                case "09":
+                    end[i]=9;
+                    break;
+                default:
+                    end[i]=Integer.parseInt(endtime[i]);
+                    break;
             }
 
         }
-       starthour=start[0]; startmin=start[1];
+        starthour=start[0]; startmin=start[1];
         endhour=end[0]; endmin=end[1];
-
-        if(what==0){
-            timeArray.add(starthour+":"+startmin+":"+endhour+":"+endmin+":"+curname+":"+memo+":"+color);
+        if(starthour>endhour){
+            if(starthour>=12&&starthour<=23&&endhour>=12&&endhour<=23 || starthour>=0&&starthour<=12&&endhour>=0&&endhour<=12){
+                Toast.makeText(MakePlan.this, "시작 시간과 끝 시간이 잘못되었습니다. 다시 설정해주세요.", Toast.LENGTH_LONG).show();
+                return;
+            }
         }
-        else if(what==1){
-            timeArray.add(starthour+":"+startmin+":"+endhour+":"+endmin+":"+curname+":"+nopop+":"+memo+":"+color);
+        else if(starthour==endhour){
+            if(startmin>endmin){
+                Toast.makeText(MakePlan.this, "시작 시간과 끝 시간이 잘못되었습니다. 다시 설정해주세요.", Toast.LENGTH_LONG).show();
+                return;
+            }
         }
-        saveData();
 
+        if(alreadyUsed()){ // 시간이 중복된다면
+            Toast.makeText(MakePlan.this, "시간이 중복됩니다. 다시 설정해주세요.", Toast.LENGTH_LONG).show();
+        }
+        else {
+
+            if (what == 0) {
+                timeArray.add(starthour + ":" + startmin + ":" + endhour + ":" + endmin + ":" + curname + ":" + memo + ":" + color);
+            } else if (what == 1) {
+                timeArray.add(starthour + ":" + startmin + ":" + endhour + ":" + endmin + ":" + curname + ":" + nopop + ":" + memo + ":" + color);
+            }
+            //시간 중복 안되게 체크하기
+            checkUsedTime();
+            saveData();
+        }
+    }
+
+    private Boolean alreadyUsed(){
+        if(endhour<starthour){
+            for(int i=starthour*60+startmin + 1;i<24*60;i++)
+                if(checkArray[i])
+                    return true;
+            for(int i=0;i<endhour*60+endmin;i++)
+                if(checkArray[i])
+                    return true;
+        }
+        else {
+            for (int i = starthour*60 + startmin+1; i < endhour*60+endmin; i++) {
+                if(checkArray[i])
+                    return true;
+            }
+        }
+        return false;
+    }
+
+    public void checkUsedTime(){
+        if(endhour<starthour){
+            for(int i=starthour*60+startmin;i<24*60;i++)
+                checkArray[i]=true;
+            for(int i=0;i<endhour*60+endmin;i++)
+                checkArray[i]=true;
+        }
+        else {
+            for (int i = starthour*60 + startmin; i < endhour*60+endmin+1; i++) {
+                checkArray[i]=true;
+            }
+        }
     }
 
 
@@ -212,10 +311,10 @@ public class MakePlan extends AppCompatActivity {
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                 String setTime, hour, min;
-                if(minute==0) min="00";
+                if(minute>=0&&minute<10) min="0"+minute;
                 else min=String.valueOf(minute);
 
-                if(hourOfDay==0) hour="00";
+                if(hourOfDay>=0&&hourOfDay<10) hour="0"+hourOfDay;
                 else hour=String.valueOf(hourOfDay);
 
                 setTime=hour+":"+min;
@@ -231,16 +330,21 @@ public class MakePlan extends AppCompatActivity {
                 tv.setText("--:--");
             }
         });
+
         timePicker.show();
 
     }
 
     public void getData(){
-        ArrayList<String> temp=PreferenceManager.getArrayList(MakePlan.this,curDate);
+        timeArray=PreferenceManager.getArrayList(MakePlan.this,curDate);
+        boolean[] temp=PreferenceManager.getBooleanArray(MakePlan.this, curDate+"check");
+        if(temp.length!=0){
+            checkArray=temp;
+        }
 
-        timeArray=temp;
     }
     public void saveData(){
         PreferenceManager.setArrayList(MakePlan.this, curDate, timeArray);
+        PreferenceManager.setBooleanArray(MakePlan.this, curDate+"check",checkArray);
     }
 }

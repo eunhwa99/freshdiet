@@ -19,9 +19,10 @@ public class ClockView extends View {
     private int numeralSpacing=0;
     private boolean isInit;
     private Paint paint;
-    private int[] numbers={1,2,3,4,5,6,7,8,9,10,11,12};
+    private int[] numbers={1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24};
     private Rect rect=new Rect();
     private RectF rectF=new RectF();
+    float[] offset=new float[25];
 
 
     public ClockView(Context context) {
@@ -45,12 +46,9 @@ public class ClockView extends View {
         drawCenter(canvas);
         drawNumeral(canvas);
         for(int i=0;i<MakePlan.timeArray.size();i++) {
-            String[] temp=MakePlan.timeArray.get(i).split(":");
-            int length=temp.length;
-            for(int j=0;j<length;j++) {
-                fillCircle(canvas, Integer.parseInt(temp[0]) * 60 + Integer.parseInt(temp[1]), Integer.parseInt(temp[2]) * 60 + Integer.parseInt(temp[3]), Integer.parseInt(temp[length-1]));
-            }
-
+            String[] temp = MakePlan.timeArray.get(i).split(":");
+            int length = temp.length;
+            fillCircle(canvas, Integer.parseInt(temp[0]) * 60 + Integer.parseInt(temp[1]), Integer.parseInt(temp[2]) * 60 + Integer.parseInt(temp[3]), Integer.parseInt(temp[length - 1]), temp[4]);
         }
 
         postInvalidateDelayed(500);
@@ -69,6 +67,10 @@ public class ClockView extends View {
         radius = min / 2 - padding;
         paint = new Paint(); // Paint 선언 --> 도화지+색연필 준비
         isInit = true;
+
+        for(int i=0;i<24;i++){
+            offset[i]=(270+15*i)%360.0f;
+        }
     }
 
 
@@ -98,66 +100,46 @@ public class ClockView extends View {
         for(int number:numbers){
             String tmp=String.valueOf(number);
             paint.getTextBounds(tmp,0,tmp.length(),rect);
-           // Log.i("위치", String.valueOf(rect.left)+" "+ String.valueOf(rect.right)+" "+String.valueOf(rect.top));
-            double angle=Math.PI/6*(number-3);
+            double angle=Math.PI/12*(number-6);
             int x = (int) (width / 2 + Math.cos(angle) * radius - rect.width() / 2);
             int y = (int) (height / 2 + Math.sin(angle) * radius + rect.height() / 2);
             canvas.drawText(tmp, x, y, paint);
         }
     }
 
-    // 시간 받아서 원 채우기
-    private void fillCircle(Canvas canvas, int start, int end, int color){
-        int starthour=start/60, startmin=start%60;
 
-        Log.i("시간2", starthour+" "+end);
-        float distance=Math.abs(end-start);
-        float angle= 0.0f, offset=0.0f;
-        switch(starthour){
-            case 0:
-                offset= 270.0f;
-                break;
-            case 1:
-                offset= 300.0f;
-                break;
-            case 2:
-                offset=330.0f;
-                break;
-            case 3:
-                offset=0.0f;
-                break;
-            case 4:
-                offset=30.0f;
-                break;
-            case 5:
-                offset=60.0f;
-                break;
-            case 6:
-                offset=90.0f;
-                break;
-            case 7:
-                offset=120.0f;
-                break;
-            case 8:
-                offset=150.0f;
-                break;
-            case 9:
-                offset=180.0f;
-                break;
-            case 10:
-                offset=210.0f;
-                break;
-            case 11:
-                offset=240.0f;
-                break;
+    // 시간 받아서 원 채우기
+    private void fillCircle(Canvas canvas, int start, int end, int color, String text){
+
+        Paint npaint=new Paint();
+        int starthour=start/60, startmin=start%60;
+        int endhour=end/60, endmin=end%60;
+
+        float distance=0.0f;
+        if(endhour<starthour){
+            end=(endhour+24)*60+endmin;
         }
-        offset=offset+startmin*0.5f;
-        angle=distance*0.5f;
+        distance=end-start;
+        float angle= 0.0f;
+
+        int curpos=starthour%24; // 현재 위치(시간, 1시면 배열의 1번 인덱스)
+        float startAngle=0.0f;
+
+        startAngle=offset[curpos]+startmin*0.25f;
+        angle=distance*0.25f;
         rectF.set(width/2-(radius+padding-80), height/2-(radius+padding-80), width/2+(radius+padding-80), height/2+(radius+padding-80));
 
-        paint.setColor(color);
-        paint.setStyle(Paint.Style.FILL);
-        canvas.drawArc(rectF, offset, angle, true, paint);
+        npaint.setColor(color);
+        npaint.setStyle(Paint.Style.FILL);
+        canvas.drawArc(rectF, startAngle, angle, true, npaint);
+
+
+        float medianAngle=(startAngle+(angle/2f))*(float)Math.PI/180f;
+        npaint.setTextAlign(Paint.Align.CENTER);
+        npaint.setTextSize(30);
+        npaint.setColor(Color.WHITE);
+        canvas.drawText(text,(float)(width/2 + (radius * 0.5*Math.cos(medianAngle))), (float)(height/2 + (radius *0.5* Math.sin(medianAngle))), npaint);
+
     }
 
 }
