@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -19,17 +20,18 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class MakePlan extends AppCompatActivity {
-    PieChart pieChart;
-    int[] colorArray=new int[] {Color.LTGRAY, Color.BLUE, Color.RED};
-
     private TextView startTime, endTime;
     private ListView listView;
     private ListViewAdapter adapter;
-    String curname;
+    private Button colorbtn;
+    private String curname, memotext, detail;
 
     ArrayList<String> listArray=new ArrayList<>(Arrays.asList("공부","운동","취미/여가","식사","숙면","기타"));
     static ArrayList<String> timeArray=new ArrayList<>();
     public static int starthour,startmin,endhour, endmin;
+    int color;
+    private final static int COLOR_ACTIVITY = 1, POPUP_ACTIVITY=2, NOPOPUP_ACTIVITY=3;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,9 +40,23 @@ public class MakePlan extends AppCompatActivity {
 
         startTime=(TextView)findViewById(R.id.startTime);
         endTime=(TextView)findViewById(R.id.endTime);
+        colorbtn=findViewById(R.id.colorbtn);
+
+        colorbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(MakePlan.this, ColorPopup.class);
+                if(color != 0){
+                    intent.putExtra("oldColor",color);
+                }
+                startActivityForResult(intent, COLOR_ACTIVITY);
+
+            }
+        });
 
         initListView();
     }
+
 
 
     private void initListView(){
@@ -61,13 +77,13 @@ public class MakePlan extends AppCompatActivity {
                 switch(curname){
                     case "공부": case "식사": case "숙면":
                         intent=new Intent(getApplicationContext(), Popup.class);
-                        startActivity(intent);
-                        addSchedule();
+                        startActivityForResult(intent,POPUP_ACTIVITY);
+
                         break;
                     case "운동": case "취미/여가":
                         intent=new Intent(getApplicationContext(), TodoList.class);
                         intent.putExtra("todo", curname);
-                        startActivityForResult(intent,1004);
+                        startActivityForResult(intent,NOPOPUP_ACTIVITY);
                         break;
 
                     case "기타":
@@ -96,12 +112,29 @@ public class MakePlan extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         switch (requestCode) {
-            case 1004:
+            case POPUP_ACTIVITY: // 공부, 숙면
                 if (resultCode == RESULT_OK) {
+                    memotext=data.getStringExtra("EditText"); // 메모 내용 가지고 오기
                     // 계획표 추가
                     addSchedule();
                 } else {
 
+                }
+                break;
+            case NOPOPUP_ACTIVITY:
+                if (resultCode == RESULT_OK) { //운동, 취미
+                   memotext=data.getStringExtra("EditText");
+                   detail=data.getStringExtra("todo"); // detail 아무것도 없으면 표시 X
+                    // 계획표 추가
+                    addSchedule();
+                } else {
+
+                }
+                break;
+            case COLOR_ACTIVITY:
+                if(resultCode==RESULT_OK) {
+                    color = data.getIntExtra("color", 0);
+                    colorbtn.setBackgroundColor(color);
                 }
                 break;
         }

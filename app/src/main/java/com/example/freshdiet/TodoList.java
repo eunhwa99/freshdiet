@@ -26,6 +26,7 @@ public class TodoList extends AppCompatActivity {
     private EditText edittxt;
     private TextView txt1;
     private Button addbtn, cancelbtn;
+    private String curname; // 체크된 할일
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +37,14 @@ public class TodoList extends AppCompatActivity {
         edittxt=findViewById(R.id.todoedittxt);
         addbtn=findViewById(R.id.todoaddbtn);
 
+        addbtn.setOnClickListener(view -> {
+            String edittext=edittxt.getText().toString();
+            Intent intent = new Intent();
+            intent.putExtra("EditText", edittext);
+            intent.putExtra("ToDo", curname); //체크 박스 표시된 것
+            setResult(RESULT_OK, intent);
+            finish(); //팝업 닫기
+        });
 
         dealIntent();
 
@@ -51,6 +60,7 @@ public class TodoList extends AppCompatActivity {
             initListView(hobbyArray, 2);
         }
     }
+
     private void initListView(ArrayList<String> curArray, int code){
         adapter=new ChoiceListViewAdapter();
 
@@ -62,8 +72,7 @@ public class TodoList extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                String name = (String) adapterView.getItemAtPosition(i);
-
+                curname = (String) adapterView.getItemAtPosition(i);
             }
         });
 

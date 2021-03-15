@@ -1,29 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MakePlan"
-    android:orientation="vertical"
-    >
+    tools:context=".MakePlan">
 
-  <!--  <com.github.mikephil.charting.charts.PieChart
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:id="@+id/piechart">
-
-    </com.github.mikephil.charting.charts.PieChart>-->
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <com.example.freshdiet.ClockView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1" />
 
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_weight="1.5"
         android:orientation="vertical">
 
         <TextView
@@ -73,11 +70,20 @@
                  android:textSize="20sp"
                  android:text="--:--"/>
 
+
         </LinearLayout>
+
+        <Button
+            android:id="@+id/colorbtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="색상 선택"/>
+
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
+
             android:layout_weight="5">
             <ListView
                 android:id="@+id/listview1"
@@ -94,4 +100,5 @@
 
     </LinearLayout>
 
+</LinearLayout>
 </LinearLayout>

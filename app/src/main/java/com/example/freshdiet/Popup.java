@@ -1,6 +1,7 @@
 package com.example.freshdiet;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
@@ -13,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 public class Popup extends Activity{
     private EditText editText;
     private Button addBtn,deleteBtn;
+    private Intent intent=new Intent();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +30,9 @@ public class Popup extends Activity{
         addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                String edittext=editText.getText().toString();
+                intent.putExtra("EditText", edittext);
+                setResult(RESULT_OK, intent);
                 finish(); //팝업 닫기
             }
         });
@@ -36,6 +40,7 @@ public class Popup extends Activity{
 
             @Override
             public void onClick(View view) {
+                setResult(RESULT_CANCELED, intent);
                 finish();
             }
         });
