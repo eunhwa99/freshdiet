@@ -20,6 +20,12 @@ import com.github.mikephil.charting.charts.PieChart;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+/**
+ * 1. 원 다시 그리기 (24시간으로)
+ * 2. 원위에 할일 적기
+ * 3. 원 선택시 수정 할 수 있도록
+ * 4. 시간 안겹치게 수정
+ */
 public class MakePlan extends AppCompatActivity {
     private TextView startTime, endTime;
     private ListView listView;
