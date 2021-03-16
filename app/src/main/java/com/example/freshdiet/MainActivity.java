@@ -27,6 +27,8 @@ public class MainActivity extends AppCompatActivity {
         switch(v.getId()){
             case R.id.profilebtn:
                 //https://asukim.tistory.com/59
+                intent=new Intent(getApplicationContext(), MyProfile.class);
+                startActivity(intent);
                 break;
             case R.id.calendarbtn:
                 intent=new Intent(getApplicationContext(), Calendar.class);

@@ -34,6 +34,7 @@ public class MakePlan extends AppCompatActivity {
 
     ArrayList<String> listArray=new ArrayList<>(Arrays.asList("공부","운동","취미/여가","식사","숙면","기타"));
     static ArrayList<String> timeArray=new ArrayList<>();
+
     public static int starthour,startmin,endhour, endmin;
     int color=Color.BLUE;
     private final static int COLOR_ACTIVITY = 1, POPUP_ACTIVITY=2, NOPOPUP_ACTIVITY=3;

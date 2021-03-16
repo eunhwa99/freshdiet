@@ -12,6 +12,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
+import android.widget.ScrollView;
 
 import java.util.ArrayList;
 
@@ -21,6 +22,7 @@ public class ClockView extends View {
     private int numeralSpacing=0;
     private boolean isInit;
     private Paint paint;
+    Paint npaint;
     private int[] numbers={1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24};
     private Rect rect=new Rect();
     private RectF rectF=new RectF();
@@ -29,21 +31,24 @@ public class ClockView extends View {
 
     public ClockView(Context context) {
         super(context);
+        this.setWillNotDraw(false);
     }
 
     public ClockView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        this.setWillNotDraw(false);
     }
 
     public ClockView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        this.setWillNotDraw(false);
     }
 
     @Override
     protected void onDraw(Canvas canvas){
+        //super.onDraw(canvas);
 
         canvas.drawColor(Color.GRAY);
-        //getTime=MakePlan.timeArray;
         drawCircle(canvas);
         drawCenter(canvas);
         drawNumeral(canvas);
@@ -68,6 +73,7 @@ public class ClockView extends View {
         int min = Math.min(height, width);
         radius = min / 2 - padding;
         paint = new Paint(); // Paint 선언 --> 도화지+색연필 준비
+        npaint=new Paint();
         isInit = true;
 
         for(int i=0;i<24;i++){
@@ -113,7 +119,6 @@ public class ClockView extends View {
     // 시간 받아서 원 채우기
     private void fillCircle(Canvas canvas, int start, int end, int color, String text){
 
-        Paint npaint=new Paint();
         int starthour=start/60, startmin=start%60;
         int endhour=end/60, endmin=end%60;
 
@@ -133,7 +138,7 @@ public class ClockView extends View {
 
         npaint.setColor(color);
         npaint.setStyle(Paint.Style.FILL);
-        npaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_OVER));
+
         canvas.drawArc(rectF, startAngle, angle, true, npaint);
 
 
@@ -141,8 +146,18 @@ public class ClockView extends View {
         npaint.setTextAlign(Paint.Align.CENTER);
         npaint.setTextSize(30);
         npaint.setColor(Color.WHITE);
+        float rotateAngle=0.0f;
+        canvas.save();
+        if(offset[endhour%24]>=90&&offset[endhour%24]<=180){
+            rotateAngle=180+offset[endhour%24];
+        }
+        else if(offset[endhour%24]>=180&&offset[endhour%24]<=270){
+            rotateAngle=offset[endhour%24]-180;
+        }
+        else rotateAngle=offset[endhour%24];
+        canvas.rotate(rotateAngle,(float)(width/2 + (radius * 0.5*Math.cos(medianAngle))), (float)(height/2 + (radius *0.5* Math.sin(medianAngle))));
         canvas.drawText(text,(float)(width/2 + (radius * 0.5*Math.cos(medianAngle))), (float)(height/2 + (radius *0.5* Math.sin(medianAngle))), npaint);
-
+        canvas.restore();
     }
 
 }
