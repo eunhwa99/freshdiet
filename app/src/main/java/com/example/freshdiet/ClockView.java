@@ -4,6 +4,8 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.util.AttributeSet;
@@ -131,6 +133,7 @@ public class ClockView extends View {
 
         npaint.setColor(color);
         npaint.setStyle(Paint.Style.FILL);
+        npaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_OVER));
         canvas.drawArc(rectF, startAngle, angle, true, npaint);
 
 

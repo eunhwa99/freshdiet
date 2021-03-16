@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
         Intent intent;
         switch(v.getId()){
             case R.id.profilebtn:
+                //https://asukim.tistory.com/59
                 break;
             case R.id.calendarbtn:
                 intent=new Intent(getApplicationContext(), Calendar.class);
