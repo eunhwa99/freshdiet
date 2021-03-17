@@ -28,7 +28,7 @@
         android:layout_height="0dp"
         android:layout_weight="4">
         <EditText
-            android:id="@+id/edittxt"
+            android:id="@+id/edittxt2"
             android:textSize="15sp"
             android:textColor="#000"
             android:alpha="0.87"
@@ -48,16 +48,16 @@
         android:layout_height="0dp"
         android:layout_weight="1">
         <Button
-            android:id="@+id/popdeletebtn"
-            android:text="취소"
+            android:id="@+id/modifybtn"
+            android:text="수정"
             android:textSize="15sp"
             android:textColor="#FAF6F2"
             android:background="#ff7a00"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
         <Button
-            android:id="@+id/popaddbtn"
-            android:text="추가"
+            android:id="@+id/deletebtn"
+            android:text="삭제"
             android:textSize="15sp"
             android:textColor="#FAF6F2"
             android:background="#ff7a00"

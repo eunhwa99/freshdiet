@@ -1,6 +1,7 @@
 package com.example.freshdiet;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -11,12 +12,14 @@ import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ScrollView;
 
 import java.util.ArrayList;
 
 public class ClockView extends View {
+    private final Context context;
     private int height, width, radius;
     private int padding=0, fontSize=0;
     private int numeralSpacing=0;
@@ -31,23 +34,24 @@ public class ClockView extends View {
 
     public ClockView(Context context) {
         super(context);
+        this.context=context;
         this.setWillNotDraw(false);
     }
 
     public ClockView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        this.context=context;
         this.setWillNotDraw(false);
     }
 
     public ClockView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        this.context=context;
         this.setWillNotDraw(false);
     }
 
     @Override
     protected void onDraw(Canvas canvas){
-        //super.onDraw(canvas);
-
         canvas.drawColor(Color.GRAY);
         drawCircle(canvas);
         drawCenter(canvas);
@@ -60,6 +64,31 @@ public class ClockView extends View {
 
         postInvalidateDelayed(500);
         invalidate();
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event){
+        float x,y, centerX=width/2, centerY=height/2;
+        float distance;
+        int r=radius+padding-80;
+        // 화면에 터치가 발생했을 때 호출되는 콜백 메서드
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN :
+            case MotionEvent.ACTION_MOVE :
+            case MotionEvent.ACTION_UP:
+                x = event.getX();
+                y = event.getY();
+                distance= (float) Math.sqrt((x-centerX)*(x-centerX)+(y-centerY)*(y-centerY));
+                if(distance>r) break;
+                else {
+                    checkInside(x,y,distance);
+
+                }
+               // invalidate();
+        }
+
+
+        return true;
     }
 
     private void initClock() {
@@ -156,23 +185,67 @@ public class ClockView extends View {
             rotateAngle = startAngle- 180;
         } else rotateAngle = startAngle;
 
-       /* if(startAngle<=270&&startAngle<=90) {
-            if (endAngle>= 90 && endAngle <= 180) {
-                rotateAngle = 180 + endAngle;
-            } else if (endAngle >= 180 && endAngle <= 270) {
-                rotateAngle =endAngle - 180;
-            } else rotateAngle =endAngle;
-        }
-        else{
-            if (startAngle >= 90 && startAngle <=180) {
-                rotateAngle = 180 + startAngle;
-            } else if (startAngle >= 180 && startAngle <= 270) {
-                rotateAngle = startAngle- 180;
-            } else rotateAngle = startAngle;
-        }*/
         canvas.rotate(rotateAngle,(float)(width/2 + (radius * 0.5*Math.cos(medianAngle))), (float)(height/2 + (radius *0.5* Math.sin(medianAngle))));
         canvas.drawText(text,(float)(width/2 + (radius * 0.5*Math.cos(medianAngle))), (float)(height/2 + (radius *0.5* Math.sin(medianAngle))), npaint);
         canvas.restore();
+    }
+
+
+
+    private boolean checkInside(float x, float y, float dist){
+        float centerX=width/2, centerY=height/2;
+        float sinO=(y-centerY)/dist;
+        float ceta=((float) Math.toDegrees(Math.asin(sinO))+360.0f)%360.0f;
+
+        if(x<centerX){
+           ceta=(540-ceta)%360.0f;
+        }
+
+        for(int i=0;i<MakePlan.timeArray.size();i++){
+            String[] temp = MakePlan.timeArray.get(i).split(":");
+
+            int starthour=Integer.parseInt(temp[0]), startmin=Integer.parseInt(temp[1]);
+            int endhour=Integer.parseInt(temp[2]), endmin=Integer.parseInt(temp[3]);
+            int start=starthour*60+startmin, end=endhour*60+endmin;
+
+
+
+            float distance=0.0f;
+            if(endhour<starthour){
+                end=(endhour+24)*60+endmin;
+            }
+            distance=end-start;
+            float angle= 0.0f;
+
+            int curpos=starthour%24; // 현재 위치(시간, 1시면 배열의 1번 인덱스)
+            float startAngle=0.0f, endAngle=0.0f;
+
+            startAngle=offset[curpos]+startmin*0.25f;
+            angle=distance*0.25f;
+            endAngle=startAngle+angle;
+
+            if(startAngle>endAngle){
+                if(ceta>=startAngle&&ceta<360 || ceta>=0&&ceta<=endAngle){
+                    makePopup(temp[4]);
+                    return true;
+                }
+            }
+            else{
+                if(ceta>=startAngle&&ceta<=endAngle){
+                    makePopup(temp[4]);
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private void makePopup(String str){
+
+        Intent intent=new Intent(context,Popup2.class);
+        intent.putExtra("Todo", str);
+
+        context.startActivity(intent);
     }
 
 }
