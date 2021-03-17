@@ -17,9 +17,10 @@ public class MyProfile extends AppCompatActivity {
     EditText nametxt, agetxt, heighttxt, weighttxt, metatxt;
     RadioGroup sexRadio;
     RadioButton manRadio, womanRadio;
+
     private String username, userage, userheight, userweight, usermeta;
-    private boolean[] check=new boolean[5]; //checkname, checkage, checkheight,checkweight,checkmeta;
-    private String[] str={"이름", "나이", "키", "몸무게"};
+    private boolean[] check=new boolean[6]; //checkname, checkage, checksex, checkheight,checkweight,checkmeta;
+    private String[] str={"이름", "나이", "성별", "키", "몸무게"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,29 +40,50 @@ public class MyProfile extends AppCompatActivity {
         manRadio=findViewById(R.id.man);
         womanRadio=findViewById(R.id.woman);
 
-       // boolean flag=PreferenceManager.getBoolean(MyProfile.this, "MyProfile");
+        getData();
+        clickListener(); // 버튼 클릭 리스너 지정
 
+    }
+
+    // 라디오 그룹 클릭 리스너
+   RadioGroup.OnCheckedChangeListener radioGroupButtonChangeListener = new RadioGroup.OnCheckedChangeListener() {
+       @Override
+       public void onCheckedChanged(RadioGroup radioGroup, int i) {
+           check[2]=true;
+           if(i==R.id.man){
+
+           }
+           else if(i==R.id.woman){
+           }
+       }
+   };
+
+    private void getData(){
+         check=PreferenceManager.getBooleanArray(MyProfile.this, "MyProfile");
+
+    }
+
+    private void saveData(){
+        PreferenceManager.setBooleanArray(MyProfile.this, "MyProfile",check);
+    }
+
+    private void clickListener(){
         inputBtn.setOnClickListener(new View.OnClickListener() {
+            private boolean flag=true;
             @Override
             public void onClick(View view) {
                 getEditText();
-                for(int i=0;i<4;i++){
+
+                for(int i=0;i<6;i++){
                     if(!check[i]){
-                        AlertDialog.Builder builder = new AlertDialog.Builder(MyProfile.this);
-
-                        builder.setTitle("알림").setMessage(str[i]+"를 입력하세요.");
-
-
-                        builder.setPositiveButton("OK", new DialogInterface.OnClickListener(){
-                            @Override
-                            public void onClick(DialogInterface dialog, int id)
-                            {
-                            }
-                        });
-                        AlertDialog alertDialog = builder.create();
-                        alertDialog.show();
+                       flag=false;
+                       makeAlertDialog("알림", str[i]+"를 입력하세요.");
                         break;
                     }
+                }
+                if(flag==true) {
+                    saveData();
+                    Toast.makeText(getApplicationContext(), "저장되었습니다.", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -72,21 +94,25 @@ public class MyProfile extends AppCompatActivity {
 
             }
         });
-
     }
 
-    // 라디오 그룹 클릭 리스너
-   RadioGroup.OnCheckedChangeListener radioGroupButtonChangeListener = new RadioGroup.OnCheckedChangeListener() {
-       @Override
-       public void onCheckedChanged(RadioGroup radioGroup, int i) {
-           if(i==R.id.man){
+    private void makeAlertDialog(String title, String message){
+        AlertDialog.Builder builder;
+        AlertDialog alertDialog;
 
-           }
-           else if(i==R.id.woman){
+        builder = new AlertDialog.Builder(MyProfile.this);
 
-           }
-       }
-   };
+        builder.setTitle(title).setMessage(message);
+
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener(){
+            @Override
+            public void onClick(DialogInterface dialog, int id)
+            {
+            }
+        });
+        alertDialog = builder.create();
+        alertDialog.show();
+    }
 
     private void getEditText(){
 

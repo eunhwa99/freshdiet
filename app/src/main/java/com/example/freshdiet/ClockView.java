@@ -130,10 +130,11 @@ public class ClockView extends View {
         float angle= 0.0f;
 
         int curpos=starthour%24; // 현재 위치(시간, 1시면 배열의 1번 인덱스)
-        float startAngle=0.0f;
+        float startAngle=0.0f, endAngle=0.0f;
 
         startAngle=offset[curpos]+startmin*0.25f;
         angle=distance*0.25f;
+        endAngle=startAngle+angle;
         rectF.set(width/2-(radius+padding-80), height/2-(radius+padding-80), width/2+(radius+padding-80), height/2+(radius+padding-80));
 
         npaint.setColor(color);
@@ -145,16 +146,30 @@ public class ClockView extends View {
         float medianAngle=(startAngle+(angle/2f))*(float)Math.PI/180f;
         npaint.setTextAlign(Paint.Align.CENTER);
         npaint.setTextSize(30);
-        npaint.setColor(Color.WHITE);
+        npaint.setColor(Color.BLACK);
         float rotateAngle=0.0f;
         canvas.save();
-        if(offset[endhour%24]>=90&&offset[endhour%24]<=180){
-            rotateAngle=180+offset[endhour%24];
+
+        if (startAngle >= 90 && startAngle <=180) {
+            rotateAngle = 180 + startAngle;
+        } else if (startAngle >= 180 && startAngle <= 270) {
+            rotateAngle = startAngle- 180;
+        } else rotateAngle = startAngle;
+
+       /* if(startAngle<=270&&startAngle<=90) {
+            if (endAngle>= 90 && endAngle <= 180) {
+                rotateAngle = 180 + endAngle;
+            } else if (endAngle >= 180 && endAngle <= 270) {
+                rotateAngle =endAngle - 180;
+            } else rotateAngle =endAngle;
         }
-        else if(offset[endhour%24]>=180&&offset[endhour%24]<=270){
-            rotateAngle=offset[endhour%24]-180;
-        }
-        else rotateAngle=offset[endhour%24];
+        else{
+            if (startAngle >= 90 && startAngle <=180) {
+                rotateAngle = 180 + startAngle;
+            } else if (startAngle >= 180 && startAngle <= 270) {
+                rotateAngle = startAngle- 180;
+            } else rotateAngle = startAngle;
+        }*/
         canvas.rotate(rotateAngle,(float)(width/2 + (radius * 0.5*Math.cos(medianAngle))), (float)(height/2 + (radius *0.5* Math.sin(medianAngle))));
         canvas.drawText(text,(float)(width/2 + (radius * 0.5*Math.cos(medianAngle))), (float)(height/2 + (radius *0.5* Math.sin(medianAngle))), npaint);
         canvas.restore();

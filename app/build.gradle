@@ -34,6 +34,7 @@ dependencies {
     implementation 'com.google.android.material:material:1.2.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation 'com.larswerkman:HoloColorPicker:1.5'
+    implementation 'petrov.kristiyan:colorpicker-library:1.1.10'
 
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'

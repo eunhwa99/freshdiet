@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -15,7 +16,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.github.mikephil.charting.charts.PieChart;
+//import com.larswerkman.holocolorpicker.ColorPicker;
+import petrov.kristiyan.colorpicker.ColorPicker;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -25,6 +27,7 @@ import java.util.Arrays;
  * 3. 원 선택시 수정 할 수 있도록
  */
 public class MakePlan extends AppCompatActivity {
+    private LinearLayout layout;
     private TextView startTime, endTime;
     private ListView listView;
     private ListViewAdapter adapter;
@@ -46,6 +49,7 @@ public class MakePlan extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.makeplan);
 
+        layout=findViewById(R.id.makeplanlayout);
         startTime=(TextView)findViewById(R.id.startTime);
         endTime=(TextView)findViewById(R.id.endTime);
         colorbtn=findViewById(R.id.colorbtn);
@@ -56,11 +60,12 @@ public class MakePlan extends AppCompatActivity {
         colorbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(MakePlan.this, ColorPopup.class);
+                openColorPicker();
+               /* Intent intent=new Intent(MakePlan.this, ColorPopup.class);
                 if(color != 0){
                     intent.putExtra("oldColor",color);
                 }
-                startActivityForResult(intent, COLOR_ACTIVITY);
+                startActivityForResult(intent, COLOR_ACTIVITY);*/
             }
         });
 
@@ -347,5 +352,42 @@ public class MakePlan extends AppCompatActivity {
     public void saveData(){
         PreferenceManager.setArrayList(MakePlan.this, curDate, timeArray);
         PreferenceManager.setBooleanArray(MakePlan.this, curDate+"check",checkArray);
+    }
+
+    private void openColorPicker(){
+        final ColorPicker colorPicker = new ColorPicker(MakePlan.this);  // ColorPicker 객체 생성
+        ArrayList<String> colors = new ArrayList<>();  // Color 넣어줄 list
+
+        colors.add("#ffab91");
+        colors.add("#F48FB1");
+        colors.add("#ce93d8");
+        colors.add("#b39ddb");
+        colors.add("#9fa8da");
+        colors.add("#90caf9");
+        colors.add("#81d4fa");
+        colors.add("#80deea");
+        colors.add("#80cbc4");
+        colors.add("#c5e1a5");
+        colors.add("#e6ee9c");
+        colors.add("#fff59d");
+        colors.add("#ffe082");
+        colors.add("#ffcc80");
+        colors.add("#bcaaa4");
+
+        colorPicker.setColors(colors)  // 만들어둔 list 적용
+                .setColumns(5)  // 5열로 설정
+                .setRoundColorButton(true)  // 원형 버튼으로 설정
+                .setOnChooseColorListener(new ColorPicker.OnChooseColorListener() {
+                    @Override
+                    public void onChooseColor(int position, int newcolor) {
+                      //  layout.setBackgroundColor(color);  // OK 버튼 클릭 시 이벤트
+                        color=newcolor;
+                    }
+
+                    @Override
+                    public void onCancel() {
+                        // Cancel 버튼 클릭 시 이벤트
+                    }
+                }).show();  // dialog 생성
     }
 }
