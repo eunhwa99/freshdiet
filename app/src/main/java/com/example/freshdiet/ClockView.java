@@ -18,7 +18,7 @@ import android.widget.ScrollView;
 
 import java.util.ArrayList;
 
-public class ClockView extends View {
+public class ClockView extends View{
     private final Context context;
     private int height, width, radius;
     private int padding=0, fontSize=0;
@@ -50,18 +50,15 @@ public class ClockView extends View {
         this.setWillNotDraw(false);
     }
 
+
+
     @Override
     protected void onDraw(Canvas canvas){
         canvas.drawColor(Color.GRAY);
         drawCircle(canvas);
         drawCenter(canvas);
         drawNumeral(canvas);
-        for(int i=0;i<MakePlan.timeArray.size();i++) {
-            String[] temp = MakePlan.timeArray.get(i).split(":");
-            int length = temp.length;
-            fillCircle(canvas, Integer.parseInt(temp[0]) * 60 + Integer.parseInt(temp[1]), Integer.parseInt(temp[2]) * 60 + Integer.parseInt(temp[3]), Integer.parseInt(temp[length - 1]), temp[4]);
-        }
-
+        drawSector(canvas);
         postInvalidateDelayed(500);
         invalidate();
     }
@@ -84,7 +81,7 @@ public class ClockView extends View {
                     checkInside(x,y,distance);
 
                 }
-               // invalidate();
+
         }
 
 
@@ -144,6 +141,21 @@ public class ClockView extends View {
         }
     }
 
+    private void drawSector(Canvas canvas){
+        for(int i=0;i<MakePlan.timeArray.size();i++) {
+            String[] temp = MakePlan.timeArray.get(i).split(":");
+            int length = temp.length;
+            fillCircle(canvas, Integer.parseInt(temp[0]) * 60 + Integer.parseInt(temp[1]), Integer.parseInt(temp[2]) * 60 + Integer.parseInt(temp[3]), Integer.parseInt(temp[length - 1]), temp[4]);
+        }
+
+        for(int i=0;i<MakePlan.timeArray2.size();i++) {
+            String[] temp = MakePlan.timeArray2.get(i).split(":");
+            int length = temp.length;
+            fillCircle(canvas, Integer.parseInt(temp[0]) * 60 + Integer.parseInt(temp[1]), Integer.parseInt(temp[2]) * 60 + Integer.parseInt(temp[3]), Integer.parseInt(temp[length - 1]), temp[4]);
+        }
+
+    }
+
 
     // 시간 받아서 원 채우기
     private void fillCircle(Canvas canvas, int start, int end, int color, String text){
@@ -192,7 +204,7 @@ public class ClockView extends View {
 
 
 
-    private boolean checkInside(float x, float y, float dist){
+    private void checkInside(float x, float y, float dist){
         float centerX=width/2, centerY=height/2;
         float sinO=(y-centerY)/dist;
         float ceta=((float) Math.toDegrees(Math.asin(sinO))+360.0f)%360.0f;
@@ -201,14 +213,20 @@ public class ClockView extends View {
            ceta=(540-ceta)%360.0f;
         }
 
-        for(int i=0;i<MakePlan.timeArray.size();i++){
-            String[] temp = MakePlan.timeArray.get(i).split(":");
+        if(checkArray(MakePlan.timeArray, ceta)) return;
+
+        checkArray(MakePlan.timeArray2, ceta);
+    }
+
+    private boolean checkArray(ArrayList<String> curlist, float ceta){
+        int length=curlist.size();
+        for(int i=0;i<length;i++){
+            String[] temp = curlist.get(i).split(":");
+            int templength=temp.length;
 
             int starthour=Integer.parseInt(temp[0]), startmin=Integer.parseInt(temp[1]);
             int endhour=Integer.parseInt(temp[2]), endmin=Integer.parseInt(temp[3]);
             int start=starthour*60+startmin, end=endhour*60+endmin;
-
-
 
             float distance=0.0f;
             if(endhour<starthour){
@@ -226,13 +244,19 @@ public class ClockView extends View {
 
             if(startAngle>endAngle){
                 if(ceta>=startAngle&&ceta<360 || ceta>=0&&ceta<=endAngle){
-                    makePopup(temp[4]);
+                    if(templength==7)
+                        makePopup(i,1);
+                    else if(templength==8)
+                        makePopup(i,2);
                     return true;
                 }
             }
             else{
                 if(ceta>=startAngle&&ceta<=endAngle){
-                    makePopup(temp[4]);
+                    if(templength==7)
+                        makePopup(i,1);
+                    else if(templength==8)
+                        makePopup(i,2);
                     return true;
                 }
             }
@@ -240,10 +264,22 @@ public class ClockView extends View {
         return false;
     }
 
-    private void makePopup(String str){
-
+    private void makePopup(int index, int type){
+        String[] temp;
         Intent intent=new Intent(context,Popup2.class);
-        intent.putExtra("Todo", str);
+
+        if(type==1){
+            temp = MakePlan.timeArray.get(index).split(":");
+            intent.putExtra("Memo",temp[5]);
+        }
+        else {
+            temp = MakePlan.timeArray2.get(index).split(":");
+            intent.putExtra("Type",temp[5]);
+            intent.putExtra("Memo",temp[6]);
+        }
+
+        intent.putExtra("Todo", temp[4]);
+        intent.putExtra("TodoIndex",index);
 
         context.startActivity(intent);
     }

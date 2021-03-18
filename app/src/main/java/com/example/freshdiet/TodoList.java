@@ -41,6 +41,9 @@ public class TodoList extends AppCompatActivity {
             String edittext=edittxt.getText().toString();
             Intent intent = new Intent();
             intent.putExtra("EditText", edittext);
+           int i=listView.getCheckedItemPosition();
+           curname=(String)listView.getItemAtPosition(i);
+
             intent.putExtra("ToDo", curname); //체크 박스 표시된 것
             setResult(RESULT_OK, intent);
             finish(); //팝업 닫기
@@ -68,13 +71,6 @@ public class TodoList extends AppCompatActivity {
         listView=(ListView)findViewById(R.id.listview2);
         listView.setAdapter(adapter);
 
-        // listview에 클릭 이벤트 핸들러 정의
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                curname = (String) adapterView.getItemAtPosition(i);
-            }
-        });
 
         String key="";
         if(code==1){

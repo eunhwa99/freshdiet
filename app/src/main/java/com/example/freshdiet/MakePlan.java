@@ -1,6 +1,7 @@
 package com.example.freshdiet;
 
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
@@ -10,6 +11,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -23,8 +25,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
- * 2. 원위에 할일 적기
- * 3. 원 선택시 수정 할 수 있도록
+ *
+ * 3. 체크박스에서 텍스트 가지고 오기
+ * 4. ScrollView
+ * 5. 사용자가 직접 추가할 수 있게
+ *
+ *
  */
 public class MakePlan extends AppCompatActivity {
     private LinearLayout layout;
@@ -37,22 +43,27 @@ public class MakePlan extends AppCompatActivity {
 
     ArrayList<String> listArray=new ArrayList<>(Arrays.asList("공부","운동","취미/여가","식사","숙면","기타"));
     static ArrayList<String> timeArray=new ArrayList<>();
+    static ArrayList<String> timeArray2=new ArrayList<>();
+    static Context Mcontext;
 
-    public static int starthour,startmin,endhour, endmin;
+    public int starthour,startmin,endhour, endmin;
+
     int color=Color.BLUE;
-    private final static int COLOR_ACTIVITY = 1, POPUP_ACTIVITY=2, NOPOPUP_ACTIVITY=3;
+    private final int COLOR_ACTIVITY = 1, POPUP_ACTIVITY=2, NOPOPUP_ACTIVITY=3;
 
-    private boolean[] checkArray=new boolean[24*60+1];
+    static boolean[] checkArray=new boolean[24*60+1];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.makeplan);
 
-        layout=findViewById(R.id.makeplanlayout);
+       // layout=findViewById(R.id.makeplanlayout);
         startTime=(TextView)findViewById(R.id.startTime);
         endTime=(TextView)findViewById(R.id.endTime);
         colorbtn=findViewById(R.id.colorbtn);
+
+        Mcontext=MakePlan.this;
 
         Intent intent=getIntent();
         curDate=intent.getStringExtra("selectedDay");
@@ -136,7 +147,7 @@ public class MakePlan extends AppCompatActivity {
             case NOPOPUP_ACTIVITY:
                 if (resultCode == RESULT_OK) { //운동, 취미
                    memotext=data.getStringExtra("EditText");
-                   detail=data.getStringExtra("todo"); // detail 아무것도 없으면 표시 X
+                   detail=data.getStringExtra("ToDo"); // detail 아무것도 없으면 표시 X
                     // 계획표 추가
                     addSchedule(memotext, detail, 1);
                 }
@@ -263,7 +274,7 @@ public class MakePlan extends AppCompatActivity {
             if (what == 0) {
                 timeArray.add(starthour + ":" + startmin + ":" + endhour + ":" + endmin + ":" + curname + ":" + memo + ":" + color);
             } else if (what == 1) {
-                timeArray.add(starthour + ":" + startmin + ":" + endhour + ":" + endmin + ":" + curname + ":" + nopop + ":" + memo + ":" + color);
+                timeArray2.add(starthour + ":" + startmin + ":" + endhour + ":" + endmin + ":" + curname + ":" + nopop + ":" + memo + ":" + color);
             }
             //시간 중복 안되게 체크하기
             checkUsedTime();
@@ -343,6 +354,7 @@ public class MakePlan extends AppCompatActivity {
 
     public void getData(){
         timeArray=PreferenceManager.getArrayList(MakePlan.this,curDate);
+        timeArray2=PreferenceManager.getArrayList(MakePlan.this, curDate+"_2");
         boolean[] temp=PreferenceManager.getBooleanArray(MakePlan.this, curDate+"check");
         if(temp.length!=0){
             checkArray=temp;
@@ -351,6 +363,7 @@ public class MakePlan extends AppCompatActivity {
     }
     public void saveData(){
         PreferenceManager.setArrayList(MakePlan.this, curDate, timeArray);
+        PreferenceManager.setArrayList(MakePlan.this, curDate+"_2", timeArray2);
         PreferenceManager.setBooleanArray(MakePlan.this, curDate+"check",checkArray);
     }
 
