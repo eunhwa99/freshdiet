@@ -27,10 +27,12 @@ import java.util.Arrays;
 import java.util.Date;
 
 /**
- *
- * 4. ScrollView
- * 5. 사용자가 직접 추가할 수 있게
- *
+ * 1. ScrollView
+ * 2. 사용자가 직접 추가할 수 있게 (기타), 10분 기준으로 적도록
+ * - 달력: 활동 대사량 + 기초 대사량 보여주고, 먹은 칼로리, 계획표
+ * - 활동 대사량 계산
+ * - 챌린지
+ * - 식품 칼로리 추가
  */
 public class MakePlan extends AppCompatActivity {
     private LinearLayout layout;
