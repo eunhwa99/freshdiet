@@ -1,19 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/scrollView"
     android:layout_width="match_parent"
-    android:layout_height="fill_parent"
-    android:fillViewport="true"
-    android:focusableInTouchMode="true"
-    android:scrollbarAlwaysDrawVerticalTrack="true"
-    android:scrollbarFadeDuration="5000">
+    android:layout_height="match_parent">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:animateLayoutChanges="true"
+        android:fillViewport="true">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:animateLayoutChanges="true"
+        android:orientation="vertical"
+        android:scrollbars="vertical">
 
             <com.example.freshdiet.ClockView
                 android:layout_width="match_parent"
@@ -21,15 +24,15 @@
                 android:layout_weight="1" />
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="TIME"
                 android:textSize="20sp"
-                android:layout_gravity="center_horizontal"/>
+                android:gravity="center_horizontal"/>
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
+                android:layout_height="wrap_content"
+
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:orientation="horizontal">
@@ -92,10 +95,14 @@
 
     </LinearLayout>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="50dp" />
+
+    </LinearLayout>
 
 
+        </ScrollView>
 
-        </LinearLayout>
 
-
-</ScrollView>
+</LinearLayout>

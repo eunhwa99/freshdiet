@@ -21,23 +21,22 @@ import androidx.appcompat.app.AppCompatActivity;
 //import com.larswerkman.holocolorpicker.ColorPicker;
 import petrov.kristiyan.colorpicker.ColorPicker;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 
 /**
  *
- * 3. 체크박스에서 텍스트 가지고 오기
  * 4. ScrollView
  * 5. 사용자가 직접 추가할 수 있게
- *
  *
  */
 public class MakePlan extends AppCompatActivity {
     private LinearLayout layout;
-    private TextView startTime, endTime;
+    private TextView startTime, endTime, calorietxt;
     private ListView listView;
     private ListViewAdapter adapter;
-    private Button colorbtn;
     private String curname, memotext, detail;
     private String curDate; //현재 날짜
 
@@ -48,7 +47,7 @@ public class MakePlan extends AppCompatActivity {
 
     public int starthour,startmin,endhour, endmin;
 
-    int color=Color.BLUE;
+    int color=Color.WHITE;
     private final int COLOR_ACTIVITY = 1, POPUP_ACTIVITY=2, NOPOPUP_ACTIVITY=3;
 
     static boolean[] checkArray=new boolean[24*60+1];
@@ -61,24 +60,18 @@ public class MakePlan extends AppCompatActivity {
        // layout=findViewById(R.id.makeplanlayout);
         startTime=(TextView)findViewById(R.id.startTime);
         endTime=(TextView)findViewById(R.id.endTime);
-        colorbtn=findViewById(R.id.colorbtn);
+        calorietxt=findViewById(R.id.calorietxt);
 
         Mcontext=MakePlan.this;
 
         Intent intent=getIntent();
         curDate=intent.getStringExtra("selectedDay");
+      /*  if(curDate==null){
+            SimpleDateFormat format = new SimpleDateFormat( "yyyy / MM / dd");
+            Date time = new Date();
+            curDate = format.format(time);
+        }*/
 
-        colorbtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                openColorPicker();
-               /* Intent intent=new Intent(MakePlan.this, ColorPopup.class);
-                if(color != 0){
-                    intent.putExtra("oldColor",color);
-                }
-                startActivityForResult(intent, COLOR_ACTIVITY);*/
-            }
-        });
 
         initListView();
         getData(); // preference에 저장된 데이터 가지고 오기
@@ -95,12 +88,24 @@ public class MakePlan extends AppCompatActivity {
 
         // listview에 클릭 이벤트 핸들러 정의
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                  curname=(String)adapterView.getItemAtPosition(i);
-
-                //String name=item.getName();
                 Intent intent;
+                if(startTime.getText().toString().equals("--:--")){
+                    Toast.makeText(getApplicationContext(),"시작 시간을 입력하세요!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(endTime.getText().toString().equals("--:--")){
+                    Toast.makeText(getApplicationContext(),"종료 시간을 입력하세요!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(alreadyUsed()){
+                    Toast.makeText(MakePlan.this, "시간이 중복됩니다. 다시 설정해주세요.", Toast.LENGTH_LONG).show();
+                    return;
+                }
                 switch(curname){
                     case "공부": case "식사": case "숙면":
                         intent=new Intent(getApplicationContext(), Popup.class);
@@ -141,7 +146,8 @@ public class MakePlan extends AppCompatActivity {
                 if (resultCode == RESULT_OK) {
                     memotext=data.getStringExtra("EditText"); // 메모 내용 가지고 오기
                     // 계획표 추가
-                    addSchedule(memotext,memotext, 0);
+                    openColorPicker(0);
+                       // addSchedule(memotext,memotext, 0);
                 }
                 break;
             case NOPOPUP_ACTIVITY:
@@ -149,13 +155,12 @@ public class MakePlan extends AppCompatActivity {
                    memotext=data.getStringExtra("EditText");
                    detail=data.getStringExtra("ToDo"); // detail 아무것도 없으면 표시 X
                     // 계획표 추가
-                    addSchedule(memotext, detail, 1);
+                    openColorPicker(1);
                 }
                 break;
             case COLOR_ACTIVITY:
                 if(resultCode==RESULT_OK) {
-                    color = data.getIntExtra("color", 0);
-                    colorbtn.setBackgroundColor(color);
+                  //  color = data.getIntExtra("Color", 0);
                 }
                 break;
         }
@@ -163,15 +168,33 @@ public class MakePlan extends AppCompatActivity {
 
     public void addSchedule(String memo, String nopop, int what){
 
-        if(startTime.getText().toString().equals("--:--")){
-            Toast.makeText(getApplicationContext(),"시작 시간을 입력하세요!", Toast.LENGTH_SHORT).show();
-            return;
+
+        if(starthour>endhour){
+            if(starthour>=12&&starthour<=23&&endhour>=12&&endhour<=23 || starthour>=0&&starthour<=12&&endhour>=0&&endhour<=12){
+                Toast.makeText(MakePlan.this, "시작 시간과 끝 시간이 잘못되었습니다. 다시 설정해주세요.", Toast.LENGTH_LONG).show();
+                return;
+            }
         }
-        if(endTime.getText().toString().equals("--:--")){
-            Toast.makeText(getApplicationContext(),"종료 시간을 입력하세요!", Toast.LENGTH_SHORT).show();
-            return;
+        else if(starthour==endhour){
+            if(startmin>endmin){
+                Toast.makeText(MakePlan.this, "시작 시간과 끝 시간이 잘못되었습니다. 다시 설정해주세요.", Toast.LENGTH_LONG).show();
+                return;
+            }
         }
 
+
+            if (what == 0) {
+                timeArray.add(starthour + ":" + startmin + ":" + endhour + ":" + endmin + ":" + curname + ":" + memo + ":" + color);
+            } else if (what == 1) {
+                timeArray2.add(starthour + ":" + startmin + ":" + endhour + ":" + endmin + ":" + curname + ":" + nopop + ":" + memo + ":" + color);
+            }
+            //시간 중복 안되게 체크하기
+            checkUsedTime();
+            saveData();
+
+    }
+
+    private Boolean alreadyUsed(){
         String[] starttime= startTime.getText().toString().split(":");
         String[] endtime=endTime.getText().toString().split(":");
 
@@ -195,10 +218,10 @@ public class MakePlan extends AppCompatActivity {
                 case "04":
                     start[i]=4;
                     break;
-                    case "05":
+                case "05":
                     start[i]=5;
                     break;
-                    case "06":
+                case "06":
                     start[i]=6;
                     break;
                 case "07":
@@ -210,7 +233,7 @@ public class MakePlan extends AppCompatActivity {
                 case "09":
                     start[i]=9;
                     break;
-                    default:
+                default:
                     start[i]=Integer.parseInt(starttime[i]);
                     break;
             }
@@ -253,36 +276,7 @@ public class MakePlan extends AppCompatActivity {
         }
         starthour=start[0]; startmin=start[1];
         endhour=end[0]; endmin=end[1];
-        if(starthour>endhour){
-            if(starthour>=12&&starthour<=23&&endhour>=12&&endhour<=23 || starthour>=0&&starthour<=12&&endhour>=0&&endhour<=12){
-                Toast.makeText(MakePlan.this, "시작 시간과 끝 시간이 잘못되었습니다. 다시 설정해주세요.", Toast.LENGTH_LONG).show();
-                return;
-            }
-        }
-        else if(starthour==endhour){
-            if(startmin>endmin){
-                Toast.makeText(MakePlan.this, "시작 시간과 끝 시간이 잘못되었습니다. 다시 설정해주세요.", Toast.LENGTH_LONG).show();
-                return;
-            }
-        }
 
-        if(alreadyUsed()){ // 시간이 중복된다면
-            Toast.makeText(MakePlan.this, "시간이 중복됩니다. 다시 설정해주세요.", Toast.LENGTH_LONG).show();
-        }
-        else {
-
-            if (what == 0) {
-                timeArray.add(starthour + ":" + startmin + ":" + endhour + ":" + endmin + ":" + curname + ":" + memo + ":" + color);
-            } else if (what == 1) {
-                timeArray2.add(starthour + ":" + startmin + ":" + endhour + ":" + endmin + ":" + curname + ":" + nopop + ":" + memo + ":" + color);
-            }
-            //시간 중복 안되게 체크하기
-            checkUsedTime();
-            saveData();
-        }
-    }
-
-    private Boolean alreadyUsed(){
         if(endhour<starthour){
             for(int i=starthour*60+startmin + 1;i<24*60;i++)
                 if(checkArray[i])
@@ -367,7 +361,7 @@ public class MakePlan extends AppCompatActivity {
         PreferenceManager.setBooleanArray(MakePlan.this, curDate+"check",checkArray);
     }
 
-    private void openColorPicker(){
+    private void openColorPicker(int what){
         final ColorPicker colorPicker = new ColorPicker(MakePlan.this);  // ColorPicker 객체 생성
         ArrayList<String> colors = new ArrayList<>();  // Color 넣어줄 list
 
@@ -393,8 +387,10 @@ public class MakePlan extends AppCompatActivity {
                 .setOnChooseColorListener(new ColorPicker.OnChooseColorListener() {
                     @Override
                     public void onChooseColor(int position, int newcolor) {
-                      //  layout.setBackgroundColor(color);  // OK 버튼 클릭 시 이벤트
                         color=newcolor;
+                        if(what==0)
+                        addSchedule(memotext,memotext, what);
+                        else addSchedule(memotext, detail, what);
                     }
 
                     @Override
@@ -403,4 +399,5 @@ public class MakePlan extends AppCompatActivity {
                     }
                 }).show();  // dialog 생성
     }
+
 }

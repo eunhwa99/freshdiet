@@ -91,7 +91,7 @@ public class ClockView extends View{
     private void initClock() {
         height = getHeight();
         width = getWidth();
-        padding = numeralSpacing + 50;
+        padding = numeralSpacing + 80;
         // 안드로이드에서 다양한 화면크기의 기기들을 지원하려면 고정 단위인 px 보다 밀도에 따른 논리 단위인 dip 를 사용해야한다.
         // 안드로이드 레이아웃 코드를 작성할 때 DP는 사용할 수 X --> PX로 바꾸어줘야 한다.
         fontSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 13,
@@ -131,12 +131,14 @@ public class ClockView extends View{
     private void drawNumeral(Canvas canvas){
         paint.setTextSize(fontSize);
 
+        int nradius=radius+padding-25;
+
         for(int number:numbers){
             String tmp=String.valueOf(number);
             paint.getTextBounds(tmp,0,tmp.length(),rect);
             double angle=Math.PI/12*(number-6);
-            int x = (int) (width / 2 + Math.cos(angle) * radius - rect.width() / 2);
-            int y = (int) (height / 2 + Math.sin(angle) * radius + rect.height() / 2);
+            int x = (int) (width / 2 + Math.cos(angle) * nradius - rect.width() / 2);
+            int y = (int) (height / 2 + Math.sin(angle) * nradius + rect.height() / 2);
             canvas.drawText(tmp, x, y, paint);
         }
     }

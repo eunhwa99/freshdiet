@@ -14,6 +14,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class Calendar extends AppCompatActivity {
     public String fname=null;
@@ -35,11 +37,12 @@ public class Calendar extends AppCompatActivity {
 
         setListener(); // button 이벤트 추가
 
-        //로그인 및 회원가입 엑티비티에서 이름을 받아옴
-        Intent intent=getIntent();
-        String name=intent.getStringExtra("userName");
-        final String userID=intent.getStringExtra("userID");
-        calendarText.setText(name+"님의 달력 일기장");
+        calendarText.setText(MyProfile.username+"님의 달력 일기장");
+        SimpleDateFormat format = new SimpleDateFormat( "yyyy / MM / dd");
+        Date time = new Date();
+        String curDate = format.format(time);
+        diaryTextView.setText(curDate);
+        selectedDay=curDate;
 
         // 계획표 및 달성 등의 정보 가지고 오기
         calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {

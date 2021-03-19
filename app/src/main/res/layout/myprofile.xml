@@ -147,13 +147,7 @@
             android:layout_height="wrap_content"
             android:text="기초대사량"
             android:textSize="20sp"/>
-            <Button
-                android:id="@+id/helpbtn"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginLeft="10dp"
-                android:text="?"
-                android:background="@drawable/ic_baseline_help_outline_24"/>
+
         </LinearLayout>
         <LinearLayout
             android:layout_width="100dp"
@@ -168,7 +162,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="(kcal)"/>
+
         </LinearLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="*기초대사량을 입력하지 않을 경우 평균 기초대사량으로 계산됩니다."/>
 
         <Button
             android:id="@+id/inputbtn"
