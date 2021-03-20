@@ -1,16 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-    <TextView
-        android:id="@+id/todotxt"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="right">
+    <TextView
+        android:id="@+id/todotxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="HI"
-        android:textSize="30sp"
-        android:gravity="center"/>
+        android:textSize="35sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="right">
+        <Button
+            android:id="@+id/editbtn"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ic_baseline_edit_24"
+            android:layout_marginRight="20dp"/>
+        </LinearLayout>
+    </LinearLayout>
 
     <ListView
         android:id="@+id/listview2"
@@ -23,6 +47,75 @@
         android:choiceMode="singleChoice"
         android:descendantFocusability="blocksDescendants"
         android:background="@drawable/memo_border"/>
+    <LinearLayout
+        android:id="@+id/editlayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="20dp"
+        android:layout_weight="1"
+        android:visibility="gone">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="리스트 추가"
+        android:textSize="20sp"
+        android:gravity="center" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_weight="1">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="항목명"/>
+        <EditText
+            android:id="@+id/editcategory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+           android:maxLength="10"
+            android:textSize="12sp"/>
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_weight="1">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="10분당 칼로리"/>
+        <EditText
+            android:id="@+id/editcalorie"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:ems="5"
+            android:textSize="12sp"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="(kcal)"/>
+    </LinearLayout>
+
+    </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/editlayout2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_weight="1">
     <TextView
         android:layout_marginTop="10dp"
         android:layout_width="match_parent"
@@ -38,15 +131,38 @@
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_height="match_parent"
         android:background="@drawable/memo_border"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginRight="10dp"
+            android:gravity="right">
     <Button
         android:id="@+id/todoaddbtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="추가"
-        android:layout_gravity="center"
-        android:gravity="center"/>
+        android:text="추가" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginLeft="10dp"
+            android:gravity="left">
+            <Button
+                android:id="@+id/todocancelbtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="취소"
+                />
+        </LinearLayout>
+    </LinearLayout>
 
 </LinearLayout>

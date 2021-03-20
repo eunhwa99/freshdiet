@@ -42,6 +42,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="*나이(Age)"
+        android:inputType="number"
         android:layout_marginTop="20dp"
         android:textSize="20sp"/>
 
@@ -53,7 +54,8 @@
             android:id="@+id/age"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"  />
+            android:layout_weight="1"
+            android:inputType="number"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -107,6 +109,7 @@
                 android:id="@+id/height"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:inputType="number"
                 android:layout_weight="1"  />
             <TextView
                 android:layout_width="wrap_content"
@@ -129,6 +132,7 @@
                 android:id="@+id/weight"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:inputType="number"
                 android:layout_weight="1"  />
             <TextView
                 android:layout_width="wrap_content"
@@ -157,6 +161,7 @@
                 android:id="@+id/metabolism"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:inputType="number"
                 android:layout_weight="1"  />
             <TextView
                 android:layout_width="wrap_content"

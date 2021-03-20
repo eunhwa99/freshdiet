@@ -54,5 +54,9 @@ public class ChoiceListViewAdapter extends BaseAdapter {
     public void addItem(String name){
         listViewItemList.add(name);
     }
+    public void removeItem(int i){
+        listViewItemList.remove(i);
+    }
+
 
 }

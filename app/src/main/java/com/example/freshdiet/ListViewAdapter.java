@@ -56,6 +56,11 @@ public class ListViewAdapter extends BaseAdapter {
 
     public void addItem(String name){
         listViewItemList.add(name);
+       // this.notifyDataSetChanged();
+    }
+
+    public void removeItem(int i){
+        listViewItemList.remove(i);
     }
 
 }

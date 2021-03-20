@@ -28,7 +28,7 @@ import java.util.Date;
 
 /**
  * 1. ScrollView
- * 2. 사용자가 직접 추가할 수 있게 (기타), 10분 기준으로 적도록
+ * 2. 사용자가 직접 추가할 수 있게 (기타), 10분 기준으로 적도록 --> 시간 입력해야 갈 수 있는데 어떻게 해야할까 (그냥... 어차피 자기가 뭘했는지 추가 할때 하는 거니까 괜찮을 듯)
  * - 달력: 활동 대사량 + 기초 대사량 보여주고, 먹은 칼로리, 계획표
  * - 활동 대사량 계산
  * - 챌린지
@@ -74,7 +74,6 @@ public class MakePlan extends AppCompatActivity {
             curDate = format.format(time);
         }*/
 
-
         initListView();
         getData(); // preference에 저장된 데이터 가지고 오기
     }
@@ -113,13 +112,10 @@ public class MakePlan extends AppCompatActivity {
                         intent=new Intent(getApplicationContext(), Popup.class);
                         startActivityForResult(intent,POPUP_ACTIVITY);
                         break;
-                    case "운동": case "취미/여가":
+                    case "운동": case "취미/여가": case "기타":
                         intent=new Intent(getApplicationContext(), TodoList.class);
                         intent.putExtra("todo", curname);
                         startActivityForResult(intent,NOPOPUP_ACTIVITY);
-                        break;
-
-                    case "기타":
                         break;
 
                 }
@@ -158,11 +154,6 @@ public class MakePlan extends AppCompatActivity {
                    detail=data.getStringExtra("ToDo"); // detail 아무것도 없으면 표시 X
                     // 계획표 추가
                     openColorPicker(1);
-                }
-                break;
-            case COLOR_ACTIVITY:
-                if(resultCode==RESULT_OK) {
-                  //  color = data.getIntExtra("Color", 0);
                 }
                 break;
         }
