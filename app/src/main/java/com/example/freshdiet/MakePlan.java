@@ -5,6 +5,7 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
@@ -31,7 +32,7 @@ import java.util.Date;
  * 1. ScrollView
  *
  * - 달력: 활동 대사량 + 기초 대사량 보여주고, 먹은 칼로리, 계획표
- * - 활동 대사량 계산
+ * - 활동 대사량 계산: https://www.topendsports.com/weight-loss/energy-met.htm
  * - 챌린지
  * - 식품 칼로리 추가
  */
@@ -68,15 +69,17 @@ public class MakePlan extends AppCompatActivity {
         endTime=(TextView)findViewById(R.id.endTime);
         calorietxt=findViewById(R.id.calorietxt);
 
-        String str;
-        str=PreferenceManager.getString(MakePlan.this,"act_cal");
-        if(str.equals("")||str==null) str="0.0";
-        calorietxt.setText(str+"(kcal)");
 
         Mcontext=MakePlan.this;
 
         Intent intent=getIntent();
         curDate=intent.getStringExtra("selectedDay");
+
+        String str;
+        SharedPreferences sharedPreferences=getSharedPreferences(curDate+"_act",MODE_PRIVATE);
+        str=sharedPreferences.getString("act_calorie", "0.0");
+
+        calorietxt.setText(str+"(kcal)");
 
         initListView();
         getData(); // preference에 저장된 데이터 가지고 오기
@@ -151,19 +154,30 @@ public class MakePlan extends AppCompatActivity {
                     memotext=data.getStringExtra("EditText"); // 메모 내용 가지고 오기
                     // 계획표 추가
                     openColorPicker(0);
-                       // addSchedule(memotext,memotext, 0);
+
+                    double cal=0.0, mets=0.0;
+                    if(curname.equals("숙면")){
+                        mets=0.9;
+                    }
+                    else if(curname.equals("공부")){
+                        mets=1.8;
+                    }
+                    CalculateActivity calculateActivity=new CalculateActivity(Double.parseDouble(MyProfile.userweight), time, mets);
+                   cal=calculateActivity.getCalorie();
+                   updateCalorie(cal);
                 }
                 break;
             case NOPOPUP_ACTIVITY:
                 if (resultCode == RESULT_OK) { //운동, 취미
                    memotext=data.getStringExtra("EditText");
                    detail=data.getStringExtra("ToDo"); // detail 아무것도 없으면 표시 X
+                    // 계획표 추가
+                    openColorPicker(1);
+
                     double cal=0.0;
                     cal=data.getDoubleExtra("calorie",0.0);
                     updateCalorie(cal);
 
-                    // 계획표 추가
-                    openColorPicker(1);
 
                 }
                 break;
@@ -420,6 +434,11 @@ public class MakePlan extends AppCompatActivity {
         else curcal=Double.parseDouble(cur)+cal;
 
         calorietxt.setText(String.valueOf(curcal)+"kcal");
+
+        SharedPreferences sharedPreferences=getSharedPreferences(curDate+"_act",MODE_PRIVATE);
+        SharedPreferences.Editor editor=sharedPreferences.edit();
+        editor.putString("act_calorie",String.valueOf(curcal));
+        editor.commit();
     }
 
 
