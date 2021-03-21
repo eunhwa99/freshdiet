@@ -37,6 +37,7 @@ public class MyProfile extends AppCompatActivity {
         metatxt = findViewById(R.id.metabolism);
 
         sexRadio = findViewById(R.id.sexRadio);
+        sexRadio.setOnCheckedChangeListener(radioGroupButtonChangeListener);
         manRadio = findViewById(R.id.man);
         womanRadio = findViewById(R.id.woman);
 
@@ -44,6 +45,8 @@ public class MyProfile extends AppCompatActivity {
         clickListener(); // 버튼 클릭 리스너 지정
 
     }
+
+
 
     // 라디오 그룹 클릭 리스너
     RadioGroup.OnCheckedChangeListener radioGroupButtonChangeListener = new RadioGroup.OnCheckedChangeListener() {
@@ -60,7 +63,9 @@ public class MyProfile extends AppCompatActivity {
     };
 
     private void getData() {
-        check = PreferenceManager.getBooleanArray(MyProfile.this, "MyProfile");
+        boolean[] tmp;
+        tmp = PreferenceManager.getBooleanArray(MyProfile.this, "MyProfile");
+        if(tmp.length!=0) check=tmp;
         username = PreferenceManager.getString(MyProfile.this, "UserName");
         userage = PreferenceManager.getString(MyProfile.this, "UserAge");
         userheight = PreferenceManager.getString(MyProfile.this, "UserHeight");

@@ -1,5 +1,6 @@
 package com.example.freshdiet;
 
+import android.annotation.SuppressLint;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -28,7 +29,7 @@ import java.util.Date;
 
 /**
  * 1. ScrollView
- * 2. 사용자가 직접 추가할 수 있게 (기타), 10분 기준으로 적도록 --> 시간 입력해야 갈 수 있는데 어떻게 해야할까 (그냥... 어차피 자기가 뭘했는지 추가 할때 하는 거니까 괜찮을 듯)
+ *
  * - 달력: 활동 대사량 + 기초 대사량 보여주고, 먹은 칼로리, 계획표
  * - 활동 대사량 계산
  * - 챌린지
@@ -49,11 +50,14 @@ public class MakePlan extends AppCompatActivity {
 
     public int starthour,startmin,endhour, endmin;
 
+    public static int time;
+
     int color=Color.WHITE;
     private final int COLOR_ACTIVITY = 1, POPUP_ACTIVITY=2, NOPOPUP_ACTIVITY=3;
 
     static boolean[] checkArray=new boolean[24*60+1];
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,15 +68,15 @@ public class MakePlan extends AppCompatActivity {
         endTime=(TextView)findViewById(R.id.endTime);
         calorietxt=findViewById(R.id.calorietxt);
 
+        String str;
+        str=PreferenceManager.getString(MakePlan.this,"act_cal");
+        if(str.equals("")||str==null) str="0.0";
+        calorietxt.setText(str+"(kcal)");
+
         Mcontext=MakePlan.this;
 
         Intent intent=getIntent();
         curDate=intent.getStringExtra("selectedDay");
-      /*  if(curDate==null){
-            SimpleDateFormat format = new SimpleDateFormat( "yyyy / MM / dd");
-            Date time = new Date();
-            curDate = format.format(time);
-        }*/
 
         initListView();
         getData(); // preference에 저장된 데이터 가지고 오기
@@ -107,6 +111,7 @@ public class MakePlan extends AppCompatActivity {
                     Toast.makeText(MakePlan.this, "시간이 중복됩니다. 다시 설정해주세요.", Toast.LENGTH_LONG).show();
                     return;
                 }
+
                 switch(curname){
                     case "공부": case "식사": case "숙면":
                         intent=new Intent(getApplicationContext(), Popup.class);
@@ -140,6 +145,7 @@ public class MakePlan extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         switch (requestCode) {
+
             case POPUP_ACTIVITY: // 공부, 숙면
                 if (resultCode == RESULT_OK) {
                     memotext=data.getStringExtra("EditText"); // 메모 내용 가지고 오기
@@ -152,8 +158,13 @@ public class MakePlan extends AppCompatActivity {
                 if (resultCode == RESULT_OK) { //운동, 취미
                    memotext=data.getStringExtra("EditText");
                    detail=data.getStringExtra("ToDo"); // detail 아무것도 없으면 표시 X
+                    double cal=0.0;
+                    cal=data.getDoubleExtra("calorie",0.0);
+                    updateCalorie(cal);
+
                     // 계획표 추가
                     openColorPicker(1);
+
                 }
                 break;
         }
@@ -181,10 +192,10 @@ public class MakePlan extends AppCompatActivity {
             } else if (what == 1) {
                 timeArray2.add(starthour + ":" + startmin + ":" + endhour + ":" + endmin + ":" + curname + ":" + nopop + ":" + memo + ":" + color);
             }
+
             //시간 중복 안되게 체크하기
             checkUsedTime();
             saveData();
-
     }
 
     private Boolean alreadyUsed(){
@@ -277,12 +288,14 @@ public class MakePlan extends AppCompatActivity {
             for(int i=0;i<endhour*60+endmin;i++)
                 if(checkArray[i])
                     return true;
+            time=(endhour+12)*60+endmin-starthour*60-startmin;
         }
         else {
             for (int i = starthour*60 + startmin+1; i < endhour*60+endmin; i++) {
                 if(checkArray[i])
                     return true;
             }
+            time=endhour*60+endmin-starthour*60-startmin;
         }
         return false;
     }
@@ -293,11 +306,13 @@ public class MakePlan extends AppCompatActivity {
                 checkArray[i]=true;
             for(int i=0;i<endhour*60+endmin;i++)
                 checkArray[i]=true;
+
         }
         else {
             for (int i = starthour*60 + startmin; i < endhour*60+endmin+1; i++) {
                 checkArray[i]=true;
             }
+
         }
     }
 
@@ -381,9 +396,12 @@ public class MakePlan extends AppCompatActivity {
                     @Override
                     public void onChooseColor(int position, int newcolor) {
                         color=newcolor;
-                        if(what==0)
-                        addSchedule(memotext,memotext, what);
-                        else addSchedule(memotext, detail, what);
+                        if(what==0) {
+                            addSchedule(memotext, memotext, what);
+                        }
+                        else {
+                            addSchedule(memotext, detail, what);
+                        }
                     }
 
                     @Override
@@ -392,5 +410,18 @@ public class MakePlan extends AppCompatActivity {
                     }
                 }).show();  // dialog 생성
     }
+
+    private void updateCalorie(double cal){
+        String cur=calorietxt.getText().toString();
+        double curcal=0.0;
+        if(cur.equals("")||cur==null){
+            curcal=cal;
+        }
+        else curcal=Double.parseDouble(cur)+cal;
+
+        calorietxt.setText(String.valueOf(curcal)+"kcal");
+    }
+
+
 
 }

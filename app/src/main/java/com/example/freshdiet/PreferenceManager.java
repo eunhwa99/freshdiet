@@ -5,8 +5,12 @@ import android.content.SharedPreferences;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 //https://copycoding.tistory.com/90
 
@@ -23,6 +27,8 @@ public class PreferenceManager {
         // PREFERENCES_NAME라는 이름의 저장소를 생성한 application에서만 사용가능 모드로 사용하기 위해 생성
         // SHARE_PREF 라는 파일이 없으면 신규로 생성
     }
+
+
 
     public static void setString(Context context, String key, String value) {
         SharedPreferences prefs = getPreferences(context);
@@ -58,6 +64,7 @@ public class PreferenceManager {
         editor.putFloat(key, value);
         editor.commit();
     }
+
 
     public static void setBooleanArray(Context context, String key, boolean[] array){
         SharedPreferences prefs = getPreferences(context);
@@ -113,6 +120,7 @@ public class PreferenceManager {
         float value = prefs.getFloat(key, DEFAULT_VALUE_FLOAT);
         return value;
     }
+
 
     public static boolean[] getBooleanArray(Context context, String key){
         SharedPreferences prefs = getPreferences(context);
