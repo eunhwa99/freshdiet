@@ -33,6 +33,7 @@ import java.util.Date;
  *
  * - 달력: 활동 대사량 + 기초 대사량 보여주고, 먹은 칼로리, 계획표
  * - 활동 대사량 계산: https://www.topendsports.com/weight-loss/energy-met.htm
+ *
  * - 챌린지
  * - 식품 칼로리 추가
  */
@@ -181,7 +182,6 @@ public class MakePlan extends AppCompatActivity {
                     double cal=0.0;
                     cal=data.getDoubleExtra("calorie",0.0);
                     updateCalorie(cal);
-
 
                 }
                 break;

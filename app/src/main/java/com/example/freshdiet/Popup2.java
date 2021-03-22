@@ -149,11 +149,18 @@ public class Popup2 extends Activity {
 
         }
         calorie=calculateActivity.getCalorie();
-     //   ((MakePlan)MakePlan.Mcontext).updateCalorie(-calorie);
+    //    ((MakePlan)MakePlan.Mcontext).updateCalorie(-calorie);
         TextView txt=((MakePlan) MakePlan.Mcontext).findViewById(R.id.calorietxt);
         String str=txt.getText().toString();
+//
 
-        txt.setText(String.valueOf(Double.parseDouble(str)-calorie));
+       txt.setText(String.valueOf(Double.parseDouble(str)-calorie));
+
+
+        SharedPreferences sharedPreferences=getSharedPreferences(Calendar.curDate2+"act",MODE_PRIVATE);
+        SharedPreferences.Editor editor=sharedPreferences.edit();
+        editor.putString("act_calorie",String.valueOf(txt.getText().toString()));
+        editor.commit();
 
     }
 

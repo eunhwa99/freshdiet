@@ -25,6 +25,8 @@ public class Calendar extends AppCompatActivity {
     public TextView diaryTextView,calendarText, meta_cal, act_cal, eat_cal, rest_cal;
     public Button addbtn;
     private String selectedDay, selectedDay2;
+    public static String curDate2;
+
 
 
     @Override
@@ -68,7 +70,7 @@ public class Calendar extends AppCompatActivity {
         SimpleDateFormat format2=new SimpleDateFormat("yyyyMMdd");
         Date time = new Date();
         String curDate = format.format(time);
-        String curDate2=format2.format(time);
+        curDate2=format2.format(time);
         diaryTextView.setText(curDate);
         selectedDay=curDate;
         selectedDay2=curDate2;
