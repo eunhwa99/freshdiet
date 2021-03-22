@@ -34,7 +34,7 @@ public class CalculateActivity {
 
 
     private void searchData(){
-        if(detail.equals("")){
+        if(detail==null||detail.equals("")){
             calorie=calculate();
         }
         else { //운동, 취미, 기타

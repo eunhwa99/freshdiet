@@ -30,13 +30,14 @@ import java.util.Iterator;
 import java.util.function.ToDoubleBiFunction;
 
 public class TodoList extends AppCompatActivity {
-    private ArrayList<String> exerciseArray=new ArrayList<>(Arrays.asList("걷기","달리기","등산",
+    private ArrayList<String> exerciseArray=new ArrayList<>(Arrays.asList("걷기(보통)", "걷기(빠르게)","달리기","등산",
             "자전거","근력운동","싸이클","볼링","배드민턴", "배구", "축구","농구",
-            "테니스","탁구","유도","주짓수", "킥복싱", "스트레칭", "체조",
+            "테니스","탁구","유도","주짓수", "킥복싱", "요가", "체조",
             "골프", "야구", "스케이트", "스키", "태권도", "럭비", "에어로빅",
-            "수영"));
+            "수영","줄넘기"));
     private ArrayList<String> hobbyArray=new ArrayList<>(Arrays.asList("독서","영화/드라마/유튜브 보기", "게임", "요리", "드라이브", "미술", "춤", "노래"));
-    private ArrayList<String> otherArray=new ArrayList<>();
+    private ArrayList<String> otherArray=new ArrayList<>(
+            Arrays.asList("가사/노동"));
 
     private HashMap<String, Double> exerciseMap, hobbyMap, otherMap,exerciseMap2, hobbyMap2, otherMap2;
     private HashMap<String,Double> curMap, curMap2;
@@ -310,24 +311,27 @@ public class TodoList extends AppCompatActivity {
         else if(val==3){
             str="other";}
 
-            if(val==1){
-                for(int i=0;i<exerciseArray.size();i++) {
+        curMap=getMap(str);
+        if(curMap.size()==0) {
+
+            if (val == 1) {
+                for (int i = 0; i < exerciseArray.size(); i++) {
                     String cur = exerciseArray.get(i);
 
                     switch (cur) {
-                        //
-                        //           ,"볼링", "배구",
-                        //           , "스트레칭",
-                        //
-                        case "자전거":
-                        case "근력운동":
+                        case "걷기(보통)":
+                            mets = 2.8;
+                            break;
+                        case "요가":
+                        case "볼링":
+                        case "배구":
                             mets = 3.0;
                             break;
                         case "체조":
                         case "골프":
                             mets = 3.5;
                             break;
-                        case "걷기":
+                        case "걷기(빠르게)":
                             mets = 3.8;
                             break;
                         case "탁구":
@@ -337,9 +341,11 @@ public class TodoList extends AppCompatActivity {
                             mets = 4.5;
                             break;
                         case "야구":
+                        case "자전거":
                             mets = 5.0;
                             break;
                         case "농구":
+                        case "근력운동":
                             mets = 6.0;
                             break;
                         case "에어로빅":
@@ -347,7 +353,6 @@ public class TodoList extends AppCompatActivity {
                             break;
                         case "축구":
                         case "테니스":
-                        case "수영":
                         case "스케이트":
                         case "스키":
                             mets = 7.0;
@@ -364,30 +369,58 @@ public class TodoList extends AppCompatActivity {
                         case "럭비":
                         case "킥복싱":
                         case "주짓수":
+                        case "수영":
                             mets = 10.0;
+                            break;
+                        case "줄넘기":
+                            mets = 11.0;
                             break;
 
                     }
                     exerciseMap.put(cur, mets);
                 }
-                curMap=exerciseMap;
-            }
-            else if(val==2){
-                for(int i=0;i<hobbyArray.size();i++){
-                    String cur=hobbyArray.get(i);
+                curMap = exerciseMap;
+
+            } else if (val == 2) {
+                for (int i = 0; i < hobbyArray.size(); i++) {
+                    String cur = hobbyArray.get(i);
                     //"독서","영화/드라마/유튜브 보기",
                     //            "게임", "요리", "드라이브", "미술", "춤", "노래"
-                    switch(cur){
+                    switch (cur) {
+                        case "영화/드라마/유튜브 보기":
+                            mets = 0.9;
+                            break;
+                        case "게임":
                         case "독서":
+                        case "드라이브":
+                        case "노래":
+                        case "미술":
+                            mets = 1.8;
+                            break;
+                        case "요리":
+                            mets = 2.0;
+                            break;
+                        case "춤":
+                            mets = 5.0;
+                            break;
                     }
                     hobbyMap.put(cur, mets);
                 }
-                curMap=hobbyMap;
-            }
-            else if(val==3){
+                curMap = hobbyMap;
 
-                curMap=otherMap;
+            } else if (val == 3) {
+                for (int i = 0; i < otherArray.size(); i++) {
+                    String cur = otherArray.get(i);
+                    switch (cur) {
+                        case "가사/노동":
+                            mets = 2.8;
+                            break;
+                    }
+                    curMap = otherMap;
+                }
             }
+            setMap(str, curMap);
+        }
     }
 
     private void saveData(ArrayList<String> curArray, HashMap<String, Double> curMap, int code){

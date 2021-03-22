@@ -38,11 +38,14 @@ import java.util.Date;
  */
 public class MakePlan extends AppCompatActivity {
     private LinearLayout layout;
-    private TextView startTime, endTime, calorietxt;
+    private TextView startTime;
+    private TextView endTime;
+    private TextView calorietxt;
     private ListView listView;
     private ListViewAdapter adapter;
     private String curname, memotext, detail;
-    private String curDate; //현재 날짜
+    private String curDate;
+    private String curDate2; //현재 날짜
 
     ArrayList<String> listArray=new ArrayList<>(Arrays.asList("공부","운동","취미/여가","식사","숙면","기타"));
     static ArrayList<String> timeArray=new ArrayList<>();
@@ -75,11 +78,12 @@ public class MakePlan extends AppCompatActivity {
         Intent intent=getIntent();
         curDate=intent.getStringExtra("selectedDay");
 
+        curDate2=intent.getStringExtra("selectedDay2");
         String str;
-        SharedPreferences sharedPreferences=getSharedPreferences(curDate+"_act",MODE_PRIVATE);
+        SharedPreferences sharedPreferences=getSharedPreferences(curDate2+"act",MODE_PRIVATE);
         str=sharedPreferences.getString("act_calorie", "0.0");
 
-        calorietxt.setText(str+"(kcal)");
+        calorietxt.setText(str);
 
         initListView();
         getData(); // preference에 저장된 데이터 가지고 오기
@@ -425,7 +429,7 @@ public class MakePlan extends AppCompatActivity {
                 }).show();  // dialog 생성
     }
 
-    private void updateCalorie(double cal){
+    public void updateCalorie(double cal){
         String cur=calorietxt.getText().toString();
         double curcal=0.0;
         if(cur.equals("")||cur==null){
@@ -433,9 +437,9 @@ public class MakePlan extends AppCompatActivity {
         }
         else curcal=Double.parseDouble(cur)+cal;
 
-        calorietxt.setText(String.valueOf(curcal)+"kcal");
+        calorietxt.setText(String.valueOf(curcal));
 
-        SharedPreferences sharedPreferences=getSharedPreferences(curDate+"_act",MODE_PRIVATE);
+        SharedPreferences sharedPreferences=getSharedPreferences(curDate2+"act",MODE_PRIVATE);
         SharedPreferences.Editor editor=sharedPreferences.edit();
         editor.putString("act_calorie",String.valueOf(curcal));
         editor.commit();

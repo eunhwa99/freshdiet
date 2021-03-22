@@ -3,6 +3,7 @@ package com.example.freshdiet;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
@@ -12,14 +13,19 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Iterator;
+
 public class Popup2 extends Activity {
     private LinearLayout typeLayout, memoLayout;
-    private TextView curText, typeText; // 현재 선택한 항목
+    private TextView curText, typeText, calorietext; // 현재 선택한 항목
     private EditText memoText;
     private Button modifyBtn, deleteBtn;
     private Intent intent;
     private String curtext, curMemo, curType;
-    private int curindex;
+    private int curindex, time;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +33,8 @@ public class Popup2 extends Activity {
         //타이틀바 없애기
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.popup2);
+
+
 
         typeLayout=findViewById(R.id.typelayout);
         memoLayout=findViewById(R.id.memolayout);
@@ -37,12 +45,14 @@ public class Popup2 extends Activity {
         modifyBtn = findViewById(R.id.modifybtn);
         deleteBtn = findViewById(R.id.deletebtn);
 
+       // calorietext=((MakePlan)MakePlan.Mcontext).updateCalorie();
+
         intent=getIntent();
 
-        curtext=intent.getStringExtra("Todo");
+        curtext=intent.getStringExtra("Todo"); // 공부, 운동, 취미/여가
         curindex=intent.getIntExtra("TodoIndex",-1);
         curMemo=intent.getStringExtra("Memo");
-        curType=intent.getStringExtra("Type");
+        curType=intent.getStringExtra("Type"); // 달리기, 영화 보기 등
 
         curText.setText(curtext); //popup창 제목
 
@@ -78,7 +88,7 @@ public class Popup2 extends Activity {
 
     private void modify(){
         String[] temp;
-        if(curType==null){
+        if(curType==null){ // 공부, 숙면
            temp=MakePlan.timeArray.get(curindex).split(":");
            temp[5]=memoText.getText().toString();
            String str="";
@@ -104,16 +114,47 @@ public class Popup2 extends Activity {
 
     private void delete(){
         String[] temp;
+       // String cur=MakePlan.calorietxt.getText().toString();
+        double calorie=0.0;
+        CalculateActivity calculateActivity;
 
         if(curType==null) {
             temp=MakePlan.timeArray.get(curindex).split(":");
+            deleteChecked(temp);
             MakePlan.timeArray.remove(curindex);
+            double cal=0.0, mets=0.0;
+            if(curtext.equals("숙면")){
+                mets=0.9;
+            }
+            else if(curtext.equals("공부")){
+                mets=1.8;
+            }
+            calculateActivity=new CalculateActivity(Double.parseDouble(MyProfile.userweight), time, mets);
+
         }
         else {
+            String str="";
             temp=MakePlan.timeArray2.get(curindex).split(":");
+            deleteChecked(temp);
             MakePlan.timeArray2.remove(curindex);
+
+            if(curtext.equals("운동")) str="exercise";
+            else if(curtext.equals("취미/여가")) str="hobby";
+            else str="other";
+
+            HashMap<String, Double> curMap=getMap(str);
+            HashMap<String,Double> curMap2=getMap(str+"2");
+
+            calculateActivity=new CalculateActivity(Double.parseDouble(MyProfile.userweight), curType,time,curMap,curMap2);
+
         }
-        deleteChecked(temp);
+        calorie=calculateActivity.getCalorie();
+     //   ((MakePlan)MakePlan.Mcontext).updateCalorie(-calorie);
+        TextView txt=((MakePlan) MakePlan.Mcontext).findViewById(R.id.calorietxt);
+        String str=txt.getText().toString();
+
+        txt.setText(String.valueOf(Double.parseDouble(str)-calorie));
+
     }
 
     private void deleteChecked(String[] curstr){
@@ -132,6 +173,30 @@ public class Popup2 extends Activity {
             }
         }
 
+        if(starthour>endhour){
+            endhour+=12;
+        }
+        time=endhour*60+endmin-starthour-startmin;
+    }
+
+    public HashMap<String,Double> getMap(String str){
+        HashMap<String,Double> outputMap = new HashMap<String,Double>();
+        SharedPreferences pSharedPref = getSharedPreferences(str, Context.MODE_PRIVATE);
+        try{
+            if (pSharedPref != null){
+                String jsonString = pSharedPref.getString(str+"Map", (new JSONObject()).toString());
+                JSONObject jsonObject = new JSONObject(jsonString);
+                Iterator<String> keysItr = jsonObject.keys();
+                while(keysItr.hasNext()) {
+                    String key = keysItr.next();
+                    Double value = (Double) jsonObject.get(key);
+                    outputMap.put(key, value);
+                }
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return outputMap;
     }
 
     @Override

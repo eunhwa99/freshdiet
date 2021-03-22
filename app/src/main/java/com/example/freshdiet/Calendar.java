@@ -24,7 +24,7 @@ public class Calendar extends AppCompatActivity {
     public CalendarView calendarView;
     public TextView diaryTextView,calendarText, meta_cal, act_cal, eat_cal, rest_cal;
     public Button addbtn;
-    private String selectedDay;
+    private String selectedDay, selectedDay2;
 
 
     @Override
@@ -55,6 +55,7 @@ public class Calendar extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent=new Intent(getApplicationContext(), MakePlan.class);
                 intent.putExtra("selectedDay",selectedDay);
+                intent.putExtra("selectedDay2",selectedDay2);
                 startActivity(intent);
 
             }
@@ -64,11 +65,14 @@ public class Calendar extends AppCompatActivity {
     public void initScreen() {
         calendarText.setText(MyProfile.username+"님의 달력 일기장");
         SimpleDateFormat format = new SimpleDateFormat( "yyyy / MM / dd");
+        SimpleDateFormat format2=new SimpleDateFormat("yyyyMMdd");
         Date time = new Date();
         String curDate = format.format(time);
+        String curDate2=format2.format(time);
         diaryTextView.setText(curDate);
         selectedDay=curDate;
-        getData();
+        selectedDay2=curDate2;
+        getData(curDate2);
 
         // 계획표 및 달성 등의 정보 가지고 오기
         calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
@@ -77,13 +81,12 @@ public class Calendar extends AppCompatActivity {
                 diaryTextView.setVisibility(View.VISIBLE);
                 diaryTextView.setText(String.format("%d / %d / %d",year,month+1,dayOfMonth));
                 selectedDay=diaryTextView.getText().toString();
-
             }
         });
     }
 
-    private void getData(){
-        SharedPreferences sharedPreferences=getSharedPreferences(selectedDay+"_act", MODE_PRIVATE);
+    private void getData(String date){
+        SharedPreferences sharedPreferences=getSharedPreferences(date+"act", MODE_PRIVATE);
         String str=sharedPreferences.getString("act_calorie","0.0");
         act_cal.setText(str+"(kcal)");
         meta_cal.setText(MyProfile.usermeta+"(kcal)");
