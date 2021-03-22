@@ -149,13 +149,14 @@ public class Popup2 extends Activity {
 
         }
         calorie=calculateActivity.getCalorie();
-    //    ((MakePlan)MakePlan.Mcontext).updateCalorie(-calorie);
+        calorie=Math.round(calorie*100)/100.0;
+
         TextView txt=((MakePlan) MakePlan.Mcontext).findViewById(R.id.calorietxt);
         String str=txt.getText().toString();
-//
 
-       txt.setText(String.valueOf(Double.parseDouble(str)-calorie));
-
+        double val=Double.parseDouble(str)-calorie;
+        val=Math.round(val*100)/100.0;
+        txt.setText(String.valueOf(val));
 
         SharedPreferences sharedPreferences=getSharedPreferences(Calendar.curDate2+"act",MODE_PRIVATE);
         SharedPreferences.Editor editor=sharedPreferences.edit();

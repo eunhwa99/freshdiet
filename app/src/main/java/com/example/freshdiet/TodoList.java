@@ -94,6 +94,7 @@ public class TodoList extends AppCompatActivity {
 
                 double calorie=0.0;
                 calorie=calculateActivity.getCalorie();
+                calorie=Math.round(calorie*100)/100.0;
                 intent.putExtra("calorie",calorie);
                 setResult(RESULT_OK, intent);
                 finish(); //팝업 닫기
