@@ -30,10 +30,8 @@ import java.util.Date;
 
 /**
  * 1. ScrollView
- *
  * - 달력: 먹은 칼로리, 계획표
  * - 활동 대사량 계산: https://www.topendsports.com/weight-loss/energy-met.htm
- * 소수점 아래 2자리까지만 보여주도록 고치기
  * - 챌린지
  * - 식품 칼로리 추가
  */
@@ -167,7 +165,7 @@ public class MakePlan extends AppCompatActivity {
                     else if(curname.equals("공부")){
                         mets=1.8;
                     }
-                    CalculateActivity calculateActivity=new CalculateActivity(Double.parseDouble(MyProfile.userweight), time, mets);
+                    CalculateActivity calculateActivity=new CalculateActivity(Double.parseDouble(MainActivity.userweight), time, mets);
                    cal=calculateActivity.getCalorie();
                     cal=Math.round(cal*100)/100.0;
                    updateCalorie(cal);

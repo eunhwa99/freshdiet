@@ -51,6 +51,7 @@ public class CalculateActivity {
     }
 
     private double calculate(){
+
         return mets*(3.5*weight*time)*5/1000.0;
     }
 

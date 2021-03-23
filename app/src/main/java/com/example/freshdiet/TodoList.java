@@ -23,11 +23,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.function.ToDoubleBiFunction;
+
+import static java.util.zip.ZipOutputStream.STORED;
 
 public class TodoList extends AppCompatActivity {
     private ArrayList<String> exerciseArray=new ArrayList<>(Arrays.asList("걷기(보통)", "걷기(빠르게)","달리기","등산",
@@ -90,7 +93,7 @@ public class TodoList extends AppCompatActivity {
                 if(name.equals("운동")) curMap2=exerciseMap2;
                 else if(name.equals("취미/여가")) curMap2=hobbyMap2;
                 else curMap2=otherMap2;
-                CalculateActivity calculateActivity=new CalculateActivity(Double.parseDouble(MyProfile.userweight), curname,MakePlan.time,curMap,curMap2);
+                CalculateActivity calculateActivity=new CalculateActivity(Double.parseDouble(MainActivity.userweight), curname,MakePlan.time,curMap,curMap2);
 
                 double calorie=0.0;
                 calorie=calculateActivity.getCalorie();
@@ -452,11 +455,14 @@ public class TodoList extends AppCompatActivity {
     }
 
     public void setMap(String str,  HashMap<String,Double> inputMap){
-        SharedPreferences pSharedPref = getSharedPreferences(str, Context.MODE_PRIVATE);
+
+      SharedPreferences pSharedPref = getSharedPreferences(str, MODE_PRIVATE);
+
         if (pSharedPref != null){
             JSONObject jsonObject = new JSONObject(inputMap);
             String jsonString = jsonObject.toString();
             SharedPreferences.Editor editor = pSharedPref.edit();
+            editor.remove(str+"Map").apply();
             editor.putString(str+"Map", jsonString);
             editor.commit();
         }
@@ -464,7 +470,8 @@ public class TodoList extends AppCompatActivity {
 
     public  HashMap<String,Double> getMap(String str){
         HashMap<String,Double> outputMap = new HashMap<String,Double>();
-        SharedPreferences pSharedPref = getSharedPreferences(str, Context.MODE_PRIVATE);
+        SharedPreferences pSharedPref =getSharedPreferences(str, MODE_PRIVATE);
+
         try{
             if (pSharedPref != null){
                 String jsonString = pSharedPref.getString(str+"Map", (new JSONObject()).toString());
@@ -472,13 +479,17 @@ public class TodoList extends AppCompatActivity {
                 Iterator<String> keysItr = jsonObject.keys();
                 while(keysItr.hasNext()) {
                     String key = keysItr.next();
-                    Double value = (Double) jsonObject.get(key);
-                    outputMap.put(key, value);
+                    String value = String.valueOf(jsonObject.get(key));
+                    outputMap.put(key, Double.parseDouble(value));
                 }
             }
         }catch(Exception e){
+            String sr=e.getMessage();
+            Log.i("오류", sr);
             e.printStackTrace();
         }
+
+
         return outputMap;
     }
 }

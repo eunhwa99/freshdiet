@@ -34,8 +34,6 @@ public class Popup2 extends Activity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.popup2);
 
-
-
         typeLayout=findViewById(R.id.typelayout);
         memoLayout=findViewById(R.id.memolayout);
 
@@ -114,7 +112,7 @@ public class Popup2 extends Activity {
 
     private void delete(){
         String[] temp;
-       // String cur=MakePlan.calorietxt.getText().toString();
+
         double calorie=0.0;
         CalculateActivity calculateActivity;
 
@@ -129,7 +127,7 @@ public class Popup2 extends Activity {
             else if(curtext.equals("공부")){
                 mets=1.8;
             }
-            calculateActivity=new CalculateActivity(Double.parseDouble(MyProfile.userweight), time, mets);
+            calculateActivity=new CalculateActivity(Double.parseDouble(MainActivity.userweight), time, mets);
 
         }
         else {
@@ -145,7 +143,7 @@ public class Popup2 extends Activity {
             HashMap<String, Double> curMap=getMap(str);
             HashMap<String,Double> curMap2=getMap(str+"2");
 
-            calculateActivity=new CalculateActivity(Double.parseDouble(MyProfile.userweight), curType,time,curMap,curMap2);
+            calculateActivity=new CalculateActivity(Double.parseDouble(MainActivity.userweight), curType,time,curMap,curMap2);
 
         }
         calorie=calculateActivity.getCalorie();
@@ -156,11 +154,12 @@ public class Popup2 extends Activity {
 
         double val=Double.parseDouble(str)-calorie;
         val=Math.round(val*100)/100.0;
+        if(val<0) val=0.0;
         txt.setText(String.valueOf(val));
 
         SharedPreferences sharedPreferences=getSharedPreferences(Calendar.curDate2+"act",MODE_PRIVATE);
         SharedPreferences.Editor editor=sharedPreferences.edit();
-        editor.putString("act_calorie",String.valueOf(txt.getText().toString()));
+        editor.putString("act_calorie",txt.getText().toString());
         editor.commit();
 
     }
@@ -189,7 +188,7 @@ public class Popup2 extends Activity {
 
     public HashMap<String,Double> getMap(String str){
         HashMap<String,Double> outputMap = new HashMap<String,Double>();
-        SharedPreferences pSharedPref = getSharedPreferences(str, Context.MODE_PRIVATE);
+        SharedPreferences pSharedPref = getSharedPreferences(str, MODE_PRIVATE);
         try{
             if (pSharedPref != null){
                 String jsonString = pSharedPref.getString(str+"Map", (new JSONObject()).toString());
@@ -197,8 +196,8 @@ public class Popup2 extends Activity {
                 Iterator<String> keysItr = jsonObject.keys();
                 while(keysItr.hasNext()) {
                     String key = keysItr.next();
-                    Double value = (Double) jsonObject.get(key);
-                    outputMap.put(key, value);
+                    String value = String.valueOf(jsonObject.get(key));
+                    outputMap.put(key, Double.parseDouble(value));
                 }
             }
         }catch(Exception e){

@@ -65,7 +65,7 @@ public class Calendar extends AppCompatActivity {
     }
 
     public void initScreen() {
-        calendarText.setText(MyProfile.username+"님의 달력 일기장");
+        calendarText.setText(MainActivity.username+"님의 달력 일기장");
         SimpleDateFormat format = new SimpleDateFormat( "yyyy / MM / dd");
         SimpleDateFormat format2=new SimpleDateFormat("yyyyMMdd");
         Date time = new Date();
@@ -91,7 +91,7 @@ public class Calendar extends AppCompatActivity {
         SharedPreferences sharedPreferences=getSharedPreferences(date+"act", MODE_PRIVATE);
         String str=sharedPreferences.getString("act_calorie","0.0");
         act_cal.setText(str+"(kcal)");
-        meta_cal.setText(MyProfile.usermeta+"(kcal)");
+        meta_cal.setText(MainActivity.usermeta+"(kcal)");
         /**
          * 섭취 칼로리, 잔여 칼로리 표시
          */
