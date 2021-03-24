@@ -16,4 +16,7 @@ public class ListViewItem {
     public String getName(){
         return this.namestr;
     }
+    public Drawable getIcon(){
+        return this.iconDrawable;
+    }
 }

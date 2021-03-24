@@ -7,7 +7,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-
+//https://wonpaper.tistory.com/164
 public class MainActivity extends AppCompatActivity {
 
     public static String username, userage, userheight, userweight, usermeta, usergender;
@@ -44,6 +44,8 @@ public class MainActivity extends AppCompatActivity {
             case R.id.caloriebtn:
                 break;
             case R.id.challengbtn:
+                intent=new Intent(getApplicationContext(), ChallengeMain.class);
+                startActivity(intent);
                 break;
 
         }

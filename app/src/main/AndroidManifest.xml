@@ -36,6 +36,7 @@
             android:screenOrientation="portrait" />
         <activity android:name="MyProfile" />
         <activity android:name=".Other"/>
+        <activity android:name=".ChallengeMain"/>
 
 
     </application>
