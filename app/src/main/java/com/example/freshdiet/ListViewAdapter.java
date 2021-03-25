@@ -12,12 +12,17 @@ import android.widget.TextView;
 
 import org.w3c.dom.Text;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class ListViewAdapter extends BaseAdapter {
     // Adapter에 추가된 데이터를 저장하기 위한 arraylist
    // private ArrayList<ListViewItem> listViewItemList=new ArrayList<ListViewItem>();
     private ArrayList<String> listViewItemList=new ArrayList<>();
+
+    public ListViewAdapter(ArrayList<String> listViewItemList){
+        this.listViewItemList=listViewItemList;
+    }
 
     @Override
     public int getCount() {
@@ -58,7 +63,7 @@ public class ListViewAdapter extends BaseAdapter {
 
     public void addItem(String name){
         listViewItemList.add(name);
-       // this.notifyDataSetChanged();
+
     }
 
     public void removeItem(int i){

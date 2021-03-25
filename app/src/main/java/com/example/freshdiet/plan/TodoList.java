@@ -1,16 +1,12 @@
-package com.example.freshdiet;
+package com.example.freshdiet.plan;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.PaintDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -21,16 +17,16 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.freshdiet.MainActivity;
+import com.example.freshdiet.PreferenceManager;
+import com.example.freshdiet.R;
+
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.function.ToDoubleBiFunction;
-
-import static java.util.zip.ZipOutputStream.STORED;
 
 public class TodoList extends AppCompatActivity {
     private ArrayList<String> exerciseArray=new ArrayList<>(Arrays.asList("걷기(보통)", "걷기(빠르게)","달리기","등산",
@@ -93,7 +89,7 @@ public class TodoList extends AppCompatActivity {
                 if(name.equals("운동")) curMap2=exerciseMap2;
                 else if(name.equals("취미/여가")) curMap2=hobbyMap2;
                 else curMap2=otherMap2;
-                CalculateActivity calculateActivity=new CalculateActivity(Double.parseDouble(MainActivity.userweight), curname,MakePlan.time,curMap,curMap2);
+                CalculateActivity calculateActivity=new CalculateActivity(Double.parseDouble(MainActivity.userweight), curname, MakePlan.time,curMap,curMap2);
 
                 double calorie=0.0;
                 calorie=calculateActivity.getCalorie();
@@ -283,7 +279,7 @@ public class TodoList extends AppCompatActivity {
         else if(code==2) key="hobby_list";
         else if(code==3) key="other_list";
 
-        ArrayList<String> temp=PreferenceManager.getArrayList(TodoList.this,key);
+        ArrayList<String> temp= PreferenceManager.getArrayList(TodoList.this,key);
         if(temp.size()==0){
             PreferenceManager.setArrayList(TodoList.this, key,curArray);
         }

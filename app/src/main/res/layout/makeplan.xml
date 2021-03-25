@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:id="@+id/makeplanlayout"
     android:isScrollContainer="true"
-    tools:context=".MakePlan">
+    tools:context=".plan.MakePlan">
 
 <LinearLayout
     android:layout_width="match_parent"
@@ -35,7 +35,7 @@
     </LinearLayout>
 
 
-    <com.example.freshdiet.ClockView
+    <com.example.freshdiet.plan.ClockView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="2" />

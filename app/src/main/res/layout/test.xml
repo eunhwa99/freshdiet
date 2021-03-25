@@ -18,7 +18,7 @@
         android:orientation="vertical"
         android:scrollbars="vertical">
 
-            <com.example.freshdiet.ClockView
+            <com.example.freshdiet.plan.ClockView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1" />

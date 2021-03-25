@@ -16,8 +16,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Calendar" />
-        <activity android:name=".MakePlan" />
+        <activity android:name=".plan.Calendar" />
+        <activity android:name=".plan.MakePlan" />
         <activity
             android:name=".Popup"
             android:theme="@android:style/Theme.Holo.Dialog.NoActionBar"
@@ -28,15 +28,15 @@
             android:theme="@android:style/Theme.Holo.Dialog.NoActionBar"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
-        <activity android:name=".TodoList" />
+        <activity android:name=".plan.TodoList" />
         <activity
             android:name=".ColorPopup"
             android:theme="@android:style/Theme.Holo.Dialog.NoActionBar"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity android:name="MyProfile" />
-        <activity android:name=".Other"/>
-        <activity android:name=".ChallengeMain"/>
+        <activity android:name=".challenge.ChallengeMain"/>
+        <activity android:name=".challenge.ChallengeSub"/>
 
 
     </application>

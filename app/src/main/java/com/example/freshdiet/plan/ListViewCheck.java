@@ -1,4 +1,4 @@
-package com.example.freshdiet;
+package com.example.freshdiet.plan;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -7,6 +7,8 @@ import android.widget.Checkable;
 import android.widget.LinearLayout;
 
 import androidx.annotation.Nullable;
+
+import com.example.freshdiet.R;
 
 public class ListViewCheck extends LinearLayout implements Checkable {
     public ListViewCheck(Context context, @Nullable AttributeSet attrs) {

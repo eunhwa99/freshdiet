@@ -1,20 +1,19 @@
-package com.example.freshdiet;
+package com.example.freshdiet.plan;
 
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.ScrollView;
+
+import com.example.freshdiet.Popup2;
+import com.example.freshdiet.plan.MakePlan;
 
 import java.util.ArrayList;
 
@@ -144,7 +143,7 @@ public class ClockView extends View{
     }
 
     private void drawSector(Canvas canvas){
-        for(int i=0;i<MakePlan.timeArray.size();i++) {
+        for(int i = 0; i< MakePlan.timeArray.size(); i++) {
             String[] temp = MakePlan.timeArray.get(i).split(":");
             int length = temp.length;
             fillCircle(canvas, Integer.parseInt(temp[0]) * 60 + Integer.parseInt(temp[1]), Integer.parseInt(temp[2]) * 60 + Integer.parseInt(temp[3]), Integer.parseInt(temp[length - 1]), temp[4]);
@@ -268,7 +267,7 @@ public class ClockView extends View{
 
     private void makePopup(int index, int type){
         String[] temp;
-        Intent intent=new Intent(context,Popup2.class);
+        Intent intent=new Intent(context, Popup2.class);
 
         if(type==1){
             temp = MakePlan.timeArray.get(index).split(":");

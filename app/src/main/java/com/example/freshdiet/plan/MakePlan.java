@@ -1,4 +1,4 @@
-package com.example.freshdiet;
+package com.example.freshdiet.plan;
 
 import android.annotation.SuppressLint;
 import android.app.TimePickerDialog;
@@ -10,10 +10,8 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -21,12 +19,16 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 //import com.larswerkman.holocolorpicker.ColorPicker;
+import com.example.freshdiet.ListViewAdapter;
+import com.example.freshdiet.MainActivity;
+import com.example.freshdiet.Popup;
+import com.example.freshdiet.PreferenceManager;
+import com.example.freshdiet.R;
+
 import petrov.kristiyan.colorpicker.ColorPicker;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 
 /**
  * 1. ScrollView
@@ -36,7 +38,6 @@ import java.util.Date;
  * - 식품 칼로리 추가
  */
 public class MakePlan extends AppCompatActivity {
-    private LinearLayout layout;
     private TextView startTime;
     private TextView endTime;
     private TextView calorietxt;
@@ -47,9 +48,9 @@ public class MakePlan extends AppCompatActivity {
     private String curDate2; //현재 날짜
 
     ArrayList<String> listArray=new ArrayList<>(Arrays.asList("공부","운동","취미/여가","식사","숙면","기타"));
-    static ArrayList<String> timeArray=new ArrayList<>();
-    static ArrayList<String> timeArray2=new ArrayList<>();
-    static Context Mcontext;
+    public static ArrayList<String> timeArray=new ArrayList<>();
+    public static ArrayList<String> timeArray2=new ArrayList<>();
+    public static Context Mcontext;
 
     public int starthour,startmin,endhour, endmin;
 
@@ -58,7 +59,7 @@ public class MakePlan extends AppCompatActivity {
     int color=Color.WHITE;
     private final int COLOR_ACTIVITY = 1, POPUP_ACTIVITY=2, NOPOPUP_ACTIVITY=3;
 
-    static boolean[] checkArray=new boolean[24*60+1];
+    public static boolean[] checkArray=new boolean[24*60+1];
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -91,7 +92,7 @@ public class MakePlan extends AppCompatActivity {
 
 
     private void initListView(){
-        adapter=new ListViewAdapter();
+        adapter=new ListViewAdapter(listArray);
 
         // 리스트뷰 참조 및 Adpater 달기
         listView=(ListView)findViewById(R.id.listview1);
@@ -134,7 +135,7 @@ public class MakePlan extends AppCompatActivity {
         });
 
 
-        ArrayList<String> templist=PreferenceManager.getArrayList(getApplicationContext(),"activity_list");
+        ArrayList<String> templist= PreferenceManager.getArrayList(getApplicationContext(),"activity_list");
         if(templist.size()==0){
             PreferenceManager.setArrayList(MakePlan.this, "activity_list",listArray);
         }

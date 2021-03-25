@@ -1,4 +1,4 @@
-package com.example.freshdiet;
+package com.example.freshdiet.calorie;
 
 import androidx.appcompat.app.AppCompatActivity;
 

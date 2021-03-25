@@ -1,4 +1,4 @@
-package com.example.freshdiet;
+package com.example.freshdiet.plan;
 
 import android.content.Context;
 import android.content.SharedPreferences;
