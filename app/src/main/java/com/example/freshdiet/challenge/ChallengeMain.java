@@ -93,7 +93,7 @@ public class ChallengeMain extends AppCompatActivity implements ViewFlipperActio
     }
 
     public void Go(View v){
-        if(v.getId()==R.id.textview) {
+        if(v.getId()==R.id.sleeptv1) {
             Intent intent = new Intent(this, ChallengeSub.class);
             startActivity(intent);
         }
