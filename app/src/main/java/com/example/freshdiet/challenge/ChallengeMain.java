@@ -30,7 +30,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class ChallengeMain extends AppCompatActivity implements ViewFlipperAction.ViewFlipperCallback{
+public class ChallengeMain extends AppCompatActivity implements ViewFlipperAction.ViewFlipperCallback {
     //뷰플리퍼
     ViewFlipper flipper;
     //인덱스
@@ -71,7 +71,7 @@ public class ChallengeMain extends AppCompatActivity implements ViewFlipperActio
         flipper.addView(view3);
 
         //리스너설정 - 좌우 터치시 화면넘어가기
-        flipper.setOnTouchListener(new ViewFlipperAction(this, flipper));
+        //flipper.setOnTouchListener(new ViewFlipperAction(this, flipper));
     }
 
 
@@ -93,12 +93,29 @@ public class ChallengeMain extends AppCompatActivity implements ViewFlipperActio
     }
 
     public void Go(View v){
-        if(v.getId()==R.id.sleeptv1) {
-            Intent intent = new Intent(this, ChallengeSub.class);
-            startActivity(intent);
+        Intent intent;
+        switch(v.getId()){
+            case R.id.sleeplayout1:
+                intent = new Intent(this, ChallengeSub.class);
+                startActivity(intent);
+                break;
+
         }
     }
 
+    public void Flip(View v){
+        TextView txtview=findViewById(v.getId());
+        int idx=0;
+        if (index0.equals(txtview)) {
+           idx=0;
+        } else if (index1.equals(txtview)) {
+           idx=1;
+        } else if (index2.equals(txtview)) {
+            idx=2;
+        }
+        flipper.setDisplayedChild(idx);
+        onFlipperActionCallback(idx);
+    }
 }
 
 

@@ -66,6 +66,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/border"
+            android:clickable="true"
+            android:onClick="Flip"
            />
         <TextView
             android:layout_weight="1"
@@ -76,6 +78,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/border"
+            android:clickable="true"
+            android:onClick="Flip"
           />
         <TextView
             android:layout_weight="1"
@@ -86,6 +90,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/border"
+            android:clickable="true"
+            android:onClick="Flip"
           />
     </LinearLayout>
 
@@ -103,11 +109,12 @@
     </LinearLayout>
 
     <LinearLayout
+        android:background="@drawable/border"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center"
-        android:layout_marginBottom="10dp"
+
         >
         <Button
             android:layout_width="wrap_content"

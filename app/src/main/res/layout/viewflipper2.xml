@@ -1,92 +1,113 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/exerlayout"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <LinearLayout
-        android:id="@+id/exerlayout1"
-        android:background="@drawable/memo_border"
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_weight="1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:clickable="true"
-        android:onClick="Go">
-
-        <TextView
-            android:text="규칙적인 숙면 습관 만들기"
-            android:textSize="20sp"
+        android:orientation="vertical">
+        <LinearLayout
+            android:id="@+id/exerlayout1"
+            android:background="@drawable/memo_border"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_weight="1"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center" />
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:src="@drawable/health1"
-            android:scaleType="centerCrop" />
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            android:clickable="true"
+            android:onClick="Go">
 
+            <TextView
+                android:text="지방 활활! 하루 만보걷기 시작!"
+                android:textSize="20sp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:adjustViewBounds="true"
+                android:src="@drawable/health1"
+                android:scaleType="centerCrop"
+                android:layout_marginLeft="1dp"
+                android:layout_marginRight="1dp"
+                android:layout_marginBottom="1dp"
+                android:layout_marginTop="1dp"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/exerlayout2"
+            android:background="@drawable/memo_border"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            android:clickable="true"
+            android:onClick="Go">
+
+            <TextView
+                android:text="근육 뿜뿜! 꾸준히 운동하자"
+               android:textSize="20sp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:adjustViewBounds="true"
+                android:src="@drawable/health2"
+                android:scaleType="centerCrop"
+                android:layout_marginLeft="1dp"
+                android:layout_marginRight="1dp"
+                android:layout_marginBottom="1dp"
+                android:layout_marginTop="1dp"
+                />
+
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/exerlayout3"
+            android:background="@drawable/memo_border"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            android:clickable="true"
+            android:onClick="Go">
+
+            <TextView
+                android:text="바른자세 유지! 다리 꼬지마"
+                android:textSize="20sp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:adjustViewBounds="true"
+                android:src="@drawable/health4"
+                android:scaleType="centerCrop"
+                android:layout_marginLeft="1dp"
+                android:layout_marginRight="1dp"
+                android:layout_marginBottom="1dp"
+                android:layout_marginTop="1dp"
+                />
+
+        </LinearLayout>
     </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/exerlayout2"
-        android:background="@drawable/memo_border"
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginBottom="20dp"
-        android:layout_weight="1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:clickable="true"
-        android:onClick="Go">
-        <TextView
-            android:text="잠자기 30분 전 핸드폰 안하기"
-            android:textSize="20sp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center" />
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:src="@drawable/health2"
-            android:scaleType="centerCrop"
-
-            />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/exerlayout3"
-        android:background="@drawable/memo_border"
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginBottom="20dp"
-        android:layout_weight="1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:clickable="true"
-        android:onClick="Go">
-        <TextView
-            android:text="잠자기 30분 전 핸드폰 안하기"
-            android:textSize="20sp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center" />
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:src="@drawable/health4"
-            android:scaleType="centerCrop"
-
-            />
-
-    </LinearLayout>
-</LinearLayout>
+</ScrollView>
 
