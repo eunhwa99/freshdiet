@@ -21,7 +21,8 @@ import java.util.ArrayList;
 public class ChallengeSub extends AppCompatActivity {
 
     private ImageView calendariv;
-    private TextView datetv, sleeptime, waketime;
+    private TextView datetv, sleeptime, waketime, curtv;
+    private String curname;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,8 +31,17 @@ public class ChallengeSub extends AppCompatActivity {
 
         calendariv=findViewById(R.id.calendariv);
         datetv=findViewById(R.id.datetv);
+        curtv=findViewById(R.id.challengetv);
         sleeptime=findViewById(R.id.sleepTime);
         waketime=findViewById(R.id.wakeTime);
+
+        dealIntent();
+    }
+
+    private void dealIntent(){
+        Intent intent=getIntent();
+        curname=intent.getStringExtra("curname");
+        curtv.setText(curname);
 
     }
 

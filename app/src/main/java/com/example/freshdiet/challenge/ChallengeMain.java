@@ -95,10 +95,29 @@ public class ChallengeMain extends AppCompatActivity implements ViewFlipperActio
 
     public void Go(View v){
         Intent intent;
+        TextView tv;
         switch(v.getId()){
             case R.id.sleeplayout1:
                 intent = new Intent(this, ChallengeSub.class);
+                tv=findViewById(R.id.sleeptv1);
+                intent.putExtra("curname",tv.getText().toString());
                 startActivity(intent);
+                break;
+            case R.id.sleeplayout2:
+                intent = new Intent(this, ChallengeSub.class);
+                tv=findViewById(R.id.sleeptv2);
+                intent.putExtra("curname",tv.getText().toString());
+                startActivity(intent);
+                break;
+            case R.id.exerlayout1:
+                break;
+            case R.id.exerlayout2:
+                break;
+            case R.id.exerlayout3:
+                break;
+            case R.id.eatlayout1:
+                break;
+            case R.id.eatlayout2:
                 break;
 
         }

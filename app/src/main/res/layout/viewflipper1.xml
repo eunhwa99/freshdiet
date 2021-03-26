@@ -60,6 +60,7 @@
         android:onClick="Go">
 
         <TextView
+            android:id="@+id/sleeptv2"
             android:text="잠자기 30분 전 핸드폰은 No"
             android:textSize="20sp"
             android:layout_width="match_parent"
