@@ -1,6 +1,7 @@
 package com.example.freshdiet.plan;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -8,7 +9,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -16,7 +19,11 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentResultListener;
 
 //import com.larswerkman.holocolorpicker.ColorPicker;
 import com.example.freshdiet.ListViewAdapter;
@@ -30,14 +37,7 @@ import petrov.kristiyan.colorpicker.ColorPicker;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-/**
- * 1. ScrollView
- * - 달력: 먹은 칼로리, 계획표
- * - 활동 대사량 계산: https://www.topendsports.com/weight-loss/energy-met.htm
- * - 챌린지
- * - 식품 칼로리 추가
- */
-public class MakePlan extends AppCompatActivity {
+public class MakePlan extends Fragment {
     private TextView startTime;
     private TextView endTime;
     private TextView calorietxt;
@@ -61,7 +61,37 @@ public class MakePlan extends AppCompatActivity {
 
     public static boolean[] checkArray=new boolean[24*60+1];
 
-    @SuppressLint("SetTextI18n")
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        ViewGroup rootView = (ViewGroup)inflater.inflate(R.layout.makeplan, container, false);
+        startTime=rootView.findViewById(R.id.startTime);
+        endTime=rootView.findViewById(R.id.endTime);
+        calorietxt=rootView.findViewById(R.id.calorietxt);
+        listView=rootView.findViewById(R.id.listview1);
+
+
+        Mcontext=getContext();
+
+        Bundle bundle = getArguments();
+        if(bundle != null){
+            curDate=bundle.getString("selectedDay");
+            curDate2=bundle.getString("selectedDay2");
+        }
+
+        String str;
+        SharedPreferences sharedPreferences=getActivity().getSharedPreferences(curDate2+"act",Context.MODE_PRIVATE);
+        str=sharedPreferences.getString("act_calorie", "0.0");
+
+        calorietxt.setText(str);
+
+        initListView();
+        getData(); // preference에 저장된 데이터 가지고 오기
+        setListener();
+
+        return rootView;
+    }
+
+   /* @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,7 +117,7 @@ public class MakePlan extends AppCompatActivity {
 
         initListView();
         getData(); // preference에 저장된 데이터 가지고 오기
-    }
+    }*/
 
 
 
@@ -95,7 +125,6 @@ public class MakePlan extends AppCompatActivity {
         adapter=new ListViewAdapter(listArray);
 
         // 리스트뷰 참조 및 Adpater 달기
-        listView=(ListView)findViewById(R.id.listview1);
         listView.setAdapter(adapter);
 
         // listview에 클릭 이벤트 핸들러 정의
@@ -107,27 +136,37 @@ public class MakePlan extends AppCompatActivity {
                  curname=(String)adapterView.getItemAtPosition(i);
                 Intent intent;
                 if(startTime.getText().toString().equals("--:--")){
-                    Toast.makeText(getApplicationContext(),"시작 시간을 입력하세요!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(),"시작 시간을 입력하세요!", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if(endTime.getText().toString().equals("--:--")){
-                    Toast.makeText(getApplicationContext(),"종료 시간을 입력하세요!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(),"종료 시간을 입력하세요!", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if(alreadyUsed()){
-                    Toast.makeText(MakePlan.this, "시간이 중복됩니다. 다시 설정해주세요.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), "시간이 중복됩니다. 다시 설정해주세요.", Toast.LENGTH_LONG).show();
                     return;
                 }
 
                 switch(curname){
                     case "공부": case "식사": case "숙면":
-                        intent=new Intent(getApplicationContext(), Popup.class);
-                        startActivityForResult(intent,POPUP_ACTIVITY);
+                    //    intent=new Intent(getContext(), Popup.class);
+                    //    startActivityForResult(intent,POPUP_ACTIVITY);
+                        getParentFragmentManager().setFragmentResultListener("requestKey", getViewLifecycleOwner(), new FragmentResultListener() {
+                            @Override
+                            public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle bundle) {
+                                // We use a String here, but any type that can be put in a Bundle is supported
+                                String result = bundle.getString("bundleKey");
+                                // Do something with the result
+                            }
+                        });
+
                         break;
                     case "운동": case "취미/여가": case "기타":
-                        intent=new Intent(getApplicationContext(), TodoList.class);
-                        intent.putExtra("todo", curname);
-                        startActivityForResult(intent,NOPOPUP_ACTIVITY);
+                     //   intent=new Intent(getApplicationContext(), TodoList.class);
+                     //   intent.putExtra("todo", curname);
+                     //   startActivityForResult(intent,NOPOPUP_ACTIVITY);
+
                         break;
 
                 }
@@ -135,9 +174,9 @@ public class MakePlan extends AppCompatActivity {
         });
 
 
-        ArrayList<String> templist= PreferenceManager.getArrayList(getApplicationContext(),"activity_list");
+        ArrayList<String> templist= PreferenceManager.getArrayList(getContext(),"activity_list");
         if(templist.size()==0){
-            PreferenceManager.setArrayList(MakePlan.this, "activity_list",listArray);
+            PreferenceManager.setArrayList(getContext(), "activity_list",listArray);
         }
         else listArray=templist;
 
@@ -147,7 +186,7 @@ public class MakePlan extends AppCompatActivity {
         }
     }
 
-    @Override
+    /*@Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
@@ -186,20 +225,20 @@ public class MakePlan extends AppCompatActivity {
                 }
                 break;
         }
-    }
+    }*/
 
     public void addSchedule(String memo, String nopop, int what){
 
 
         if(starthour>endhour){
             if(starthour>=12&&starthour<=23&&endhour>=12&&endhour<=23 || starthour>=0&&starthour<=12&&endhour>=0&&endhour<=12){
-                Toast.makeText(MakePlan.this, "시작 시간과 끝 시간이 잘못되었습니다. 다시 설정해주세요.", Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), "시작 시간과 끝 시간이 잘못되었습니다. 다시 설정해주세요.", Toast.LENGTH_LONG).show();
                 return;
             }
         }
         else if(starthour==endhour){
             if(startmin>endmin){
-                Toast.makeText(MakePlan.this, "시작 시간과 끝 시간이 잘못되었습니다. 다시 설정해주세요.", Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), "시작 시간과 끝 시간이 잘못되었습니다. 다시 설정해주세요.", Toast.LENGTH_LONG).show();
                 return;
             }
         }
@@ -214,6 +253,15 @@ public class MakePlan extends AppCompatActivity {
             //시간 중복 안되게 체크하기
             checkUsedTime();
             saveData();
+    }
+
+    private void setListener(){
+        startTime.setOnClickListener(view -> {
+            pickTime(startTime);
+        });
+        endTime.setOnClickListener(view->{
+            pickTime(endTime);
+        });
     }
 
     private Boolean alreadyUsed(){
@@ -344,7 +392,7 @@ public class MakePlan extends AppCompatActivity {
             time_tmp[0] = time_tmp[1] = "0";
         }
 
-        timePicker = new TimePickerDialog(this, android.R.style.Theme_Holo_Light_Dialog, new TimePickerDialog.OnTimeSetListener(){
+        timePicker = new TimePickerDialog(getContext(), android.R.style.Theme_Holo_Light_Dialog, new TimePickerDialog.OnTimeSetListener(){
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                 String setTime, hour, min;
@@ -373,22 +421,22 @@ public class MakePlan extends AppCompatActivity {
     }
 
     public void getData(){
-        timeArray=PreferenceManager.getArrayList(MakePlan.this,curDate);
-        timeArray2=PreferenceManager.getArrayList(MakePlan.this, curDate+"_2");
-        boolean[] temp=PreferenceManager.getBooleanArray(MakePlan.this, curDate+"check");
+        timeArray=PreferenceManager.getArrayList(getContext(),curDate);
+        timeArray2=PreferenceManager.getArrayList(getContext(), curDate+"_2");
+        boolean[] temp=PreferenceManager.getBooleanArray(getContext(), curDate+"check");
         if(temp.length!=0){
             checkArray=temp;
         }
 
     }
     public void saveData(){
-        PreferenceManager.setArrayList(MakePlan.this, curDate, timeArray);
-        PreferenceManager.setArrayList(MakePlan.this, curDate+"_2", timeArray2);
-        PreferenceManager.setBooleanArray(MakePlan.this, curDate+"check",checkArray);
+        PreferenceManager.setArrayList(getContext(), curDate, timeArray);
+        PreferenceManager.setArrayList(getContext(), curDate+"_2", timeArray2);
+        PreferenceManager.setBooleanArray(getContext(), curDate+"check",checkArray);
     }
 
     private void openColorPicker(int what){
-        final ColorPicker colorPicker = new ColorPicker(MakePlan.this);  // ColorPicker 객체 생성
+        final ColorPicker colorPicker = new ColorPicker((Activity) getContext());  // ColorPicker 객체 생성
         ArrayList<String> colors = new ArrayList<>();  // Color 넣어줄 list
 
         colors.add("#ffab91");
@@ -439,7 +487,7 @@ public class MakePlan extends AppCompatActivity {
 
         calorietxt.setText(String.valueOf(curcal));
 
-        SharedPreferences sharedPreferences=getSharedPreferences(curDate2+"act",MODE_PRIVATE);
+        SharedPreferences sharedPreferences=getActivity().getSharedPreferences(curDate2+"act",Context.MODE_PRIVATE);
         SharedPreferences.Editor editor=sharedPreferences.edit();
         editor.putString("act_calorie",String.valueOf(curcal));
         editor.commit();

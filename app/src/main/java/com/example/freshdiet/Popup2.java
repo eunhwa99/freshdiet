@@ -69,7 +69,9 @@ public class Popup2 extends Activity {
             @Override
             public void onClick(View view) {
                 modify();
-                ((MakePlan)MakePlan.Mcontext).saveData();
+                MakePlan makePlan=new MakePlan();
+                makePlan.saveData();
+
                 finish(); //팝업 닫기
             }
         });
@@ -79,8 +81,9 @@ public class Popup2 extends Activity {
             @Override
             public void onClick(View view) {
                 delete();
+                MakePlan makePlan=new MakePlan();
+                makePlan.saveData();
 
-                ((MakePlan)MakePlan.Mcontext).saveData();
                 finish();
             }
         });
@@ -151,7 +154,10 @@ public class Popup2 extends Activity {
         calorie=calculateActivity.getCalorie();
         calorie=Math.round(calorie*100)/100.0;
 
-        TextView txt=((MakePlan) MakePlan.Mcontext).findViewById(R.id.calorietxt);
+        MakePlan makePlan=new MakePlan();
+
+
+        TextView txt=makePlan.getView().findViewById(R.id.calorietxt);
         String str=txt.getText().toString();
 
         double val=Double.parseDouble(str)-calorie;

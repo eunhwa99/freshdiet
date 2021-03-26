@@ -1,18 +1,24 @@
 package com.example.freshdiet;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 
 public class MyProfile extends AppCompatActivity {
     Button inputBtn;
@@ -102,7 +108,7 @@ public class MyProfile extends AppCompatActivity {
                     }
 
                     saveData();
-                    Toast.makeText(getApplicationContext(), "저장되었습니다.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(view.getContext(), "저장되었습니다.", Toast.LENGTH_SHORT).show();
                     Intent intent=new Intent();
                     intent.putExtra("name",username);
                     intent.putExtra("age",userage);
@@ -111,7 +117,7 @@ public class MyProfile extends AppCompatActivity {
                     intent.putExtra("weight",userweight);
                     intent.putExtra("meta",usermeta);
                     setResult(RESULT_OK, intent);
-                    finish(); //팝업 닫기
+                    finish();
                 }
             }
         });

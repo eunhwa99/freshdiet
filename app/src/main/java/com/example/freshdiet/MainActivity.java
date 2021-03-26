@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
 
 import android.content.Context;
 import android.content.Intent;
@@ -32,73 +33,48 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 //https://wonpaper.tistory.com/164
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,FragmentCallback{
 
     //http://blog.naver.com/PostView.nhn?blogId=qbxlvnf11&logNo=221641795446&categoryNo=37&parentCategoryNo=0&viewDate=&currentPage=1&postListTopCurrentPage=1&from=search
 
-        private DrawerLayout mDrawerLayout;
-        private Context context = this;
-      public static String username, userage, userheight, userweight, usermeta, usergender;
-    public CalendarView calendarView;
-    public TextView diaryTextView,calendarText, meta_cal, act_cal, eat_cal, rest_cal;
-    public Button addbtn;
-    private String selectedDay, selectedDay2;
-    public static String curDate2;
+    private DrawerLayout mDrawerLayout;
+    private Context context = this;
+    public static String username, userage, userheight, userweight, usermeta, usergender;
+
+    Fragment calendarf, profilef, calorief, challengef;
+    Toolbar toolbar;
 
 
-        @Override
-        protected void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            setContentView(R.layout.activity_main);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 
-        calendarView=findViewById(R.id.calendarView);
-        diaryTextView=findViewById(R.id.diaryTextView);
-        addbtn=findViewById(R.id.addbtn);
-        calendarText=findViewById(R.id.calendarText);
-        meta_cal=findViewById(R.id.cal_meta);
-        act_cal=findViewById(R.id.cal_act);
-        eat_cal=findViewById(R.id.cal_eat);
-        rest_cal=findViewById(R.id.cal_rest);
-
-            getData();
-            setListener(); // button 이벤트 추가
-        initScreen(); // 화면 초기화
-
-
-
-        Toolbar toolbar =  findViewById(R.id.toolbar);
-            setSupportActionBar(toolbar);
-            ActionBar actionBar = getSupportActionBar();
-            actionBar.setDisplayShowTitleEnabled(false); // 기존 title 지우기
-            actionBar.setDisplayHomeAsUpEnabled(true); // 뒤로가기 버튼 만들기
-            actionBar.setHomeAsUpIndicator(R.drawable.ic_baseline_dehaze_24); //뒤로가기 버튼 이미지 지정
-
-            mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-
-            NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-            navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-                @Override
-                public boolean onNavigationItemSelected(MenuItem menuItem) {
-                    menuItem.setChecked(true);
-                    mDrawerLayout.closeDrawers();
-
-                    int id = menuItem.getItemId();
-                    String title = menuItem.getTitle().toString();
-
-                    if(id == R.id.account){
-                        Toast.makeText(context, title + ": 계정 정보를 확인합니다.", Toast.LENGTH_SHORT).show();
-                    }
-                    else if(id == R.id.setting){
-                        Toast.makeText(context, title + ": 설정 정보를 확인합니다.", Toast.LENGTH_SHORT).show();
-                    }
-                    else if(id == R.id.logout){
-                        Toast.makeText(context, title + ": 로그아웃 시도중", Toast.LENGTH_SHORT).show();
-                    }
-
-                    return true;
-                }
-            });
+        getData();
+        if(username.equals("Unknown")){
+            Intent intent=new Intent(getApplicationContext(), MyProfile.class);
+            startActivityForResult(intent,1004);
         }
+
+        toolbar =  findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayShowTitleEnabled(false); // 기존 title 지우기
+        actionBar.setDisplayHomeAsUpEnabled(true); // 뒤로가기 버튼 만들기
+        actionBar.setHomeAsUpIndicator(R.drawable.ic_baseline_dehaze_24); //뒤로가기 버튼 이미지 지정
+
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+
+        calendarf=new Calendar();
+        //profilef=new Fragment();
+        //calendarf=new Fragment();
+        //challengef=new Fragment();
+        // calendar 화면을 첫 번째 fragment로 설정
+        getSupportFragmentManager().beginTransaction().replace(R.id.container, calendarf).commit();
+    }
 
     @Override
         public boolean onOptionsItemSelected(MenuItem item) {
@@ -112,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-        private void getData() {
+    private void getData() {
         SharedPreferences sharedPreferences=getSharedPreferences("Profile",MODE_PRIVATE);
         username=sharedPreferences.getString("UserName","Unknown");
         userage = sharedPreferences.getString("UserAge", "Unknown");
@@ -122,55 +98,65 @@ public class MainActivity extends AppCompatActivity {
         usergender=sharedPreferences.getString("UserGender","Unknown");
     }
 
-    public void setListener(){
-        addbtn.setOnClickListener(new View.OnClickListener(
+    @Override
+    public void onChangedFragment(int position, Bundle bundle) {
+        Fragment fragment = null;
 
-        ) {
-            @Override
-            public void onClick(View view) {
-                Intent intent=new Intent(getApplicationContext(), MakePlan.class);
-                intent.putExtra("selectedDay",selectedDay);
-                intent.putExtra("selectedDay2",selectedDay2);
-                startActivity(intent);
-
-            }
-        });
+        switch (position){
+            case 1:
+                fragment = profilef;
+                toolbar.setTitle("첫 번째 화면");
+                break;
+            case 2:
+                fragment = calorief;
+                toolbar.setTitle("두 번째 화면");
+                break;
+            case 3:
+                fragment = challengef;
+                toolbar.setTitle("세 번째 화면");
+                break;
+            default:
+                break;
+        }
+        getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
     }
 
-    public void initScreen() {
-        calendarText.setText(username+"님의 달력 일기장");
-        SimpleDateFormat format = new SimpleDateFormat( "yyyy / MM / dd");
-        SimpleDateFormat format2=new SimpleDateFormat("yyyyMMdd");
-        Date time = new Date();
-        String curDate = format.format(time);
-        curDate2=format2.format(time);
-        diaryTextView.setText(curDate);
-        selectedDay=curDate;
-        selectedDay2=curDate2;
-        getData(curDate2);
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        item.setChecked(true);
+        mDrawerLayout.closeDrawers();
 
-        // 계획표 및 달성 등의 정보 가지고 오기
-        calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
-            @Override
-            public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
-                diaryTextView.setVisibility(View.VISIBLE);
-                diaryTextView.setText(String.format("%d / %d / %d",year,month+1,dayOfMonth));
-                selectedDay=diaryTextView.getText().toString();
-            }
-        });
+        int id = item.getItemId();
+        String title = item.getTitle().toString();
+
+        if(id == R.id.account){
+            onChangedFragment(1, null);
+            Toast.makeText(context, title + ": 계정 정보를 확인합니다.", Toast.LENGTH_SHORT).show();
+        }
+        else if(id == R.id.setting){
+            onChangedFragment(2, null);
+            Toast.makeText(context, title + ": 설정 정보를 확인합니다.", Toast.LENGTH_SHORT).show();
+        }
+        else if(id == R.id.logout){
+            onChangedFragment(3, null);
+            Toast.makeText(context, title + ": 로그아웃 시도중", Toast.LENGTH_SHORT).show();
+        }
+        else{
+            onChangedFragment(4, null);
+        }
+
+        return true;
     }
 
-    private void getData(String date){
-        SharedPreferences sharedPreferences=getSharedPreferences(date+"act", MODE_PRIVATE);
-        String str=sharedPreferences.getString("act_calorie","0.0");
-        act_cal.setText(str+"(kcal)");
-        meta_cal.setText(MainActivity.usermeta+"(kcal)");
-        /**
-         * 섭취 칼로리, 잔여 칼로리 표시
-         */
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
     }
-
-
 }
 
 

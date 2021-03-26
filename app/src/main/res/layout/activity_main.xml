@@ -31,10 +31,16 @@
                 android:text="Fresh Diet" />
         </androidx.appcompat.widget.Toolbar>
 
-        <include layout="@layout/calendar"
+       <!-- <include layout="@layout/calendar"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
-            android:layout_below="@+id/toolbar"/>
+            android:layout_below="@+id/toolbar"/>-->
+        <FrameLayout
+            android:id="@+id/container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/toolbar">
+        </FrameLayout>
     </RelativeLayout>
 
 
