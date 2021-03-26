@@ -8,7 +8,7 @@ import android.widget.ViewFlipper;
 
 import com.example.freshdiet.R;
 
-public class ViewFlipperAction implements View.OnTouchListener {
+public class ViewFlipperAction {
 
     Context context;
 
@@ -47,7 +47,7 @@ public class ViewFlipperAction implements View.OnTouchListener {
         indexCallback.onFlipperActionCallback(currentIndex);
     }
 
-    @Override
+   /* @Override
     public boolean onTouch(View v, MotionEvent event) {
         //터치시작
         if(event.getAction()==MotionEvent.ACTION_DOWN){
@@ -90,5 +90,5 @@ public class ViewFlipperAction implements View.OnTouchListener {
         }
 
         return true;
-    }
+    }*/
 }
