@@ -1,18 +1,12 @@
 package com.example.freshdiet;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
-import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class ListViewAdapter extends BaseAdapter {
@@ -50,7 +44,7 @@ public class ListViewAdapter extends BaseAdapter {
             LayoutInflater inflater=(LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view=inflater.inflate(R.layout.plannerlist, viewGroup, false);
 
-            view.setMinimumHeight(viewGroup.getHeight()/getCount());
+           // view.setMinimumHeight(viewGroup.getHeight()/getCount());
         }
 
         TextView nameText=(TextView)view.findViewById(R.id.nameText);
@@ -66,8 +60,5 @@ public class ListViewAdapter extends BaseAdapter {
 
     }
 
-    public void removeItem(int i){
-        listViewItemList.remove(i);
-    }
 
 }

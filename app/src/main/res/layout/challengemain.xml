@@ -1,52 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
 
-    <TextView
-        android:layout_weight="1"
-        android:layout_marginTop="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:gravity="center"
-        android:textSize="20sp"
-        android:text="챌린지를 선택하세요!"/>
-
-    <ListView
-        android:layout_weight="4"
-        android:id="@+id/challengelistview"
-        android:layout_marginTop="20dp"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:background="@drawable/memo_border"
-        android:descendantFocusability="blocksDescendants"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginBottom="20dp"
-        />
-
-    <LinearLayout
-        android:layout_weight="1"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:orientation="horizontal"
-        android:gravity="center">
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="주간 레포트"
-            android:layout_marginRight="10dp"/>
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:text="월간 레포트"/>
-
-    </LinearLayout>
-
-</LinearLayout>-->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
@@ -67,7 +20,6 @@
             android:layout_height="wrap_content"
             android:background="@drawable/border"
             android:clickable="true"
-            android:onClick="Flip"
            />
         <TextView
             android:layout_weight="1"
@@ -79,7 +31,6 @@
             android:layout_height="wrap_content"
             android:background="@drawable/border"
             android:clickable="true"
-            android:onClick="Flip"
           />
         <TextView
             android:layout_weight="1"
@@ -91,7 +42,6 @@
             android:layout_height="wrap_content"
             android:background="@drawable/border"
             android:clickable="true"
-            android:onClick="Flip"
           />
     </LinearLayout>
 

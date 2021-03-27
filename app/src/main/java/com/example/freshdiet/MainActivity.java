@@ -1,37 +1,31 @@
 package com.example.freshdiet;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.view.MenuItem;
+
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
-
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.res.Configuration;
-import android.os.Build;
-import android.os.Bundle;
-import android.view.MenuItem;
-import android.view.MotionEvent;
-import android.view.View;
-import android.widget.Button;
-import android.widget.CalendarView;
-import android.widget.TextView;
-import android.widget.Toast;
+import androidx.fragment.app.FragmentManager;
 
 import com.example.freshdiet.challenge.ChallengeMain;
 import com.example.freshdiet.plan.Calendar;
 import com.example.freshdiet.plan.MakePlan;
+import com.example.freshdiet.profile.MyProfile;
+import com.example.freshdiet.profile.ShowProfile;
 import com.google.android.material.navigation.NavigationView;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 //https://wonpaper.tistory.com/164
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,FragmentCallback {
@@ -42,9 +36,27 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private Context context = this;
     public static String username, userage, userheight, userweight, usermeta, usergender;
 
-    Fragment calendarf, profilef, calorief, challengef;
+    Fragment calendarf, makeplanf, profilef, calorief, challengef,settingsf;
     Toolbar toolbar;
+    static FragmentManager manager;
 
+    ActivityResultLauncher<Intent> startActivityResult = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        Intent data=result.getData();
+                        username=data.getStringExtra("name");
+                        userage=data.getStringExtra("age");
+                        userheight=data.getStringExtra("height");
+                        userweight=data.getStringExtra("weight");
+                        usermeta=data.getStringExtra("meta");
+                        usergender=data.getStringExtra("gender");
+
+                    }
+                }
+            });
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +66,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         getData();
         if(username.equals("Unknown")){
             Intent intent=new Intent(getApplicationContext(), MyProfile.class);
-            startActivityForResult(intent,1004);
+            startActivityResult.launch(intent);
+            getData();
         }
 
         toolbar =  findViewById(R.id.toolbar);
@@ -70,9 +83,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setNavigationItemSelectedListener(this);
 
         calendarf=new Calendar();
-        //profilef=new Fragment();
-        //calendarf=new Fragment();
-        //challengef=new Fragment();
+
+        profilef=new ShowProfile();
+        makeplanf=new MakePlan();
+        challengef=new ChallengeMain();
+
+        manager=getSupportFragmentManager();
         // calendar 화면을 첫 번째 fragment로 설정
         getSupportFragmentManager().beginTransaction().replace(R.id.container, calendarf).commit();
     }
@@ -104,18 +120,27 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Fragment fragment = null;
 
         switch (position){
+            case 0:
+                fragment=profilef;
+
+                break;
             case 1:
-                fragment = profilef;
-                toolbar.setTitle("첫 번째 화면");
+                //makeplanf=new MakePlan();
+                fragment = calendarf;
+                toolbar.setTitle("계획표");
                 break;
-            case 2:
-                fragment = calorief;
-                toolbar.setTitle("두 번째 화면");
-                break;
+
             case 3:
-                fragment = challengef;
+                fragment = calorief;
                 toolbar.setTitle("세 번째 화면");
                 break;
+            case 4:
+                fragment=challengef;
+
+                break;
+            case 5:
+                fragment=settingsf;
+
             default:
                 break;
         }
@@ -130,20 +155,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         int id = item.getItemId();
         String title = item.getTitle().toString();
 
-        if(id == R.id.account){
+        if(id == R.id.menu0){
+            onChangedFragment(0, null);
+
+        }
+        else if(id == R.id.menu1){
             onChangedFragment(1, null);
-            Toast.makeText(context, title + ": 계정 정보를 확인합니다.", Toast.LENGTH_SHORT).show();
+
         }
-        else if(id == R.id.setting){
-            onChangedFragment(2, null);
-            Toast.makeText(context, title + ": 설정 정보를 확인합니다.", Toast.LENGTH_SHORT).show();
-        }
-        else if(id == R.id.logout){
+
+        else if(id==R.id.menu3){
             onChangedFragment(3, null);
-            Toast.makeText(context, title + ": 로그아웃 시도중", Toast.LENGTH_SHORT).show();
         }
-        else{
+        else if(id==R.id.menu4){
             onChangedFragment(4, null);
+        }
+        else if(id==R.id.menu5){
+            onChangedFragment(5, null);
         }
 
         return true;
@@ -159,10 +187,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+    public static void changeText(double cal){
+        MakePlan mp=(MakePlan)manager.findFragmentById(R.id.container);
+        mp.updateCalorie(cal);
     }
+
 
 }
 

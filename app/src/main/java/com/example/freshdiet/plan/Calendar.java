@@ -1,7 +1,6 @@
 package com.example.freshdiet.plan;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -13,13 +12,11 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.freshdiet.MainActivity;
 import com.example.freshdiet.R;
-import com.example.freshdiet.plan.MakePlan;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -51,8 +48,6 @@ public class Calendar extends Fragment {
         setListener(); // button 이벤트 추가
         initScreen(); // 화면 초기화
 
-
-
         return rootView;
     }
 
@@ -74,7 +69,8 @@ public class Calendar extends Fragment {
         ) {
             @Override
             public void onClick(View view) {
-                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+
+                FragmentTransaction transaction = ((MainActivity)getActivity()).getSupportFragmentManager().beginTransaction();
                 Bundle bundle=new Bundle();
                 bundle.putString("selectedDay",selectedDay);
                 bundle.putString("selectedDay2",selectedDay2);
@@ -88,8 +84,8 @@ public class Calendar extends Fragment {
 
     public void initScreen() {
         calendarText.setText(MainActivity.username+"님의 달력 일기장");
-        SimpleDateFormat format = new SimpleDateFormat( "yyyy / MM / dd");
-        SimpleDateFormat format2=new SimpleDateFormat("yyyyMMdd");
+        SimpleDateFormat format = new SimpleDateFormat( "yyyy / M / d");
+        SimpleDateFormat format2=new SimpleDateFormat("yyyyMd");
         Date time = new Date();
         String curDate = format.format(time);
         curDate2=format2.format(time);
@@ -105,6 +101,8 @@ public class Calendar extends Fragment {
                 diaryTextView.setVisibility(View.VISIBLE);
                 diaryTextView.setText(String.format("%d / %d / %d",year,month+1,dayOfMonth));
                 selectedDay=diaryTextView.getText().toString();
+                selectedDay2=String.valueOf(year)+String.valueOf(month+1)+String.valueOf(dayOfMonth);
+                getData(selectedDay2);
             }
         });
     }

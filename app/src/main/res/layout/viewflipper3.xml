@@ -20,7 +20,7 @@
             android:layout_height="0dp"
             android:orientation="vertical"
             android:clickable="true"
-            android:onClick="Go">
+          >
 
             <TextView
                 android:text="든든하게! 아침 챙겨 먹자"
@@ -53,8 +53,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:orientation="vertical"
-            android:clickable="true"
-            android:onClick="Go">
+            android:clickable="true">
 
             <TextView
                 android:text="건강하게! 규칙적으로 챙겨먹자"

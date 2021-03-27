@@ -1,6 +1,5 @@
 package com.example.freshdiet.plan;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.TimePickerDialog;
 import android.content.Context;
@@ -13,31 +12,28 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentResultListener;
 
-//import com.larswerkman.holocolorpicker.ColorPicker;
 import com.example.freshdiet.ListViewAdapter;
 import com.example.freshdiet.MainActivity;
 import com.example.freshdiet.Popup;
 import com.example.freshdiet.PreferenceManager;
 import com.example.freshdiet.R;
 
-import petrov.kristiyan.colorpicker.ColorPicker;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import static android.app.Activity.RESULT_OK;
+import petrov.kristiyan.colorpicker.ColorPicker;
 
 public class MakePlan extends Fragment {
     private TextView startTime;
@@ -46,8 +42,8 @@ public class MakePlan extends Fragment {
     private ListView listView;
     private ListViewAdapter adapter;
     private String curname, memotext, detail;
-    private String curDate;
-    private String curDate2; //현재 날짜
+    private static String curDate;
+    private static String curDate2; //현재 날짜
 
     ArrayList<String> listArray=new ArrayList<>(Arrays.asList("공부","운동","취미/여가","식사","숙면","기타"));
     public static ArrayList<String> timeArray=new ArrayList<>();
@@ -59,9 +55,52 @@ public class MakePlan extends Fragment {
     public static int time;
 
     int color=Color.WHITE;
-    private final int COLOR_ACTIVITY = 1, POPUP_ACTIVITY=2, NOPOPUP_ACTIVITY=3;
 
     public static boolean[] checkArray=new boolean[24*60+1];
+
+    ActivityResultLauncher<Intent> startActivityResult1 = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override public void onActivityResult(ActivityResult result) {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        Intent data=result.getData();
+                        memotext=data.getStringExtra("EditText"); // 메모 내용 가지고 오기
+                        // 계획표 추가
+                        openColorPicker(0);
+
+                        double cal=0.0, mets=0.0;
+                        if(curname.equals("숙면")){
+                            mets=0.9;
+                        }
+                        else if(curname.equals("공부")){
+                            mets=1.8;
+                        }
+                        CalculateActivity calculateActivity=new CalculateActivity(Double.parseDouble(MainActivity.userweight), time, mets);
+                        cal=calculateActivity.getCalorie();
+                        cal=Math.round(cal*100)/100.0;
+                        updateCalorie(cal);
+                    }
+                }
+            });
+
+    ActivityResultLauncher<Intent> startActivityResult2 = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override public void onActivityResult(ActivityResult result) {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        Intent data=result.getData();
+                        memotext=data.getStringExtra("EditText");
+                        detail=data.getStringExtra("ToDo"); // detail 아무것도 없으면 표시 X
+                        // 계획표 추가
+                        openColorPicker(1);
+
+                        double cal=0.0;
+                        cal=data.getDoubleExtra("calorie",0.0);
+                        updateCalorie(cal);
+                    }
+
+                }
+            });
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -71,8 +110,7 @@ public class MakePlan extends Fragment {
         calorietxt=rootView.findViewById(R.id.calorietxt);
         listView=rootView.findViewById(R.id.listview1);
 
-
-        Mcontext=getContext();
+        Mcontext=container.getContext();
 
         Bundle bundle = getArguments();
         if(bundle != null){
@@ -93,41 +131,13 @@ public class MakePlan extends Fragment {
         return rootView;
     }
 
-   /* @SuppressLint("SetTextI18n")
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.makeplan);
-
-       // layout=findViewById(R.id.makeplanlayout);
-        startTime=(TextView)findViewById(R.id.startTime);
-        endTime=(TextView)findViewById(R.id.endTime);
-        calorietxt=findViewById(R.id.calorietxt);
-
-
-        Mcontext=MakePlan.this;
-
-        Intent intent=getIntent();
-        curDate=intent.getStringExtra("selectedDay");
-
-        curDate2=intent.getStringExtra("selectedDay2");
-        String str;
-        SharedPreferences sharedPreferences=getSharedPreferences(curDate2+"act",MODE_PRIVATE);
-        str=sharedPreferences.getString("act_calorie", "0.0");
-
-        calorietxt.setText(str);
-
-        initListView();
-        getData(); // preference에 저장된 데이터 가지고 오기
-    }*/
-
-
 
     private void initListView(){
         adapter=new ListViewAdapter(listArray);
 
         // 리스트뷰 참조 및 Adpater 달기
         listView.setAdapter(adapter);
+
 
         // listview에 클릭 이벤트 핸들러 정의
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -153,15 +163,12 @@ public class MakePlan extends Fragment {
                 switch(curname){
                     case "공부": case "식사": case "숙면":
                        intent=new Intent(getContext(), Popup.class);
-                       // startActivityForResult(intent,POPUP_ACTIVITY);
-                        startActivityForResult(intent,POPUP_ACTIVITY);
-
+                        startActivityResult1.launch(intent);
                         break;
                     case "운동": case "취미/여가": case "기타":
                        intent=new Intent(getContext(), TodoList.class);
                        intent.putExtra("todo", curname);
-                        startActivityForResult(intent,NOPOPUP_ACTIVITY);
-
+                        startActivityResult2.launch(intent);
                         break;
 
                 }
@@ -169,61 +176,12 @@ public class MakePlan extends Fragment {
         });
 
 
-        ArrayList<String> templist= PreferenceManager.getArrayList(getContext(),"activity_list");
-        if(templist.size()==0){
-            PreferenceManager.setArrayList(getContext(), "activity_list",listArray);
-        }
-        else listArray=templist;
-
-        for(int i=0;i<listArray.size();i++){
-            String name=listArray.get(i);
-            adapter.addItem(name);
-        }
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
 
-        switch (requestCode) {
 
-            case POPUP_ACTIVITY: // 공부, 숙면
-                if (resultCode == RESULT_OK) {
-                    memotext=data.getStringExtra("EditText"); // 메모 내용 가지고 오기
-                    // 계획표 추가
-                    openColorPicker(0);
-
-                    double cal=0.0, mets=0.0;
-                    if(curname.equals("숙면")){
-                        mets=0.9;
-                    }
-                    else if(curname.equals("공부")){
-                        mets=1.8;
-                    }
-                    CalculateActivity calculateActivity=new CalculateActivity(Double.parseDouble(MainActivity.userweight), time, mets);
-                   cal=calculateActivity.getCalorie();
-                    cal=Math.round(cal*100)/100.0;
-                   updateCalorie(cal);
-                }
-                break;
-            case NOPOPUP_ACTIVITY:
-                if (resultCode == RESULT_OK) { //운동, 취미
-                   memotext=data.getStringExtra("EditText");
-                   detail=data.getStringExtra("ToDo"); // detail 아무것도 없으면 표시 X
-                    // 계획표 추가
-                    openColorPicker(1);
-
-                    double cal=0.0;
-                    cal=data.getDoubleExtra("calorie",0.0);
-                    updateCalorie(cal);
-
-                }
-                break;
-        }
-    }
 
     public void addSchedule(String memo, String nopop, int what){
-
 
         if(starthour>endhour){
             if(starthour>=12&&starthour<=23&&endhour>=12&&endhour<=23 || starthour>=0&&starthour<=12&&endhour>=0&&endhour<=12){
@@ -237,7 +195,6 @@ public class MakePlan extends Fragment {
                 return;
             }
         }
-
 
             if (what == 0) {
                 timeArray.add(starthour + ":" + startmin + ":" + endhour + ":" + endmin + ":" + curname + ":" + memo + ":" + color);
@@ -416,18 +373,18 @@ public class MakePlan extends Fragment {
     }
 
     public void getData(){
-        timeArray=PreferenceManager.getArrayList(getContext(),curDate);
-        timeArray2=PreferenceManager.getArrayList(getContext(), curDate+"_2");
-        boolean[] temp=PreferenceManager.getBooleanArray(getContext(), curDate+"check");
+        timeArray=PreferenceManager.getArrayList(Mcontext,curDate);
+        timeArray2=PreferenceManager.getArrayList(Mcontext, curDate+"_2");
+        boolean[] temp=PreferenceManager.getBooleanArray(Mcontext, curDate+"check");
         if(temp.length!=0){
             checkArray=temp;
         }
 
     }
-    public void saveData(){
-        PreferenceManager.setArrayList(getContext(), curDate, timeArray);
-        PreferenceManager.setArrayList(getContext(), curDate+"_2", timeArray2);
-        PreferenceManager.setBooleanArray(getContext(), curDate+"check",checkArray);
+    public static void saveData(){
+        PreferenceManager.setArrayList(Mcontext, curDate, timeArray);
+        PreferenceManager.setArrayList(Mcontext, curDate+"_2", timeArray2);
+        PreferenceManager.setBooleanArray(Mcontext, curDate+"check",checkArray);
     }
 
     private void openColorPicker(int what){
@@ -472,13 +429,19 @@ public class MakePlan extends Fragment {
                 }).show();  // dialog 생성
     }
 
-    public void updateCalorie(double cal){
+    public  void updateCalorie(double cal){
+
         String cur=calorietxt.getText().toString();
         double curcal=0.0;
         if(cur.equals("")||cur==null){
             curcal=cal;
         }
         else curcal=Double.parseDouble(cur)+cal;
+
+
+        curcal=Math.round(curcal*100)/100.0;
+        if(curcal<0) curcal=0.0;
+
 
         calorietxt.setText(String.valueOf(curcal));
 

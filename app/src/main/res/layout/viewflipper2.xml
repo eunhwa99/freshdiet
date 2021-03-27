@@ -19,7 +19,7 @@
             android:layout_height="0dp"
             android:orientation="vertical"
             android:clickable="true"
-            android:onClick="Go">
+           >
 
             <TextView
                 android:text="지방 활활! 하루 만보걷기 시작!"
@@ -53,7 +53,7 @@
             android:layout_height="0dp"
             android:orientation="vertical"
             android:clickable="true"
-            android:onClick="Go">
+           >
 
             <TextView
                 android:text="근육 뿜뿜! 꾸준히 운동하자"
@@ -86,7 +86,7 @@
             android:layout_height="0dp"
             android:orientation="vertical"
             android:clickable="true"
-            android:onClick="Go">
+           >
 
             <TextView
                 android:text="바른자세 유지! 다리 꼬지마"

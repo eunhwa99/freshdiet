@@ -8,6 +8,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+        android:largeHeap="true"
         android:theme="@style/Theme.Freshdiet">
         <activity android:name=".MainActivity">
             <intent-filter>
@@ -33,7 +34,7 @@
             android:theme="@android:style/Theme.Holo.Dialog.NoActionBar"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
-        <activity android:name="MyProfile" />
+        <activity android:name=".profile.MyProfile" />
         <activity android:name=".challenge.ChallengeMain"/>
         <activity android:name=".challenge.ChallengeSub"/>
 

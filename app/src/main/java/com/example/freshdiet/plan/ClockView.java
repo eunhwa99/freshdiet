@@ -8,12 +8,12 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
 
 import com.example.freshdiet.Popup2;
-import com.example.freshdiet.plan.MakePlan;
 
 import java.util.ArrayList;
 
@@ -222,9 +222,12 @@ public class ClockView extends View{
     private boolean checkArray(ArrayList<String> curlist, float ceta){
         int length=curlist.size();
         for(int i=0;i<length;i++){
+            String t=curlist.get(i);
+            Log.i("ee",t);
             String[] temp = curlist.get(i).split(":");
             int templength=temp.length;
 
+          //  Log.i("hello",temp[5]+temp[6]+temp[7]);
             int starthour=Integer.parseInt(temp[0]), startmin=Integer.parseInt(temp[1]);
             int endhour=Integer.parseInt(temp[2]), endmin=Integer.parseInt(temp[3]);
             int start=starthour*60+startmin, end=endhour*60+endmin;
@@ -283,6 +286,7 @@ public class ClockView extends View{
         intent.putExtra("TodoIndex",index);
 
         context.startActivity(intent);
+
     }
 
 }

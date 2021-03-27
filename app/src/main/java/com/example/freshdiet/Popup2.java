@@ -11,8 +11,9 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.fragment.app.FragmentManager;
+
 import com.example.freshdiet.plan.CalculateActivity;
-import com.example.freshdiet.plan.Calendar;
 import com.example.freshdiet.plan.MakePlan;
 
 import org.json.JSONObject;
@@ -28,6 +29,8 @@ public class Popup2 extends Activity {
     private Intent intent;
     private String curtext, curMemo, curType;
     private int curindex, time;
+    FragmentManager manager;
+    MakePlan makePlan;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,12 +68,13 @@ public class Popup2 extends Activity {
         memoLayout.setVisibility(View.VISIBLE);
         memoText.setText(curMemo);
 
+
         modifyBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 modify();
-                MakePlan makePlan=new MakePlan();
-                makePlan.saveData();
+
+                MakePlan.saveData();
 
                 finish(); //팝업 닫기
             }
@@ -81,8 +85,8 @@ public class Popup2 extends Activity {
             @Override
             public void onClick(View view) {
                 delete();
-                MakePlan makePlan=new MakePlan();
-                makePlan.saveData();
+
+                MakePlan.saveData();
 
                 finish();
             }
@@ -108,7 +112,7 @@ public class Popup2 extends Activity {
             String str="";
             for(int i=0;i<8;i++){
                 str+=temp[i];
-                if(i!=6) str+=":";
+                if(i!=7) str+=":";
             }
 
             MakePlan.timeArray2.set(curindex, str);
@@ -154,21 +158,12 @@ public class Popup2 extends Activity {
         calorie=calculateActivity.getCalorie();
         calorie=Math.round(calorie*100)/100.0;
 
-        MakePlan makePlan=new MakePlan();
+        MainActivity.changeText(-calorie);
+        //getSupportFragmentManager().executePendingTransactions();
+        //makePlan=(MakePlan)manager.findFragmentById(R.id.container);
+      //  MakePlan fragment=new MakePlan();
+     //   MakePlan.updateCalorie(-calorie);
 
-
-        TextView txt=makePlan.getView().findViewById(R.id.calorietxt);
-        String str=txt.getText().toString();
-
-        double val=Double.parseDouble(str)-calorie;
-        val=Math.round(val*100)/100.0;
-        if(val<0) val=0.0;
-        txt.setText(String.valueOf(val));
-
-        SharedPreferences sharedPreferences=getSharedPreferences(Calendar.curDate2+"act",MODE_PRIVATE);
-        SharedPreferences.Editor editor=sharedPreferences.edit();
-        editor.putString("act_calorie",txt.getText().toString());
-        editor.commit();
 
     }
 

@@ -2,22 +2,35 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/account"
+            android:id="@+id/menu0"
             android:icon="@drawable/ic_launcher_foreground"
             style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
-            android:title="계정"
+            android:title="내 프로필"
             />
         <item
-            android:id="@+id/setting"
+            android:id="@+id/menu1"
+            android:icon="@drawable/ic_launcher_foreground"
+            style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
+            android:title="캘린더"
+            />
+
+        <item
+            android:id="@+id/menu3"
+            android:icon="@drawable/ic_launcher_foreground"
+            style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
+            android:title="칼로리"
+            />
+        <item
+            android:id="@+id/menu4"
+            android:icon="@drawable/ic_launcher_foreground"
+            style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
+            android:title="챌린지"
+            />
+        <item
+            android:id="@+id/menu5"
             android:icon="@drawable/ic_launcher_foreground"
             style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
             android:title="설정"
-            />
-        <item
-            android:id="@+id/logout"
-            android:icon="@drawable/ic_launcher_foreground"
-            style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
-            android:title="로그아웃"
             />
     </group>
 
