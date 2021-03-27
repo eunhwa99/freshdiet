@@ -37,6 +37,8 @@ import petrov.kristiyan.colorpicker.ColorPicker;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import static android.app.Activity.RESULT_OK;
+
 public class MakePlan extends Fragment {
     private TextView startTime;
     private TextView endTime;
@@ -150,22 +152,15 @@ public class MakePlan extends Fragment {
 
                 switch(curname){
                     case "공부": case "식사": case "숙면":
-                    //    intent=new Intent(getContext(), Popup.class);
-                    //    startActivityForResult(intent,POPUP_ACTIVITY);
-                        getParentFragmentManager().setFragmentResultListener("requestKey", getViewLifecycleOwner(), new FragmentResultListener() {
-                            @Override
-                            public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle bundle) {
-                                // We use a String here, but any type that can be put in a Bundle is supported
-                                String result = bundle.getString("bundleKey");
-                                // Do something with the result
-                            }
-                        });
+                       intent=new Intent(getContext(), Popup.class);
+                       // startActivityForResult(intent,POPUP_ACTIVITY);
+                        startActivityForResult(intent,POPUP_ACTIVITY);
 
                         break;
                     case "운동": case "취미/여가": case "기타":
-                     //   intent=new Intent(getApplicationContext(), TodoList.class);
-                     //   intent.putExtra("todo", curname);
-                     //   startActivityForResult(intent,NOPOPUP_ACTIVITY);
+                       intent=new Intent(getContext(), TodoList.class);
+                       intent.putExtra("todo", curname);
+                        startActivityForResult(intent,NOPOPUP_ACTIVITY);
 
                         break;
 
@@ -186,8 +181,8 @@ public class MakePlan extends Fragment {
         }
     }
 
-    /*@Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         switch (requestCode) {
@@ -225,7 +220,7 @@ public class MakePlan extends Fragment {
                 }
                 break;
         }
-    }*/
+    }
 
     public void addSchedule(String memo, String nopop, int what){
 
