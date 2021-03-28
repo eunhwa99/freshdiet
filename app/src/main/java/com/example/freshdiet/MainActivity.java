@@ -20,6 +20,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import com.example.freshdiet.calorie.XMLTask;
 import com.example.freshdiet.challenge.ChallengeMain;
 import com.example.freshdiet.plan.Calendar;
 import com.example.freshdiet.plan.MakePlan;
@@ -31,6 +32,8 @@ import com.google.android.material.navigation.NavigationView;
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,FragmentCallback {
 
     //http://blog.naver.com/PostView.nhn?blogId=qbxlvnf11&logNo=221641795446&categoryNo=37&parentCategoryNo=0&viewDate=&currentPage=1&postListTopCurrentPage=1&from=search
+
+    XMLTask xmltask=new XMLTask();
 
     private DrawerLayout mDrawerLayout;
     private Context context = this;
