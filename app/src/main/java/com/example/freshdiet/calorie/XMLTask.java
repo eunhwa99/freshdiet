@@ -21,7 +21,6 @@ public class XMLTask extends AsyncTask<String,Void, String> {
     @Override
     protected String doInBackground(String... strings) {
 
-
         try {
            // serviceKey= URLDecoder.decode(serviceKey,"UTF-8");
             requestUrl="http://openapi.foodsafetykorea.go.kr/api/"+serviceKey+"/I2790/xml/6/21";
