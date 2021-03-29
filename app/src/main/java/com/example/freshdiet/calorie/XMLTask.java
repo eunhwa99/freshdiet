@@ -1,6 +1,7 @@
 package com.example.freshdiet.calorie;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;
@@ -15,10 +16,15 @@ import java.util.ArrayList;
 public class XMLTask extends AsyncTask<String,Void, String> {
     private String requestUrl;
     private ArrayList<String> list;
+    private String serviceKey="3b0058815936482daa41";
+   // "http://openapi.foodsafetykorea.go.kr/api/3b0058815936482daa41/I2790/xml/1/5 "
     @Override
     protected String doInBackground(String... strings) {
-        requestUrl="http://openapi.foodsafetykorea.go.kr/api/3b0058815936482daa41/식품영양성분DB(NEW)/xml/6/21";
+
+
         try {
+           // serviceKey= URLDecoder.decode(serviceKey,"UTF-8");
+            requestUrl="http://openapi.foodsafetykorea.go.kr/api/"+serviceKey+"/I2790/xml/6/21";
             URL url = new URL(requestUrl);
             InputStream is = url.openStream();
             XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
@@ -46,8 +52,9 @@ public class XMLTask extends AsyncTask<String,Void, String> {
 
                         }
 
-                        else if(parser.getName().equals("DESC_KOR") ) {
-                            list.add(parser.getText());
+                        else if(parser.getText().equals("DESC_KOR") ) {
+                           // list.add(parser.getText());
+                            Log.d("이름: ",parser.getText());
                         }
                         break;
                 }

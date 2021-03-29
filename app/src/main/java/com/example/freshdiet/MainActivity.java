@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
@@ -28,12 +29,8 @@ import com.example.freshdiet.profile.MyProfile;
 import com.example.freshdiet.profile.ShowProfile;
 import com.google.android.material.navigation.NavigationView;
 
-//https://wonpaper.tistory.com/164
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,FragmentCallback {
 
-    //http://blog.naver.com/PostView.nhn?blogId=qbxlvnf11&logNo=221641795446&categoryNo=37&parentCategoryNo=0&viewDate=&currentPage=1&postListTopCurrentPage=1&from=search
-
-    XMLTask xmltask=new XMLTask();
 
     private DrawerLayout mDrawerLayout;
     private Context context = this;
@@ -42,6 +39,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     Fragment calendarf, makeplanf, profilef, calorief, challengef,settingsf;
     Toolbar toolbar;
     static FragmentManager manager;
+    private boolean isMembersVisible = false;
+    NavigationView navigationView;
+
 
     ActivityResultLauncher<Intent> startActivityResult = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
@@ -66,6 +66,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        XMLTask xmltask=new XMLTask();
+        xmltask.execute();
         getData();
         if(username.equals("Unknown")){
             Intent intent=new Intent(getApplicationContext(), MyProfile.class);
@@ -82,8 +84,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
 
         calendarf=new Calendar();
 
@@ -92,6 +95,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         challengef=new ChallengeMain();
 
         manager=getSupportFragmentManager();
+        navigationView.getMenu().findItem(R.id.memberone).setVisible(false);
+        navigationView.getMenu().findItem(R.id.membertwo).setVisible(false);
+      //  navigationView.getMenu().setGroupVisible(R.id.members_group, false);
         // calendar 화면을 첫 번째 fragment로 설정
         getSupportFragmentManager().beginTransaction().replace(R.id.container, calendarf).commit();
     }
@@ -100,6 +106,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         public boolean onOptionsItemSelected(MenuItem item) {
             switch (item.getItemId()){
                 case android.R.id.home:{ // 왼쪽 상단 버튼 눌렀을 때
+                    navigationView.getMenu().findItem(R.id.memberone).setVisible(false);
+                    navigationView.getMenu().findItem(R.id.membertwo).setVisible(false);
+                    isMembersVisible = false;
                     mDrawerLayout.openDrawer(GravityCompat.START);
                     return true;
                 }
@@ -153,7 +162,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         item.setChecked(true);
-        mDrawerLayout.closeDrawers();
 
         int id = item.getItemId();
         String title = item.getTitle().toString();
@@ -164,11 +172,28 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         else if(id == R.id.menu1){
             onChangedFragment(1, null);
-
         }
 
         else if(id==R.id.menu3){
-            onChangedFragment(3, null);
+            if (!isMembersVisible) {
+                navigationView.getMenu().findItem(R.id.memberone).setVisible(true);
+                navigationView.getMenu().findItem(R.id.membertwo).setVisible(true);
+                isMembersVisible = true;
+            } else {
+                navigationView.getMenu().findItem(R.id.memberone).setVisible(false);
+                navigationView.getMenu().findItem(R.id.membertwo).setVisible(false);
+                isMembersVisible = false;
+            }
+            return true;
+           // mDrawerLayout.openDrawer(GravityCompat.START);
+          //  mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_OPEN);
+        }
+        else if(id==R.id.memberone){
+            Toast.makeText(MainActivity.this, "member one", Toast.LENGTH_SHORT).show();
+
+        }
+        else if(id==R.id.membertwo){
+            Toast.makeText(MainActivity.this, "member two", Toast.LENGTH_SHORT).show();
         }
         else if(id==R.id.menu4){
             onChangedFragment(4, null);
@@ -177,13 +202,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             onChangedFragment(5, null);
         }
 
+        mDrawerLayout.closeDrawers();
         return true;
     }
 
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
+
         if (drawer.isDrawerOpen(GravityCompat.START)) {
+            navigationView.getMenu().findItem(R.id.memberone).setVisible(false);
+            navigationView.getMenu().findItem(R.id.membertwo).setVisible(false);
+            isMembersVisible = false;
             drawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
