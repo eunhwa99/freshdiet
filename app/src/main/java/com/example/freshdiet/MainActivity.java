@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
@@ -21,6 +20,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import com.example.freshdiet.calorie.FoodMain;
 import com.example.freshdiet.calorie.XMLTask;
 import com.example.freshdiet.challenge.ChallengeMain;
 import com.example.freshdiet.plan.Calendar;
@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private Context context = this;
     public static String username, userage, userheight, userweight, usermeta, usergender;
 
-    Fragment calendarf, makeplanf, profilef, calorief, challengef,settingsf;
+    Fragment calendarf, makeplanf, profilef, challengef,settingsf, foodmainf, fooddessertf;
     Toolbar toolbar;
     static FragmentManager manager;
     private boolean isMembersVisible = false;
@@ -66,8 +66,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        XMLTask xmltask=new XMLTask();
-        xmltask.execute();
+        XMLTask xmlTask=new XMLTask();
+        xmlTask.execute();
         getData();
         if(username.equals("Unknown")){
             Intent intent=new Intent(getApplicationContext(), MyProfile.class);
@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
-         navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
 
@@ -93,6 +93,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         profilef=new ShowProfile();
         makeplanf=new MakePlan();
         challengef=new ChallengeMain();
+        foodmainf=new FoodMain();
+       // fooddessertf=new FoodDessert();
 
         manager=getSupportFragmentManager();
         navigationView.getMenu().findItem(R.id.memberone).setVisible(false);
@@ -142,8 +144,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 toolbar.setTitle("계획표");
                 break;
 
+            case 2:
+                fragment=foodmainf;
+                break;
             case 3:
-                fragment = calorief;
+                fragment = fooddessertf;
                 toolbar.setTitle("세 번째 화면");
                 break;
             case 4:
@@ -189,11 +194,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
           //  mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_OPEN);
         }
         else if(id==R.id.memberone){
-            Toast.makeText(MainActivity.this, "member one", Toast.LENGTH_SHORT).show();
-
+          //  Toast.makeText(MainActivity.this, "member one", Toast.LENGTH_SHORT).show();
+            onChangedFragment(2,null);
         }
         else if(id==R.id.membertwo){
-            Toast.makeText(MainActivity.this, "member two", Toast.LENGTH_SHORT).show();
+          //  Toast.makeText(MainActivity.this, "member two", Toast.LENGTH_SHORT).show();
+            onChangedFragment(3,null);
         }
         else if(id==R.id.menu4){
             onChangedFragment(4, null);

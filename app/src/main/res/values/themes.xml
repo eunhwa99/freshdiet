@@ -24,7 +24,7 @@
         <item name="colorPrimaryVariant">@color/purple_700</item>
         <item name="colorOnPrimary">@color/white</item>
     </style>
-    <style name="MenuTheme" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
+    <style name="MenuTheme">
         <item name="android:textSize">10sp</item>
     </style>
 

@@ -1,39 +1,30 @@
 package com.example.freshdiet.challenge;
 
+import android.app.Activity;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.DialogFragment;
-
-import com.example.freshdiet.ListViewAdapter;
 import com.example.freshdiet.R;
 
-import java.util.ArrayList;
+public class ChallengeSub extends Activity {
+// https://lcw126.tistory.com/289
 
-public class ChallengeSub extends AppCompatActivity {
-
-    private ImageView calendariv;
-    private TextView datetv, sleeptime, waketime, curtv;
+    private TextView alarmtime , waketime, curtv;
     private String curname;
+    private TimePicker timePicker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.challengesub);
 
-        calendariv=findViewById(R.id.calendariv);
-        datetv=findViewById(R.id.datetv);
+        timePicker=findViewById(R.id.tp_timepicker);
         curtv=findViewById(R.id.challengetv);
-        sleeptime=findViewById(R.id.sleepTime);
-        waketime=findViewById(R.id.wakeTime);
 
         dealIntent();
     }
@@ -45,21 +36,7 @@ public class ChallengeSub extends AppCompatActivity {
 
     }
 
-    public void calendarclick(View v){ //달력 사진 눌렀을 때
-        if(v.getId()==R.id.calendariv) {
-            DialogFragment newFragment = new DatePickerFragment();
-            newFragment.show(getSupportFragmentManager(), "datePicker");
-        }
-    }
 
-    public void processDatePickerResult(int year, int month, int day){
-        String month_string = Integer.toString(month+1);
-        String day_string = Integer.toString(day);
-        String year_string = Integer.toString(year);
-        String dateMessage = (year_string+"년 "+month_string + "월 " + day_string + "일 ");
-
-        datetv.setText(dateMessage);
-    }
 
     public void timepicker(View v){
         TimePickerDialog timePicker;

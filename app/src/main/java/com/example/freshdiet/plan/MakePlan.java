@@ -24,7 +24,6 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.example.freshdiet.ListViewAdapter;
 import com.example.freshdiet.MainActivity;
 import com.example.freshdiet.Popup;
 import com.example.freshdiet.PreferenceManager;

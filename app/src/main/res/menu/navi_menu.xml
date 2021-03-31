@@ -24,13 +24,13 @@
                 <item
                     android:id="@+id/memberone"
                     android:icon="@drawable/ic_baseline_flatware_24"
-
+                    style="@style/MenuTheme"
                     android:title="본식" />
 
                 <item
                     android:id="@+id/membertwo"
                     android:icon="@drawable/ic_baseline_coffee_24"
-
+                    style="@style/MenuTheme"
                     android:title="후식" />
 
 

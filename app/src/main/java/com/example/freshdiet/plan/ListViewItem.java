@@ -1,4 +1,4 @@
-package com.example.freshdiet;
+package com.example.freshdiet.plan;
 
 import android.graphics.drawable.Drawable;
 
