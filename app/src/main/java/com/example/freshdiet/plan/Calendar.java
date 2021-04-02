@@ -31,6 +31,7 @@ public class Calendar extends Fragment {
     public static String curDate2;
     MainActivity mainActivity;
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         ViewGroup rootView = (ViewGroup)inflater.inflate(R.layout.calendar, container, false);

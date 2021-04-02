@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="#ffffff"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
@@ -8,6 +9,7 @@
     android:layout_gravity="center">
 
     <TextView
+        android:textColor="#000"
         android:id="@+id/challengetv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -28,11 +30,13 @@
             android:orientation="horizontal"
             android:gravity="center">
             <TextView
+                android:textColor="#000"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="챌린지 기간: "
                 android:textSize="20sp"/>
             <EditText
+                android:textColor="#000"
                 android:id="@+id/duration"
                 android:layout_width="80dp"
                 android:layout_height="wrap_content"
@@ -40,6 +44,7 @@
                 android:layout_weight="1"
                 android:gravity="center_horizontal"/>
             <TextView
+                android:textColor="#000"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="(일)"
@@ -54,12 +59,28 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:gravity="center">
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
+            android:orientation="horizontal">
+        <TextView
+            android:textColor="#000"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="end"
             android:textSize="20sp"
             android:text="알람 설정"/>
+
+            <com.kyleduo.switchbutton.SwitchButton
+                android:id="@+id/sb_use_listener"
+                style="@style/SwitchButtonStyle"
+                android:layout_gravity="start"
+                android:layout_width="wrap_content"
+                android:layout_weight="1"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
         <LinearLayout
             android:background="@drawable/memo_border"
             android:layout_marginTop="10dp"
@@ -75,6 +96,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:timePickerMode="spinner"
+                android:textColor="#000"
                 />
 
             </LinearLayout>
@@ -88,6 +110,7 @@
         android:orientation="vertical"
         android:gravity="center|top">
         <TextView
+            android:textColor="#000"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
@@ -109,6 +132,7 @@
             android:layout_gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="#000"
             android:text="챌린지 시작!"/>
 
     </LinearLayout>

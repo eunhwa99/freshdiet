@@ -211,11 +211,34 @@
     android:layout_height="wrap_content"
     android:text="진행 중인 챌린지"
     android:textSize="20sp"/>
-            <TextView
+            <LinearLayout
+                android:id="@+id/textlist"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="20dp">
+            <LinearLayout
                 android:id="@+id/chtv"
                 android:textSize="15sp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_weight="5"
+                android:orientation="vertical"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"/>
+                <View
+                    android:layout_width="2dp"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/border"/>
+                <LinearLayout
+                    android:id="@+id/daytv"
+                    android:textSize="15sp"
+                    android:orientation="vertical"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"/>
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 

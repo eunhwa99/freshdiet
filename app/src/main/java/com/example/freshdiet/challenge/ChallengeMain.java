@@ -159,31 +159,31 @@ public class ChallengeMain extends Fragment implements ViewFlipperAction.ViewFli
        if(challenge[0]){
            sleep1.setBackgroundColor(Color.RED);
        }
-       else sleep1.setBackgroundColor(Color.WHITE);
+       else sleep1.setBackgroundColor(Color.GRAY);
         if(challenge[1]){
             sleep2.setBackgroundColor(Color.RED);
         }
-        else sleep2.setBackgroundColor(Color.WHITE);
+        else sleep2.setBackgroundColor(Color.GRAY);
         if(challenge[2]){
             exer1.setBackgroundColor(Color.RED);
         }
-        else exer1.setBackgroundColor(Color.WHITE);
+        else exer1.setBackgroundColor(Color.GRAY);
         if(challenge[3]){
             exer2.setBackgroundColor(Color.RED);
         }
-        else exer2.setBackgroundColor(Color.WHITE);
+        else exer2.setBackgroundColor(Color.GRAY);
         if(challenge[4]){
             exer3.setBackgroundColor(Color.RED);
         }
-        else exer3.setBackgroundColor(Color.WHITE);
+        else exer3.setBackgroundColor(Color.GRAY);
         if(challenge[5]){
             eat1.setBackgroundColor(Color.RED);
         }
-        else eat1.setBackgroundColor(Color.WHITE);
+        else eat1.setBackgroundColor(Color.GRAY);
         if(challenge[6]){
             eat2.setBackgroundColor(Color.RED);
         }
-        else eat2.setBackgroundColor(Color.WHITE);
+        else eat2.setBackgroundColor(Color.GRAY);
 
     }
 

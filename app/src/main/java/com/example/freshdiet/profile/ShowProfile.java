@@ -1,7 +1,10 @@
 package com.example.freshdiet.profile;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.icu.util.Calendar;
 import android.os.Build;
 import android.os.Bundle;
@@ -10,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -29,21 +33,25 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class ShowProfile extends Fragment {
     private final int ONE_DAY = 24 * 60 * 60 * 1000;
-    TextView nametv, agetv, sextv, weighttv, heighttv, metatv, chtv;
+    LinearLayout chtv, daytv;
+    TextView nametv, agetv, sextv, weighttv, heighttv, metatv;
     Button editbtn;
     HashMap<String, Long> challengeMap;
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         ViewGroup rootView = (ViewGroup)inflater.inflate(R.layout.showprofile, container, false);
-       nametv=rootView.findViewById(R.id.nametv);
-       agetv=rootView.findViewById(R.id.agetv);
+        chtv=rootView.findViewById(R.id.chtv);
+        daytv= rootView.findViewById(R.id.daytv);
+        nametv=rootView.findViewById(R.id.nametv);
+        agetv=rootView.findViewById(R.id.agetv);
         sextv=rootView.findViewById(R.id.sextv);
         weighttv=rootView.findViewById(R.id.weighttv);
         heighttv=rootView.findViewById(R.id.heighttv);
         metatv=rootView.findViewById(R.id.metatv);
         editbtn=rootView.findViewById(R.id.editprofile);
-        chtv=rootView.findViewById(R.id.chtv);
+
 
         challengeMap=getMap();
         setClick();
@@ -57,6 +65,8 @@ public class ShowProfile extends Fragment {
             startActivity(intent);
         });
     }
+
+    @SuppressLint("SetTextI18n")
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void initScreen(){
         nametv.setText(MainActivity.username);
@@ -68,9 +78,36 @@ public class ShowProfile extends Fragment {
 
         for(Map.Entry<String, Long> entry : challengeMap.entrySet()){
             Long today=getDay();
-
-            chtv.setText("챌린지 : " + entry.getKey() + "  " + String.valueOf(today-entry.getValue())+"일째");
+            createTextView(entry.getKey(), today-entry.getValue());
+          //  chtv.setText(entry.getKey());
+          //  chtv.setTextColor(Color.BLACK);
+          //  daytv.setText(today-entry.getValue()+"일째");
+           // daytv.setTextColor(Color.RED);
         }
+
+    }
+
+    private void createTextView(String challenge, Long day){
+        TextView txtview=new TextView(getActivity());
+        txtview.setText(challenge);
+        txtview.setTextSize(15);
+        txtview.setTypeface(null, Typeface.BOLD);
+        //txtview.setId(0);
+        LinearLayout.LayoutParams param=new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT);
+
+        txtview.setLayoutParams(param);
+        chtv.addView(txtview);
+
+        TextView txtview2=new TextView(getActivity());
+        txtview2.setText(day+" 일 진행");
+        txtview2.setTextSize(15);
+        txtview2.setTypeface(null, Typeface.BOLD);
+
+       // txtview2.setId(0);
+       txtview2.setTextColor(Color.RED);
+        txtview2.setLayoutParams(param);
+        daytv.addView(txtview2);
 
     }
 
