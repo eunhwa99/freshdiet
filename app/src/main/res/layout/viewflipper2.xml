@@ -22,6 +22,7 @@
            >
 
             <TextView
+                android:id="@+id/exertv1"
                 android:text="지방 활활! 하루 만보걷기 시작!"
                 android:textSize="20sp"
                 android:layout_width="match_parent"
@@ -56,6 +57,7 @@
            >
 
             <TextView
+                android:id="@+id/exertv2"
                 android:text="근육 뿜뿜! 꾸준히 운동하자"
                android:textSize="20sp"
                 android:layout_width="match_parent"
@@ -89,6 +91,7 @@
            >
 
             <TextView
+                android:id="@+id/exertv3"
                 android:text="바른자세 유지! 다리 꼬지마"
                 android:textSize="20sp"
                 android:layout_width="match_parent"

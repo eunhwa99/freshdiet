@@ -187,7 +187,7 @@ public class ClockView extends View{
 
         float medianAngle=(startAngle+(angle/2f))*(float)Math.PI/180f;
         npaint.setTextAlign(Paint.Align.CENTER);
-        npaint.setTextSize(30);
+        npaint.setTextSize(40);
         npaint.setColor(Color.BLACK);
         float rotateAngle=0.0f;
         canvas.save();
@@ -227,7 +227,6 @@ public class ClockView extends View{
             String[] temp = curlist.get(i).split(":");
             int templength=temp.length;
 
-          //  Log.i("hello",temp[5]+temp[6]+temp[7]);
             int starthour=Integer.parseInt(temp[0]), startmin=Integer.parseInt(temp[1]);
             int endhour=Integer.parseInt(temp[2]), endmin=Integer.parseInt(temp[3]);
             int start=starthour*60+startmin, end=endhour*60+endmin;

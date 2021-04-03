@@ -22,6 +22,7 @@ import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 
@@ -34,14 +35,17 @@ import java.util.Calendar;
 public class ChallengeSub extends Activity implements TimePicker.OnTimeChangedListener{
 // https://lcw126.tistory.com/289
 
-    private TextView alarmtime , waketime, curtv;
-    private String curname;
     private TimePicker timePicker;
-    private Button start_btn;
+    private TextView  curtv;
+    private EditText editText;
+    private String curname;
+    private Button start_btn, cancel_btn;
     int index=0, nHourDay, nMinute;
     long millis;
     Intent intent;
     SwitchButton switchButton;
+    boolean timepickerchecked;
+
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,9 +54,12 @@ public class ChallengeSub extends Activity implements TimePicker.OnTimeChangedLi
 
         timePicker=findViewById(R.id.tp_timepicker);
         curtv=findViewById(R.id.challengetv);
+        editText=findViewById(R.id.duration);
         start_btn=findViewById(R.id.ch_btn);
+        cancel_btn=findViewById(R.id.cancel_btn);
         switchButton = (SwitchButton) findViewById(R.id.sb_use_listener);
         timePicker=findViewById(R.id.tp_timepicker);
+        timepickerchecked=false;
         dealIntent();
         registerListener();
 
@@ -117,9 +124,12 @@ public class ChallengeSub extends Activity implements TimePicker.OnTimeChangedLi
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 // 스위치 버튼이 체크되었는지 검사하여 텍스트뷰에 각 경우에 맞게 출력합니다.
                 if (isChecked){
+                    timepickerchecked=true;
                     set_timepicker_text_colour(Color.BLACK);
                     timePicker.setEnabled(true);
                 }else{
+                    timepickerchecked=false;
+                  //  millis=-1;
                     set_timepicker_text_colour(Color.WHITE);
                     timePicker.setEnabled(false);
                 }
@@ -128,10 +138,17 @@ public class ChallengeSub extends Activity implements TimePicker.OnTimeChangedLi
         start_btn.setOnClickListener(view->{
             ChallengeMain.challenge[index]=true;
             intent.putExtra("idx",index);
-            AlarmHATT alarmHATT=new AlarmHATT(ChallengeSub.this);
-            alarmHATT.Alarm(index, curname,millis); //alarm 설정
-
+            if(timepickerchecked) {
+                intent.putExtra("alarmtime",millis);
+                AlarmHATT alarmHATT = new AlarmHATT(ChallengeSub.this);
+                alarmHATT.Alarm(index, curname, millis); //alarm 설정
+            }
+            Toast.makeText(getApplicationContext(), "챌린지가 시작되었습니다.", Toast.LENGTH_SHORT).show();
             setResult(RESULT_OK, intent);
+            finish();
+        });
+        cancel_btn.setOnClickListener(view->{
+            setResult(RESULT_CANCELED,intent);
             finish();
         });
     }

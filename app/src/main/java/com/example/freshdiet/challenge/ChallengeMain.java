@@ -54,7 +54,9 @@ public class ChallengeMain extends Fragment implements ViewFlipperAction.ViewFli
     View view1,view2,view3;
     Context Ccontext;
     public static boolean[] challenge;//=new boolean[CHANLLENGE_NUM+1];
+
     HashMap<String, Long> hashMap;
+    HashMap<String, Long> alarmtimeMap;
 
     ActivityResultLauncher<Intent> startActivityResult1 = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
@@ -64,25 +66,29 @@ public class ChallengeMain extends Fragment implements ViewFlipperAction.ViewFli
                     if (result.getResultCode() == Activity.RESULT_OK) {
                         Intent data=result.getData();
                         int idx=data.getIntExtra("idx",-1);
+                        Long time=data.getLongExtra("alarmtime",-1);
                         if(idx!=-1){
                             String text=getTitle(idx);
                             if(hashMap.containsKey(text)){
                                 if(challenge[idx]==false){ // false --> 키 삭제
                                     hashMap.remove(text);
                                 }
+                                else{ // 수정되었다.
+                                   alarmtimeMap.put(text, time);
+                                }
                             }else{ // 해쉬맵에 키가 없다면
                                 if(challenge[idx]==true){ //challenge 체크가 true 이면 현재 날짜와 저장
                                     Long day=getDay();
                                     hashMap.put(text,day);
-                                }
-                                else{ //수정했다는 거임.
-
+                                    alarmtimeMap.put(text, time);
                                 }
                             }
                         }
                         initScreen();
                        saveData();
-                       setMap(hashMap);
+                       setMap(hashMap,"Challenge");
+                       setMap(alarmtimeMap,"Alarm");
+
                     }
                 }
             });
@@ -153,8 +159,11 @@ public class ChallengeMain extends Fragment implements ViewFlipperAction.ViewFli
     }
 
     private void initScreen(){
-        HashMap<String, Long>temp=getMap();
+        HashMap<String, Long>temp=getMap("Challenge");
         if(temp.size()!=0) hashMap=temp;
+
+        temp=getMap("Alarm");
+        if(temp.size()!=0) alarmtimeMap=temp;
 
        if(challenge[0]){
            sleep1.setBackgroundColor(Color.RED);
@@ -194,8 +203,21 @@ public class ChallengeMain extends Fragment implements ViewFlipperAction.ViewFli
         switch(idx){
             case 0:
                 tv=rootView.findViewById(R.id.sleeptv1);
-                str=tv.getText().toString();
+                break;
+            case 1:
+                tv=rootView.findViewById(R.id.sleeptv2);break;
+            case 2:
+                tv=rootView.findViewById(R.id.exertv1);break;
+            case 3:
+                tv=rootView.findViewById(R.id.exertv2);break;
+            case 4:
+                tv=rootView.findViewById(R.id.exertv3);break;
+            case 5:
+                tv=rootView.findViewById(R.id.foodtv1);break;
+            case 6:
+                tv=rootView.findViewById(R.id.foodtv2);break;
         }
+        str=tv.getText().toString();
         return str;
     }
 
@@ -225,24 +247,44 @@ public class ChallengeMain extends Fragment implements ViewFlipperAction.ViewFli
 
 
         sleep1.setOnClickListener(view->{
-            Intent intent;
-            TextView tv;
-            intent=new Intent(getContext(), ChallengeSub.class);
-            intent.putExtra("index",0);
-            tv=rootView.findViewById(R.id.sleeptv1);
-            intent.putExtra("curname",tv.getText().toString());
-            startActivityResult1.launch(intent);
+            makeIntent(0);
         });
 
         sleep2.setOnClickListener(view -> {
-            Intent intent;
-            TextView tv;
-            intent = new Intent(getContext(), ChallengeSub.class);
-            intent.putExtra("index",1);
-            tv=rootView.findViewById(R.id.sleeptv2);
-            intent.putExtra("curname",tv.getText().toString());
-            startActivityResult1.launch(intent);
+            makeIntent(1);
         });
+
+        exer1.setOnClickListener(view->{
+            makeIntent(2);
+        });
+        exer2.setOnClickListener(view->{
+            makeIntent(3);
+        });
+        exer3.setOnClickListener(view->{
+            makeIntent(4);
+        });
+        eat1.setOnClickListener(view->{
+            makeIntent(5);
+        });
+        eat2.setOnClickListener(view->{
+            makeIntent(6);
+        });
+    }
+
+    private void makeIntent(int idx){
+        Intent intent;
+        String title=getTitle(idx);
+        if(!challenge[idx])
+            intent=new Intent(getContext(), ChallengeSub.class);
+        else {
+            intent = new Intent(getContext(), ChallengeSub2.class);
+            Long time=alarmtimeMap.get(title); // 알람 시간 가지고 오기
+            intent.putExtra("alarmtime",time);
+        }
+
+        intent.putExtra("index",idx);
+        intent.putExtra("curname",title);
+        startActivityResult1.launch(intent);
     }
 
     private void getData(){
@@ -256,27 +298,27 @@ public class ChallengeMain extends Fragment implements ViewFlipperAction.ViewFli
         PreferenceManager.setBooleanArray(Ccontext, "challenge_check",challenge);
     }
 
-    public void setMap(HashMap<String, Long> inputMap){
+    public void setMap(HashMap<String, Long> inputMap,String str){
 
-        SharedPreferences pSharedPref = getActivity().getSharedPreferences("Challenge", MODE_PRIVATE);
+        SharedPreferences pSharedPref = getActivity().getSharedPreferences(str, MODE_PRIVATE);
 
         if (pSharedPref != null){
             JSONObject jsonObject = new JSONObject(inputMap);
             String jsonString = jsonObject.toString();
             SharedPreferences.Editor editor = pSharedPref.edit();
-            editor.remove("challenge_day").apply();
-            editor.putString("challenge_day", jsonString);
+            editor.remove(str+"day").apply();
+            editor.putString(str+"day", jsonString);
             editor.commit();
         }
     }
 
-    public  HashMap<String,Long> getMap(){
+    public  HashMap<String,Long> getMap(String str){
         HashMap<String,Long> outputMap = new HashMap<String,Long>();
-        SharedPreferences pSharedPref = getActivity().getSharedPreferences("Challenge", MODE_PRIVATE);
+        SharedPreferences pSharedPref = getActivity().getSharedPreferences(str, MODE_PRIVATE);
 
         try{
             if (pSharedPref != null){
-                String jsonString = pSharedPref.getString("challenge_day", (new JSONObject()).toString());
+                String jsonString = pSharedPref.getString(str+"day", (new JSONObject()).toString());
                 JSONObject jsonObject = new JSONObject(jsonString);
                 Iterator<String> keysItr = jsonObject.keys();
                 while(keysItr.hasNext()) {

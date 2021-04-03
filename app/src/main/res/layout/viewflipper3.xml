@@ -23,6 +23,7 @@
           >
 
             <TextView
+                android:id="@+id/foodtv1"
                 android:text="든든하게! 아침 챙겨 먹자"
                 android:textSize="20sp"
                 android:layout_width="match_parent"
@@ -56,6 +57,7 @@
             android:clickable="true">
 
             <TextView
+                android:id="@+id/foodtv2"
                 android:text="건강하게! 규칙적으로 챙겨먹자"
                 android:textSize="20sp"
                 android:layout_width="match_parent"

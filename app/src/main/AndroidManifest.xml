@@ -28,6 +28,8 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".profile.MyProfile" />
+
         <activity
             android:name=".Popup"
             android:theme="@android:style/Theme.Holo.Dialog.NoActionBar"
@@ -44,8 +46,6 @@
             android:theme="@android:style/Theme.Holo.Dialog.NoActionBar"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
-        <activity android:name=".profile.MyProfile" />
-
         <activity android:name=".challenge.ChallengeSub"
             android:theme="@android:style/Theme.Holo.Dialog.NoActionBar"
             android:launchMode="singleTask"

@@ -5,6 +5,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 
@@ -29,6 +30,7 @@ public class AlarmHATT {
 
       //  calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DATE), 23, 12, 0);
         //알람 예약
+        Toast.makeText(context, "알람이 설정되었습니다.",Toast.LENGTH_SHORT).show();
         am.set(AlarmManager.RTC_WAKEUP, timemills, sender);
     }
 
