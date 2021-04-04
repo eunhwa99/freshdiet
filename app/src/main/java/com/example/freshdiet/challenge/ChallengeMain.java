@@ -57,6 +57,7 @@ public class ChallengeMain extends Fragment implements ViewFlipperAction.ViewFli
 
     HashMap<String, Long> hashMap;
     HashMap<String, Long> alarmtimeMap;
+    ArrayList<String> prizeArray; // 한 줄 보상
 
     ActivityResultLauncher<Intent> startActivityResult1 = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
@@ -67,25 +68,31 @@ public class ChallengeMain extends Fragment implements ViewFlipperAction.ViewFli
                         Intent data=result.getData();
                         int idx=data.getIntExtra("idx",-1);
                         Long time=data.getLongExtra("alarmtime",-1);
+                        String prize=data.getStringExtra("prize");
                         if(idx!=-1){
                             String text=getTitle(idx);
-                            if(hashMap.containsKey(text)){
-                                if(challenge[idx]==false){ // false --> 키 삭제
+                            if(hashMap.containsKey(text)){ // 해쉬맵에 이미 키가 존재한다면
+                                if(!challenge[idx]){ // false --> 키 삭제
                                     hashMap.remove(text);
+                                    alarmtimeMap.remove(text);
+                                    prizeArray.set(idx,"");
                                 }
                                 else{ // 수정되었다.
-                                   alarmtimeMap.put(text, time);
+                                  alarmtimeMap.put(text, time);
+                                   prizeArray.set(idx, prize);
                                 }
                             }else{ // 해쉬맵에 키가 없다면
-                                if(challenge[idx]==true){ //challenge 체크가 true 이면 현재 날짜와 저장
+                                if(challenge[idx]){ //challenge 체크가 true 이면 현재 날짜와 저장
                                     Long day=getDay();
                                     hashMap.put(text,day);
                                     alarmtimeMap.put(text, time);
+                                    prizeArray.set(idx, prize);
                                 }
                             }
                         }
+
                         initScreen();
-                       saveData();
+                       saveData(); // boolean challenge 배열 수정
                        setMap(hashMap,"Challenge");
                        setMap(alarmtimeMap,"Alarm");
 
@@ -278,12 +285,14 @@ public class ChallengeMain extends Fragment implements ViewFlipperAction.ViewFli
             intent=new Intent(getContext(), ChallengeSub.class);
         else {
             intent = new Intent(getContext(), ChallengeSub2.class);
+            String prizestr=prizeArray.get(idx);
             Long time=alarmtimeMap.get(title); // 알람 시간 가지고 오기
+            intent.putExtra("prize",prizestr);
             intent.putExtra("alarmtime",time);
         }
 
-        intent.putExtra("index",idx);
-        intent.putExtra("curname",title);
+        intent.putExtra("index",idx); // 몇 번째 레이아웃인지
+        intent.putExtra("curname",title); // 챌린지 제목
         startActivityResult1.launch(intent);
     }
 
@@ -293,9 +302,16 @@ public class ChallengeMain extends Fragment implements ViewFlipperAction.ViewFli
             challenge=temp;
         }
         else challenge=new boolean[CHALLENGE_NUM+1];
+
+        ArrayList<String> temp2=PreferenceManager.getArrayList(Ccontext,"prize_str");
+        if(temp2.size()!=0){
+            prizeArray=temp2;
+        }
+        else prizeArray=new ArrayList<>(CHALLENGE_NUM+1);
     }
     private void saveData(){
         PreferenceManager.setBooleanArray(Ccontext, "challenge_check",challenge);
+        PreferenceManager.setArrayList(Ccontext, "prize_str", prizeArray);
     }
 
     public void setMap(HashMap<String, Long> inputMap,String str){
