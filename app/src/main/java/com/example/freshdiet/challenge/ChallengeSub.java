@@ -15,6 +15,7 @@ import android.graphics.Paint;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -37,7 +38,7 @@ public class ChallengeSub extends Activity implements TimePicker.OnTimeChangedLi
 
     private TimePicker timePicker;
     private TextView  curtv;
-    private EditText editText;
+    private EditText editText, prizetext;
     private String curname;
     private Button start_btn, cancel_btn;
     int index=0, nHourDay, nMinute;
@@ -55,6 +56,7 @@ public class ChallengeSub extends Activity implements TimePicker.OnTimeChangedLi
         timePicker=findViewById(R.id.tp_timepicker);
         curtv=findViewById(R.id.challengetv);
         editText=findViewById(R.id.duration);
+        prizetext=findViewById(R.id.etxtprize);
         start_btn=findViewById(R.id.ch_btn);
         cancel_btn=findViewById(R.id.cancel_btn);
         switchButton = (SwitchButton) findViewById(R.id.sb_use_listener);
@@ -138,8 +140,9 @@ public class ChallengeSub extends Activity implements TimePicker.OnTimeChangedLi
         start_btn.setOnClickListener(view->{
             ChallengeMain.challenge[index]=true;
             intent.putExtra("idx",index);
+            intent.putExtra("prize",prizetext.getText().toString());
             if(timepickerchecked) {
-                intent.putExtra("alarmtime",millis);
+                intent.putExtra("alarmtime",nHourDay*3600*1000+nMinute*60*1000);
                 AlarmHATT alarmHATT = new AlarmHATT(ChallengeSub.this);
                 alarmHATT.Alarm(index, curname, millis); //alarm 설정
             }
@@ -159,15 +162,29 @@ public class ChallengeSub extends Activity implements TimePicker.OnTimeChangedLi
         nHourDay=hourOfDay;
         nMinute=minute;
         Calendar calendar=Calendar.getInstance();
-        calendar.set(Calendar.HOUR,nHourDay);
+        calendar.set(Calendar.HOUR_OF_DAY,nHourDay);
         calendar.set(Calendar.MINUTE,nMinute);
 
         millis= calendar.getTimeInMillis();
+
     }
 
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        //바깥레이어 클릭시 안닫히게
+        if(event.getAction()==MotionEvent.ACTION_OUTSIDE){
+            return false;
+        }
+        return true;
+    }
 
+    @Override
+    public void onBackPressed() {
+        //안드로이드 백버튼 막기
+        return;
+    }
 
-    public class BroadcastD extends BroadcastReceiver {
+    public  class BroadcastD extends BroadcastReceiver {
         Notification.Builder builder;
         //오레오 이상은 반드시 채널을 설정해줘야 Notification이 작동함
         private String CHANNEL_ID = "channel1";
@@ -208,4 +225,5 @@ public class ChallengeSub extends Activity implements TimePicker.OnTimeChangedLi
 
         }
     }
+
 }

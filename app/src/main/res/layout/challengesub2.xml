@@ -2,10 +2,11 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:background="#eeeeee"
+    android:id="@+id/sub2layout"
     android:orientation="vertical"
     android:layout_gravity="center"
     android:layout_width="300dp"
-    android:layout_height="400dp">
+    android:layout_height="wrap_content">
 
     <LinearLayout
         android:orientation="horizontal"
@@ -18,10 +19,9 @@
             android:layout_height="match_parent"
             android:textSize="20sp"
             android:textColor="#fff"
-            android:layout_marginBottom="20dp"
+
             android:gravity="center"
             android:background="#ff7a00"/>
-
     </LinearLayout>
 
     <LinearLayout
@@ -97,16 +97,17 @@
                 android:layout_height="wrap_content"
                 android:text="알람 시간 "
                 android:textSize="20sp"/>
+
             <TextView
                 android:id="@+id/alarmtv"
-                android:background="@drawable/memo_border"
-                android:layout_marginLeft="20dp"
-                android:textColor="#000"
                 android:layout_width="80dp"
-                android:layout_height="wrap_content"
-                android:textSize="20sp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="20dp"
+                android:background="@drawable/memo_border"
+                android:clickable="true"
                 android:gravity="center_horizontal"
-                android:clickable="true"/>
+                android:textColor="#000"
+                android:textSize="20sp" />
 
         </LinearLayout>
         <LinearLayout
@@ -119,30 +120,31 @@
             android:gravity="center"
             android:orientation="horizontal"
             android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp">
+            android:layout_marginRight="20dp"
+            android:visibility="gone">
             <TimePicker
                 android:id="@+id/tp_timepicker"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:timePickerMode="spinner"
                 android:textColor="#000"
-                android:visibility="gone"
                 />
 
         </LinearLayout>
-        <TextView
-            android:id="@+id/giveuptv"
-            android:layout_marginTop="50dp"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:background="@drawable/border"
-            android:textStyle="bold"
-            android:textColor="@color/purple_200"
-            android:text="포기할래요"
-            android:gravity="center"
-            android:clickable="true"/>
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/giveuptv"
+        android:layout_marginTop="50dp"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@drawable/border"
+        android:textStyle="bold"
+        android:textColor="@color/purple_200"
+        android:text="포기할래요"
+        android:gravity="center"
+        android:clickable="true"/>
 
 
     <View

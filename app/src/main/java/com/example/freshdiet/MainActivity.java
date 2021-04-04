@@ -50,12 +50,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 public void onActivityResult(ActivityResult result) {
                     if (result.getResultCode() == Activity.RESULT_OK) {
                         Intent data=result.getData();
-                        username=data.getStringExtra("name");
+                        getData();
+                        initScreen();
+                        /*username=data.getStringExtra("name");
                         userage=data.getStringExtra("age");
                         userheight=data.getStringExtra("height");
                         userweight=data.getStringExtra("weight");
                         usermeta=data.getStringExtra("meta");
-                        usergender=data.getStringExtra("gender");
+                        usergender=data.getStringExtra("gender");*/
 
                     }
                 }
@@ -72,10 +74,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if(username.equals("Unknown")){
             Intent intent=new Intent(getApplicationContext(), MyProfile.class);
             startActivityResult.launch(intent);
-            getData();
+           // getData();
         }
 
-        toolbar =  findViewById(R.id.toolbar);
+        else {
+            initScreen();
+        }
+    }
+
+    private void initScreen(){
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayShowTitleEnabled(false); // 기존 title 지우기
@@ -88,18 +96,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setNavigationItemSelectedListener(this);
 
 
-        calendarf=new Calendar();
+        calendarf = new Calendar();
 
-        profilef=new ShowProfile();
-        makeplanf=new MakePlan();
-        challengef=new ChallengeMain();
-        foodmainf=new FoodMain();
-       // fooddessertf=new FoodDessert();
+        profilef = new ShowProfile();
+        makeplanf = new MakePlan();
+        challengef = new ChallengeMain();
+        foodmainf = new FoodMain();
+        // fooddessertf=new FoodDessert();
 
-        manager=getSupportFragmentManager();
+        manager = getSupportFragmentManager();
         navigationView.getMenu().findItem(R.id.memberone).setVisible(false);
         navigationView.getMenu().findItem(R.id.membertwo).setVisible(false);
-      //  navigationView.getMenu().setGroupVisible(R.id.members_group, false);
+        //  navigationView.getMenu().setGroupVisible(R.id.members_group, false);
         // calendar 화면을 첫 번째 fragment로 설정
         getSupportFragmentManager().beginTransaction().replace(R.id.container, calendarf).commit();
     }

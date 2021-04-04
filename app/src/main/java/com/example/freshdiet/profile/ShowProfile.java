@@ -113,7 +113,7 @@ public class ShowProfile extends Fragment {
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     public Long getDay(){
-        final Calendar ddayCalendar = Calendar.getInstance();
+       // final Calendar ddayCalendar = Calendar.getInstance();
         final long today = Calendar.getInstance().getTimeInMillis() / ONE_DAY;
         return today;
     }
@@ -124,7 +124,7 @@ public class ShowProfile extends Fragment {
 
         try{
             if (pSharedPref != null){
-                String jsonString = pSharedPref.getString("challenge_day", (new JSONObject()).toString());
+                String jsonString = pSharedPref.getString("Challenge_day", (new JSONObject()).toString());
                 JSONObject jsonObject = new JSONObject(jsonString);
                 Iterator<String> keysItr = jsonObject.keys();
                 while(keysItr.hasNext()) {

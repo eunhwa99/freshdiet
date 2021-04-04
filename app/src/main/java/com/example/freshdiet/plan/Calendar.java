@@ -84,7 +84,7 @@ public class Calendar extends Fragment {
     }
 
     public void initScreen() {
-        calendarText.setText(MainActivity.username+"님의 달력 일기장");
+        calendarText.setText(MainActivity.username+"님의 달력");
         SimpleDateFormat format = new SimpleDateFormat( "yyyy / M / d");
         SimpleDateFormat format2=new SimpleDateFormat("yyyyMd");
         Date time = new Date();

@@ -31,7 +31,17 @@ public class AlarmHATT {
       //  calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DATE), 23, 12, 0);
         //알람 예약
         Toast.makeText(context, "알람이 설정되었습니다.",Toast.LENGTH_SHORT).show();
-        am.set(AlarmManager.RTC_WAKEUP, timemills, sender);
+        am.setRepeating(AlarmManager.RTC_WAKEUP, timemills, AlarmManager.INTERVAL_DAY,sender);
+    }
+
+    public void noAlarm(int request){
+        AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        Intent intent=new Intent(context, ChallengeSub.BroadcastD.class);
+        PendingIntent sender=PendingIntent.getBroadcast(context, request, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        if(sender!=null) {
+            am.cancel(sender);
+            sender.cancel();
+        }
     }
 
 }

@@ -14,6 +14,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.freshdiet.MainActivity;
 import com.example.freshdiet.R;
 
 public class MyProfile extends AppCompatActivity {
@@ -105,13 +106,13 @@ public class MyProfile extends AppCompatActivity {
 
                     saveData();
                     Toast.makeText(view.getContext(), "저장되었습니다.", Toast.LENGTH_SHORT).show();
-                    Intent intent=new Intent();
-                    intent.putExtra("name",username);
+                    Intent intent=new Intent(MyProfile.this, MainActivity.class);
+                  /*  intent.putExtra("name",username);
                     intent.putExtra("age",userage);
                     intent.putExtra("gender",gender);
                     intent.putExtra("height",userheight);
                     intent.putExtra("weight",userweight);
-                    intent.putExtra("meta",usermeta);
+                    intent.putExtra("meta",usermeta);*/
                     setResult(RESULT_OK, intent);
                     finish();
                 }

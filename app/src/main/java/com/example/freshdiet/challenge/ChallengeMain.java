@@ -56,7 +56,7 @@ public class ChallengeMain extends Fragment implements ViewFlipperAction.ViewFli
     public static boolean[] challenge;//=new boolean[CHANLLENGE_NUM+1];
 
     HashMap<String, Long> hashMap;
-    HashMap<String, Long> alarmtimeMap;
+    HashMap<String, Integer> alarmtimeMap;
     ArrayList<String> prizeArray; // 한 줄 보상
 
     ActivityResultLauncher<Intent> startActivityResult1 = registerForActivityResult(
@@ -67,7 +67,7 @@ public class ChallengeMain extends Fragment implements ViewFlipperAction.ViewFli
                     if (result.getResultCode() == Activity.RESULT_OK) {
                         Intent data=result.getData();
                         int idx=data.getIntExtra("idx",-1);
-                        Long time=data.getLongExtra("alarmtime",-1);
+                        int time=data.getIntExtra("alarmtime",-1);
                         String prize=data.getStringExtra("prize");
                         if(idx!=-1){
                             String text=getTitle(idx);
@@ -90,12 +90,10 @@ public class ChallengeMain extends Fragment implements ViewFlipperAction.ViewFli
                                 }
                             }
                         }
-
-                        initScreen();
                        saveData(); // boolean challenge 배열 수정
                        setMap(hashMap,"Challenge");
-                       setMap(alarmtimeMap,"Alarm");
-
+                       setMap2(alarmtimeMap,"Alarm");
+                        initScreen();
                     }
                 }
             });
@@ -105,6 +103,8 @@ public class ChallengeMain extends Fragment implements ViewFlipperAction.ViewFli
         rootView = (ViewGroup)inflater.inflate(R.layout.challengemain, container, false);
 
         Ccontext=container.getContext();
+        challenge=new boolean[CHALLENGE_NUM+1];
+        //prizeArray=new ArrayList<String>(CHALLENGE_NUM+1);
         getData();
 
         //UI
@@ -142,6 +142,13 @@ public class ChallengeMain extends Fragment implements ViewFlipperAction.ViewFli
         //리스너설정 - 좌우 터치시 화면넘어가기
         //flipper.setOnTouchListener(new ViewFlipperAction(this, flipper));
         hashMap=new HashMap<>();
+        alarmtimeMap=new HashMap<>();
+        HashMap<String, Long>temp=getMap("Challenge");
+        if(temp.size()!=0) hashMap=temp;
+
+        HashMap<String, Integer>temp2=getMap2("Alarm");
+        if(temp2.size()!=0) alarmtimeMap=temp2;
+
         initScreen();
         setClickListener();
 
@@ -166,11 +173,6 @@ public class ChallengeMain extends Fragment implements ViewFlipperAction.ViewFli
     }
 
     private void initScreen(){
-        HashMap<String, Long>temp=getMap("Challenge");
-        if(temp.size()!=0) hashMap=temp;
-
-        temp=getMap("Alarm");
-        if(temp.size()!=0) alarmtimeMap=temp;
 
        if(challenge[0]){
            sleep1.setBackgroundColor(Color.RED);
@@ -286,7 +288,7 @@ public class ChallengeMain extends Fragment implements ViewFlipperAction.ViewFli
         else {
             intent = new Intent(getContext(), ChallengeSub2.class);
             String prizestr=prizeArray.get(idx);
-            Long time=alarmtimeMap.get(title); // 알람 시간 가지고 오기
+            int time=alarmtimeMap.get(title); // 알람 시간 가지고 오기
             intent.putExtra("prize",prizestr);
             intent.putExtra("alarmtime",time);
         }
@@ -307,14 +309,18 @@ public class ChallengeMain extends Fragment implements ViewFlipperAction.ViewFli
         if(temp2.size()!=0){
             prizeArray=temp2;
         }
-        else prizeArray=new ArrayList<>(CHALLENGE_NUM+1);
+        else {
+            prizeArray=new ArrayList<>();
+            for(int i=0;i<CHALLENGE_NUM+1;i++)
+                prizeArray.add("");
+        }
     }
     private void saveData(){
         PreferenceManager.setBooleanArray(Ccontext, "challenge_check",challenge);
         PreferenceManager.setArrayList(Ccontext, "prize_str", prizeArray);
     }
 
-    public void setMap(HashMap<String, Long> inputMap,String str){
+    public void setMap(HashMap<String, Long> inputMap, String str){
 
         SharedPreferences pSharedPref = getActivity().getSharedPreferences(str, MODE_PRIVATE);
 
@@ -352,6 +358,47 @@ public class ChallengeMain extends Fragment implements ViewFlipperAction.ViewFli
 
         return outputMap;
     }
+
+    public void setMap2(HashMap<String, Integer> inputMap, String str){
+
+        SharedPreferences pSharedPref = getActivity().getSharedPreferences(str, MODE_PRIVATE);
+
+        if (pSharedPref != null){
+            JSONObject jsonObject = new JSONObject(inputMap);
+            String jsonString = jsonObject.toString();
+            SharedPreferences.Editor editor = pSharedPref.edit();
+            editor.remove(str+"day").apply();
+            editor.putString(str+"day", jsonString);
+            editor.commit();
+        }
+    }
+
+    public  HashMap<String,Integer> getMap2(String str){
+        HashMap<String,Integer> outputMap = new HashMap<String,Integer>();
+        SharedPreferences pSharedPref = getActivity().getSharedPreferences(str, MODE_PRIVATE);
+
+        try{
+            if (pSharedPref != null){
+                String jsonString = pSharedPref.getString(str+"day", (new JSONObject()).toString());
+                JSONObject jsonObject = new JSONObject(jsonString);
+                Iterator<String> keysItr = jsonObject.keys();
+                while(keysItr.hasNext()) {
+                    String key = keysItr.next();
+                    String value = String.valueOf(jsonObject.get(key));
+                    outputMap.put(key, Integer.parseInt(value));
+                }
+            }
+        }catch(Exception e){
+            String sr=e.getMessage();
+            Log.i("오류", sr);
+            e.printStackTrace();
+        }
+
+
+        return outputMap;
+    }
+
+
 
 }
 

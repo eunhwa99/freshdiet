@@ -50,6 +50,11 @@
             android:theme="@android:style/Theme.Holo.Dialog.NoActionBar"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"/>
+        <activity android:name=".challenge.ChallengeSub2"
+            android:theme="@android:style/Theme.Holo.Dialog.NoActionBar"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"/>
+
 
 
     </application>
