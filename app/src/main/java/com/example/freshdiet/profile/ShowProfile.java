@@ -124,7 +124,7 @@ public class ShowProfile extends Fragment {
 
         try{
             if (pSharedPref != null){
-                String jsonString = pSharedPref.getString("Challenge_day", (new JSONObject()).toString());
+                String jsonString = pSharedPref.getString("Challengeday", (new JSONObject()).toString());
                 JSONObject jsonObject = new JSONObject(jsonString);
                 Iterator<String> keysItr = jsonObject.keys();
                 while(keysItr.hasNext()) {

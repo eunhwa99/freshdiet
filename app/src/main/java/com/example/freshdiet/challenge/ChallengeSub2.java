@@ -5,13 +5,20 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
+import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -20,13 +27,13 @@ import androidx.annotation.RequiresApi;
 
 import com.example.freshdiet.R;
 
+import java.lang.reflect.Field;
 import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
 
 /**
- * 1. 레이아웃 크기 동적 변환
- * 2. 알람 상자 숫자 크기 줄이기
- * 3. timepicker 글자 검정색으로 바꾸기
+
+
  */
 
 public class ChallengeSub2 extends Activity implements TimePicker.OnTimeChangedListener{
@@ -36,7 +43,7 @@ public class ChallengeSub2 extends Activity implements TimePicker.OnTimeChangedL
     String curname, prizestr;
     int idx;
     int nHourDay, nMinute;
-    long millis=-1;
+    long millis=-1, hours, minutes;
 
     private TextView curtv, durtv, alarmtv, giveuptv;
     private Button start_btn, cancel_btn;
@@ -76,12 +83,56 @@ public class ChallengeSub2 extends Activity implements TimePicker.OnTimeChangedL
         prizestr=intent.getStringExtra("prize");
     }
 
+    private void set_timepicker_text_colour(int color){
+        Resources system;
+        system = Resources.getSystem();
+        int hour_numberpicker_id = system.getIdentifier("hour", "id", "android");
+        int minute_numberpicker_id = system.getIdentifier("minute", "id", "android");
+        int ampm_numberpicker_id = system.getIdentifier("amPm", "id", "android");
+
+        NumberPicker hour_numberpicker = (NumberPicker) timePicker.findViewById(hour_numberpicker_id);
+        NumberPicker minute_numberpicker = (NumberPicker) timePicker.findViewById(minute_numberpicker_id);
+        NumberPicker ampm_numberpicker = (NumberPicker) timePicker.findViewById(ampm_numberpicker_id);
+
+        set_numberpicker_text_colour(hour_numberpicker,color);
+        set_numberpicker_text_colour(minute_numberpicker,color);
+        set_numberpicker_text_colour(ampm_numberpicker,color);
+    }
+
+    @SuppressLint("LongLogTag")
+    private void set_numberpicker_text_colour(NumberPicker number_picker, int color){
+        final int count = number_picker.getChildCount();
+        //final int color = getResources().getColor(R.color.text);
+
+        for(int i = 0; i < count; i++){
+            View child = number_picker.getChildAt(i);
+
+            try{
+                Field wheelpaint_field = number_picker.getClass().getDeclaredField("mSelectorWheelPaint");
+                wheelpaint_field.setAccessible(true);
+
+                ((Paint)wheelpaint_field.get(number_picker)).setColor(color);
+                ((EditText)child).setTextColor(color);
+                number_picker.invalidate();
+            }
+            catch(NoSuchFieldException e){
+                Log.w("setNumberPickerTextColor", e);
+            }
+            catch(IllegalAccessException e){
+                Log.w("setNumberPickerTextColor", e);
+            }
+            catch(IllegalArgumentException e){
+                Log.w("setNumberPickerTextColor", e);
+            }
+        }
+    }
+
     @SuppressLint("SetTextI18n")
     private void setTextView(){
         curtv.setText(curname);
         if(alarmTime!=-1) {
-            long hours = TimeUnit.MILLISECONDS.toHours(alarmTime);
-            long minutes = TimeUnit.MILLISECONDS.toMinutes(alarmTime)%60;
+            hours = TimeUnit.MILLISECONDS.toHours(alarmTime);
+            minutes = TimeUnit.MILLISECONDS.toMinutes(alarmTime)%60;
             alarmtv.setText(hours+"시 "+minutes+"분 ");
         }
 
@@ -115,19 +166,29 @@ public class ChallengeSub2 extends Activity implements TimePicker.OnTimeChangedL
 
         //알람 시간
         alarmtv.setOnClickListener(view->{
+            FrameLayout.LayoutParams params;
             if(!timepickervisible) {
                 timepickervisible=true;
                 timepickerlayout.setVisibility(View.VISIBLE);
-                giveuptv.setVisibility(View.INVISIBLE);
+                set_timepicker_text_colour(Color.BLACK);
+                if(alarmTime!=-1){
+                    timePicker.setCurrentHour((int) hours);
+                    timePicker.setCurrentMinute((int)minutes);
+                }
+
+               // giveuptv.setVisibility(View.INVISIBLE);
             }
             else{
                 timepickervisible=false;
-                timepickerlayout.setVisibility(View.INVISIBLE);
-                giveuptv.setVisibility(View.VISIBLE);
+                timepickerlayout.setVisibility(View.GONE);
+              //  giveuptv.setVisibility(View.VISIBLE);
                 millis=-1;
             }
-          //  ViewGroup.MarginLayoutParams params=new ViewGroup.MarginLayoutParams(300, LinearLayout.LayoutParams.WRAP_CONTENT);
-          //  layout.setLayoutParams(params);
+
+            int width=0;
+            width=(int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,300,getResources().getDisplayMetrics());
+            params=new FrameLayout.LayoutParams(width, LinearLayout.LayoutParams.WRAP_CONTENT);
+            layout.setLayoutParams(params);
         });
 
         // 포기 버튼
@@ -141,6 +202,7 @@ public class ChallengeSub2 extends Activity implements TimePicker.OnTimeChangedL
                 public void onClick(DialogInterface dialog, int id)
                 {
                     ChallengeMain.challenge[idx]=false;
+                    intent.putExtra("idx",idx);
                     Toast.makeText(getApplicationContext(), "처리되었습니다.", Toast.LENGTH_SHORT).show();
                     setResult(RESULT_OK,intent);
                     finish();
@@ -171,7 +233,7 @@ public class ChallengeSub2 extends Activity implements TimePicker.OnTimeChangedL
         calendar.set(Calendar.MINUTE,nMinute);
 
         clicked=true;
-        Toast.makeText(getApplicationContext(),nHourDay+"시"+nMinute+"분",Toast.LENGTH_SHORT).show();
+       // Toast.makeText(getApplicationContext(),nHourDay+"시"+nMinute+"분",Toast.LENGTH_SHORT).show();
         millis= calendar.getTimeInMillis();
     }
 
