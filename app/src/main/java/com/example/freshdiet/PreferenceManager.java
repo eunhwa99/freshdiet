@@ -5,12 +5,8 @@ import android.content.SharedPreferences;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
 
 //https://copycoding.tistory.com/90
 
@@ -62,6 +58,15 @@ public class PreferenceManager {
         SharedPreferences prefs = getPreferences(context);
         SharedPreferences.Editor editor = prefs.edit();
         editor.putFloat(key, value);
+        editor.commit();
+    }
+
+    public static void setIntArray(Context context, String key, int[] array){
+        SharedPreferences prefs = getPreferences(context);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putInt(key, array.length);
+        for(int i=0;i<array.length;i++)
+            editor.putInt(key+i, array[i]);
         editor.commit();
     }
 
@@ -128,6 +133,17 @@ public class PreferenceManager {
         boolean array[] = new boolean[size];
         for(int i=0;i<size;i++)
             array[i] = prefs.getBoolean(key+ i, false);
+
+        return array;
+    }
+
+
+    public static int[] getIntArray(Context context, String key){
+        SharedPreferences prefs = getPreferences(context);
+        int size=prefs.getInt(key, 0);
+        int array[] = new int[size];
+        for(int i=0;i<size;i++)
+            array[i] = prefs.getInt(key+ i, -1);
 
         return array;
     }

@@ -133,7 +133,7 @@ public class ChallengeSub extends Activity implements TimePicker.OnTimeChangedLi
                     timePicker.setEnabled(true);
                 }else{
                     timepickerchecked=false;
-                  //  millis=-1;
+
                     set_timepicker_text_colour(Color.WHITE);
                     timePicker.setEnabled(false);
                 }
@@ -143,6 +143,8 @@ public class ChallengeSub extends Activity implements TimePicker.OnTimeChangedLi
             ChallengeMain.challenge[index]=true;
             intent.putExtra("idx",index);
             intent.putExtra("prize",prizetext.getText().toString());
+            intent.putExtra("days",Integer.parseInt(editText.getText().toString()));
+
             if(timepickerchecked) {
                 intent.putExtra("alarmtime",nHourDay*3600*1000+nMinute*60*1000);
                 AlarmHATT alarmHATT = new AlarmHATT(ChallengeSub.this);

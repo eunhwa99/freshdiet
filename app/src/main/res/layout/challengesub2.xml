@@ -71,11 +71,12 @@
                 android:layout_height="wrap_content"
                 android:text="챌린지 기간 "
                 android:textSize="20sp"/>
-            <TextView
+            <EditText
                 android:textColor="#000"
                 android:id="@+id/duration"
                 android:layout_width="80dp"
                 android:layout_height="wrap_content"
+                android:inputType="number"
                 android:textSize="20sp"
                 android:gravity="center_horizontal"/>
             <TextView

@@ -55,8 +55,8 @@ public class ChallengeMain extends Fragment implements ViewFlipperAction.ViewFli
     Context Ccontext;
     public static boolean[] challenge;//=new boolean[CHANLLENGE_NUM+1];
 
+    int[] daysArray, alarmArray;
     HashMap<String, Long> hashMap;
-    HashMap<String, Integer> alarmtimeMap;
     ArrayList<String> prizeArray; // 한 줄 보상
 
     ActivityResultLauncher<Intent> startActivityResult1 = registerForActivityResult(
@@ -67,32 +67,36 @@ public class ChallengeMain extends Fragment implements ViewFlipperAction.ViewFli
                     if (result.getResultCode() == Activity.RESULT_OK) {
                         Intent data=result.getData();
                         int idx=data.getIntExtra("idx",-1);
-                        int time=data.getIntExtra("alarmtime",-1);
+                        int time=data.getIntExtra("alarmtime",-1); // 알람 시간
+                        int days=data.getIntExtra("days",-1); // 챌린지 기간
                         String prize=data.getStringExtra("prize");
                         if(idx!=-1){
                             String text=getTitle(idx);
                             if(hashMap.containsKey(text)){ // 해쉬맵에 이미 키가 존재한다면
                                 if(!challenge[idx]){ // false --> 키 삭제
                                     hashMap.remove(text);
-                                    alarmtimeMap.remove(text);
+                                    alarmArray[idx]=-1;
+                                    daysArray[idx]=-1;
                                     prizeArray.set(idx,"");
                                 }
                                 else{ // 수정되었다.
-                                  alarmtimeMap.put(text, time);
+                                    alarmArray[idx]=time;
+                                    daysArray[idx]=days;
                                    prizeArray.set(idx, prize);
                                 }
                             }else{ // 해쉬맵에 키가 없다면
                                 if(challenge[idx]){ //challenge 체크가 true 이면 현재 날짜와 저장
                                     Long day=getDay();
                                     hashMap.put(text,day);
-                                    alarmtimeMap.put(text, time);
+                                    alarmArray[idx]=time;
+                                    daysArray[idx]=days;
                                     prizeArray.set(idx, prize);
                                 }
                             }
                         }
                        saveData(); // boolean challenge 배열 수정
                        setMap(hashMap,"Challenge");
-                       setMap2(alarmtimeMap,"Alarm");
+
                         initScreen();
                     }
                 }
@@ -140,14 +144,10 @@ public class ChallengeMain extends Fragment implements ViewFlipperAction.ViewFli
         flipper.addView(view3);
 
         //리스너설정 - 좌우 터치시 화면넘어가기
-        //flipper.setOnTouchListener(new ViewFlipperAction(this, flipper));
         hashMap=new HashMap<>();
-        alarmtimeMap=new HashMap<>();
+
         HashMap<String, Long>temp=getMap("Challenge");
         if(temp.size()!=0) hashMap=temp;
-
-        HashMap<String, Integer>temp2=getMap2("Alarm");
-        if(temp2.size()!=0) alarmtimeMap=temp2;
 
         initScreen();
         setClickListener();
@@ -286,9 +286,12 @@ public class ChallengeMain extends Fragment implements ViewFlipperAction.ViewFli
         else {
             intent = new Intent(getContext(), ChallengeSub2.class);
             String prizestr=prizeArray.get(idx);
-            int time=alarmtimeMap.get(title); // 알람 시간 가지고 오기
+            int time=alarmArray[idx]; // 알람 시간 가지고 오기
             intent.putExtra("prize",prizestr);
             intent.putExtra("alarmtime",time);
+
+            time=daysArray[idx]; // 챌린지 기간
+            intent.putExtra("days",time);
         }
 
         intent.putExtra("index",idx); // 몇 번째 레이아웃인지
@@ -312,10 +315,25 @@ public class ChallengeMain extends Fragment implements ViewFlipperAction.ViewFli
             for(int i=0;i<CHALLENGE_NUM+1;i++)
                 prizeArray.add("");
         }
+
+       int[] temp3=PreferenceManager.getIntArray(Ccontext,"alarmtime");
+        if(temp3.length!=0){
+           alarmArray=temp3;
+        }
+        else  alarmArray=new int[CHALLENGE_NUM+1];
+
+        temp3=PreferenceManager.getIntArray(Ccontext, "days");
+        if(temp3.length!=0){
+            daysArray=temp3;
+        }
+        else  daysArray=new int[CHALLENGE_NUM+1];
+
     }
     private void saveData(){
         PreferenceManager.setBooleanArray(Ccontext, "challenge_check",challenge);
         PreferenceManager.setArrayList(Ccontext, "prize_str", prizeArray);
+        PreferenceManager.setIntArray(Ccontext,"alarmtime", alarmArray);
+        PreferenceManager.setIntArray(Ccontext,"days", daysArray);
     }
 
     public void setMap(HashMap<String, Long> inputMap, String str){
@@ -356,46 +374,6 @@ public class ChallengeMain extends Fragment implements ViewFlipperAction.ViewFli
 
         return outputMap;
     }
-
-    public void setMap2(HashMap<String, Integer> inputMap, String str){
-
-        SharedPreferences pSharedPref = getActivity().getSharedPreferences(str, MODE_PRIVATE);
-
-        if (pSharedPref != null){
-            JSONObject jsonObject = new JSONObject(inputMap);
-            String jsonString = jsonObject.toString();
-            SharedPreferences.Editor editor = pSharedPref.edit();
-            editor.remove(str+"day").apply();
-            editor.putString(str+"day", jsonString);
-            editor.commit();
-        }
-    }
-
-    public  HashMap<String,Integer> getMap2(String str){
-        HashMap<String,Integer> outputMap = new HashMap<String,Integer>();
-        SharedPreferences pSharedPref = getActivity().getSharedPreferences(str, MODE_PRIVATE);
-
-        try{
-            if (pSharedPref != null){
-                String jsonString = pSharedPref.getString(str+"day", (new JSONObject()).toString());
-                JSONObject jsonObject = new JSONObject(jsonString);
-                Iterator<String> keysItr = jsonObject.keys();
-                while(keysItr.hasNext()) {
-                    String key = keysItr.next();
-                    String value = String.valueOf(jsonObject.get(key));
-                    outputMap.put(key, Integer.parseInt(value));
-                }
-            }
-        }catch(Exception e){
-            String sr=e.getMessage();
-            Log.i("오류", sr);
-            e.printStackTrace();
-        }
-
-
-        return outputMap;
-    }
-
 
 
 }
