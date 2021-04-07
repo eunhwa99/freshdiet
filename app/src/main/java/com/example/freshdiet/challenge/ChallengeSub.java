@@ -140,19 +140,24 @@ public class ChallengeSub extends Activity implements TimePicker.OnTimeChangedLi
             }
         });
         start_btn.setOnClickListener(view->{
-            ChallengeMain.challenge[index]=true;
-            intent.putExtra("idx",index);
-            intent.putExtra("prize",prizetext.getText().toString());
-            intent.putExtra("days",Integer.parseInt(editText.getText().toString()));
-
-            if(timepickerchecked) {
-                intent.putExtra("alarmtime",nHourDay*3600*1000+nMinute*60*1000);
-                AlarmHATT alarmHATT = new AlarmHATT(ChallengeSub.this);
-                alarmHATT.Alarm(index, curname, millis); //alarm 설정
+            if(editText.getText().toString()==null || editText.getText().toString().equals("")){
+                Toast.makeText(getApplicationContext(), "챌린지 기간을 설정하세요.",Toast.LENGTH_SHORT).show();
             }
-            Toast.makeText(getApplicationContext(), "챌린지가 시작되었습니다.", Toast.LENGTH_SHORT).show();
-            setResult(RESULT_OK, intent);
-            finish();
+            else {
+                ChallengeMain.challenge[index] = true;
+                intent.putExtra("idx", index);
+                intent.putExtra("prize", prizetext.getText().toString());
+                intent.putExtra("days", Integer.parseInt(editText.getText().toString()));
+
+                if (timepickerchecked) {
+                    intent.putExtra("alarmtime", nHourDay * 3600 * 1000 + nMinute * 60 * 1000);
+                    AlarmHATT alarmHATT = new AlarmHATT(ChallengeSub.this);
+                    alarmHATT.Alarm(index, curname, millis); //alarm 설정
+                }
+                Toast.makeText(getApplicationContext(), "챌린지가 시작되었습니다.", Toast.LENGTH_SHORT).show();
+                setResult(RESULT_OK, intent);
+                finish();
+            }
         });
         cancel_btn.setOnClickListener(view->{
             setResult(RESULT_CANCELED,intent);

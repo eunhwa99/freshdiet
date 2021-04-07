@@ -137,7 +137,7 @@ public class ChallengeSub2 extends Activity implements TimePicker.OnTimeChangedL
             alarmtv.setText(hours+"시 "+minutes+"분 ");
         }
         if(challengeDays!=-1){
-            durtv.setText(challengeDays);
+            durtv.setText(String.valueOf(challengeDays));
         }
 
         prize.setText(prizestr);
@@ -147,24 +147,29 @@ public class ChallengeSub2 extends Activity implements TimePicker.OnTimeChangedL
     private void setClickListener(){
         timePicker.setOnTimeChangedListener(this);
         start_btn.setOnClickListener(view->{ // 수정버튼
-            intent.putExtra("idx",idx);
-            intent.putExtra("prize", prize.getText().toString());
-            intent.putExtra("days", Integer.parseInt(durtv.getText().toString()));
-
-            if(clicked) // 알람 시간 수정되었다면
-                intent.putExtra("alarmtime",nHourDay*3600*1000+nMinute*60*1000); // 새로운 알람 시간 저장
-            else //아니면 그대로 저장
-                intent.putExtra("alarmtime",alarmTime);
-
-            if(timepickervisible){ // 알람설정
-                AlarmHATT alarmHATT = new AlarmHATT(ChallengeSub2.this);
-                alarmHATT.noAlarm(idx); // 기존 알람 삭제
-                alarmHATT.Alarm(idx, curname, millis); // 알람 다시 설정
-                Toast.makeText(getApplicationContext(), "알람이 설정되었습니다.", Toast.LENGTH_SHORT).show();
+            if(durtv.getText().toString()==null|| durtv.getText().toString().equals("")){
+                Toast.makeText(getApplicationContext(), "챌린지 기간을 설정하세요.",Toast.LENGTH_SHORT).show();
             }
+            else {
+                intent.putExtra("idx", idx);
+                intent.putExtra("prize", prize.getText().toString());
+                intent.putExtra("days", Integer.parseInt(durtv.getText().toString()));
 
-            setResult(RESULT_OK,intent);
-            finish();
+                if (clicked) // 알람 시간 수정되었다면
+                    intent.putExtra("alarmtime", nHourDay * 3600 * 1000 + nMinute * 60 * 1000); // 새로운 알람 시간 저장
+                else //아니면 그대로 저장
+                    intent.putExtra("alarmtime", alarmTime);
+
+                if (timepickervisible) { // 알람설정
+                    AlarmHATT alarmHATT = new AlarmHATT(ChallengeSub2.this);
+                    alarmHATT.noAlarm(idx); // 기존 알람 삭제
+                    alarmHATT.Alarm(idx, curname, millis); // 알람 다시 설정
+                    Toast.makeText(getApplicationContext(), "알람이 설정되었습니다.", Toast.LENGTH_SHORT).show();
+                }
+
+                setResult(RESULT_OK, intent);
+                finish();
+            }
         });
         cancel_btn.setOnClickListener(view->{
             setResult(RESULT_CANCELED,intent);
@@ -208,9 +213,10 @@ public class ChallengeSub2 extends Activity implements TimePicker.OnTimeChangedL
                 public void onClick(DialogInterface dialog, int id)
                 {
                     ChallengeMain.challenge[idx]=false;
+
                     intent.putExtra("idx",idx);
 
-                    Toast.makeText(getApplicationContext(), "처리되었습니다.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "포기하였습니다.", Toast.LENGTH_SHORT).show();
                     setResult(RESULT_OK,intent);
                     finish();
                 }

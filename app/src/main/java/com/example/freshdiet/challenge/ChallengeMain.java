@@ -59,52 +59,53 @@ public class ChallengeMain extends Fragment implements ViewFlipperAction.ViewFli
     HashMap<String, Long> hashMap;
     ArrayList<String> prizeArray; // 한 줄 보상
 
-    ActivityResultLauncher<Intent> startActivityResult1 = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
-            new ActivityResultCallback<ActivityResult>() {
-                @RequiresApi(api = Build.VERSION_CODES.N)
-                @Override public void onActivityResult(ActivityResult result) {
-                    if (result.getResultCode() == Activity.RESULT_OK) {
-                        Intent data=result.getData();
-                        int idx=data.getIntExtra("idx",-1);
-                        int time=data.getIntExtra("alarmtime",-1); // 알람 시간
-                        int days=data.getIntExtra("days",-1); // 챌린지 기간
-                        String prize=data.getStringExtra("prize");
-                        if(idx!=-1){
-                            String text=getTitle(idx);
-                            if(hashMap.containsKey(text)){ // 해쉬맵에 이미 키가 존재한다면
-                                if(!challenge[idx]){ // false --> 키 삭제
-                                    hashMap.remove(text);
-                                    alarmArray[idx]=-1;
-                                    daysArray[idx]=-1;
-                                    prizeArray.set(idx,"");
-                                }
-                                else{ // 수정되었다.
-                                    alarmArray[idx]=time;
-                                    daysArray[idx]=days;
-                                   prizeArray.set(idx, prize);
-                                }
-                            }else{ // 해쉬맵에 키가 없다면
-                                if(challenge[idx]){ //challenge 체크가 true 이면 현재 날짜와 저장
-                                    Long day=getDay();
-                                    hashMap.put(text,day);
-                                    alarmArray[idx]=time;
-                                    daysArray[idx]=days;
-                                    prizeArray.set(idx, prize);
-                                }
-                            }
-                        }
-                       saveData(); // boolean challenge 배열 수정
-                       setMap(hashMap,"Challenge");
-
-                        initScreen();
-                    }
-                }
-            });
-
+    ActivityResultLauncher<Intent> startActivityResult1;
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootView = (ViewGroup)inflater.inflate(R.layout.challengemain, container, false);
+        startActivityResult1 = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                new ActivityResultCallback<ActivityResult>() {
+                    @RequiresApi(api = Build.VERSION_CODES.N)
+                    @Override public void onActivityResult(ActivityResult result) {
+                        if (result.getResultCode() == Activity.RESULT_OK) {
+                            Intent data=result.getData();
+                            int idx=data.getIntExtra("idx",-1);
+                            int time=data.getIntExtra("alarmtime",-1); // 알람 시간
+                            int days=data.getIntExtra("days",-1); // 챌린지 기간
+                            String prize=data.getStringExtra("prize");
+                            if(idx!=-1){
+                                String text=getTitle(idx);
+                                if(hashMap.containsKey(text)){ // 해쉬맵에 이미 키가 존재한다면
+                                    if(!challenge[idx]){ // false --> 키 삭제
+                                        hashMap.remove(text);
+                                        alarmArray[idx]=-1;
+                                        daysArray[idx]=-1;
+                                        prizeArray.set(idx,"");
+                                    }
+                                    else{ // 수정되었다.
+                                        alarmArray[idx]=time;
+                                        daysArray[idx]=days;
+                                        prizeArray.set(idx, prize);
+                                    }
+                                }else{ // 해쉬맵에 키가 없다면
+                                    if(challenge[idx]){ //challenge 체크가 true 이면 현재 날짜와 저장
+                                        Long day=getDay();
+                                        hashMap.put(text,day);
+                                        alarmArray[idx]=time;
+                                        daysArray[idx]=days;
+                                        prizeArray.set(idx, prize);
+                                    }
+                                }
+                            }
+                            saveData(); // boolean challenge 배열 수정
+                            setMap(hashMap,"Challenge");
+
+                            initScreen();
+                        }
+                    }
+                });
+
 
         Ccontext=container.getContext();
         challenge=new boolean[CHALLENGE_NUM+1];
@@ -171,6 +172,7 @@ public class ChallengeMain extends Fragment implements ViewFlipperAction.ViewFli
             }
         }
     }
+
 
     private void initScreen(){
 
