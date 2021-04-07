@@ -128,6 +128,8 @@ public class ChallengeSub extends Activity implements TimePicker.OnTimeChangedLi
                 if (isChecked){
                     timepickerchecked=true;
                     set_timepicker_text_colour(Color.BLACK);
+                    timePicker.setCurrentHour(0);
+                    timePicker.setCurrentMinute(0);
                     timePicker.setEnabled(true);
                 }else{
                     timepickerchecked=false;

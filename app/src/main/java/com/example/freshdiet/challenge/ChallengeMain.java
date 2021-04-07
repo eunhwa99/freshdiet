@@ -253,8 +253,6 @@ public class ChallengeMain extends Fragment implements ViewFlipperAction.ViewFli
             flipper.setDisplayedChild(2);
             onFlipperActionCallback(2);
         });
-
-
         sleep1.setOnClickListener(view->{
             makeIntent(0);
         });
