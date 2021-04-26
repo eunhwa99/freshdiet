@@ -3,7 +3,6 @@ package com.example.freshdiet.calorie;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,14 +13,12 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.freshdiet.R;
+import com.opencsv.CSVReader;
 
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
-
-import jxl.Sheet;
-import jxl.Workbook;
-import jxl.read.biff.BiffException;
 
 public class FoodMain extends Fragment {
     ViewGroup rootView;
@@ -45,7 +42,30 @@ public class FoodMain extends Fragment {
     private void getFoodList(){
 
         try {
-            InputStream is = getContext().getResources().getAssets().open("my_excel.xls");
+            FoodListItem item=new FoodListItem();
+            InputStreamReader is = new InputStreamReader(getResources().getAssets().open("my_excel.csv"));
+            BufferedReader reader = new BufferedReader(is);
+            CSVReader read = new CSVReader(reader);
+            String[] nextLine = null;
+            while ((nextLine = read.readNext()) != null){
+                int len=nextLine.length;
+                for (int i = 0; i < len; i++) {
+                    if(i==0){
+                        item=new FoodListItem();
+                        item.setTitle(nextLine[i]);
+                    }
+                    else if(i==len-1){
+                        item.setDesc(nextLine[i]);
+                        mainList.add(item);
+                    }
+                 //   System.out.println(i + " " + nextLine[i]);
+                }
+            }
+
+
+
+
+        /*    InputStream is = getContext().getResources().getAssets().open("my_excel.xls");
             Workbook wb = Workbook.getWorkbook(is);
 
 
@@ -77,10 +97,8 @@ public class FoodMain extends Fragment {
 
                     }
                 }
-            }
+            }*/
         } catch (IOException e) {
-            e.printStackTrace();
-        } catch (BiffException e) {
             e.printStackTrace();
         }
 

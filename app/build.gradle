@@ -9,6 +9,7 @@ android {
     defaultConfig {
         applicationId "com.example.freshdiet"
         minSdkVersion 16
+        multiDexEnabled true
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
@@ -44,6 +45,11 @@ dependencies {
     implementation 'jexcelapi:jxl:2.6'
     implementation 'com.github.bumptech.glide:glide:4.11.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
+    implementation 'com.opencsv:opencsv:4.4'
+    implementation 'com.android.support:multidex:1.0.3'
+
+
+
 
 
     testImplementation 'junit:junit:4.+'
