@@ -8,6 +8,7 @@ import android.graphics.Typeface;
 import android.icu.util.Calendar;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -79,10 +80,7 @@ public class ShowProfile extends Fragment {
         for(Map.Entry<String, Long> entry : challengeMap.entrySet()){
             Long today=getDay();
             createTextView(entry.getKey(), today-entry.getValue());
-          //  chtv.setText(entry.getKey());
-          //  chtv.setTextColor(Color.BLACK);
-          //  daytv.setText(today-entry.getValue()+"일째");
-           // daytv.setTextColor(Color.RED);
+
         }
 
     }
@@ -92,15 +90,19 @@ public class ShowProfile extends Fragment {
         txtview.setText(challenge);
         txtview.setTextSize(15);
         txtview.setTypeface(null, Typeface.BOLD);
+        DisplayMetrics dm=getResources().getDisplayMetrics();
+        int size=Math.round(10*dm.density);
+
         //txtview.setId(0);
         LinearLayout.LayoutParams param=new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT);
 
+        param.topMargin=size;
         txtview.setLayoutParams(param);
         chtv.addView(txtview);
 
         TextView txtview2=new TextView(getActivity());
-        txtview2.setText(day+" 일 진행");
+        txtview2.setText(day+" 일 째");
         txtview2.setTextSize(15);
         txtview2.setTypeface(null, Typeface.BOLD);
 

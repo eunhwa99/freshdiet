@@ -1,9 +1,9 @@
 package com.example.freshdiet.calorie;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,40 +15,80 @@ import androidx.fragment.app.Fragment;
 
 import com.example.freshdiet.R;
 
-import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserFactory;
-
+import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.URL;
 import java.util.ArrayList;
+
+import jxl.Sheet;
+import jxl.Workbook;
+import jxl.read.biff.BiffException;
 
 public class FoodMain extends Fragment {
     ViewGroup rootView;
     FoodListViewAdapter adapter;
     ListView listview = null ;
-    ArrayList<FoodListItem> mainList=new ArrayList<>();;
+    ArrayList<FoodListItem> mainList=new ArrayList<>();
+    private String requestUrl;
+    private String serviceKey="3b0058815936482daa41";
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootView = (ViewGroup)inflater.inflate(R.layout.foodmain, container, false);
 
-       XMLTask1 xmltask=new XMLTask1();
-        xmltask.execute();
+        requestUrl="http://openapi.foodsafetykorea.go.kr/api/"+serviceKey+"/I2790/xml/6/21";
 
-        listview = (ListView)rootView.findViewById(R.id.food_listview);
-        listview.setAdapter(adapter);
+
         getFoodList();
-        setTextChanged(); // 검색 기능
 
         return rootView;
     }
     private void getFoodList(){
-     //   mainList=new ArrayList<>();
-        FoodListItem item=new FoodListItem();
-        item.setTitle("고기");
-        item.setDesc("황제");
-        mainList.add(item);
+
+        try {
+            InputStream is = getContext().getResources().getAssets().open("my_excel.xls");
+            Workbook wb = Workbook.getWorkbook(is);
+
+
+            if(wb != null) {
+                Sheet sheet = wb.getSheet(0);   // 시트 불러오기
+                if(sheet != null) {
+                    int colTotal = sheet.getColumns();    // 전체 컬럼
+                    int rowIndexStart = 1;                  // row 인덱스 시작
+                    int rowTotal = sheet.getColumn(colTotal-1).length;
+
+                    FoodListItem item=new FoodListItem();
+                    StringBuilder sb;
+                    for(int row=rowIndexStart;row<rowTotal;row++) {
+                        sb = new StringBuilder();
+
+                        for(int col=0;col<colTotal;col++) {
+                            String contents = sheet.getCell(col, row).getContents();
+
+                            if(col==0){
+                                item=new FoodListItem();
+                                item.setTitle(contents);
+                            }
+                            else if(col==colTotal-1){
+                                item.setDesc(contents);
+                                mainList.add(item);
+                            }
+                            Log.d("Main",col+"번째: "+contents);
+                        }
+
+                    }
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (BiffException e) {
+            e.printStackTrace();
+        }
+
+        listview = (ListView)rootView.findViewById(R.id.food_listview);
+        adapter=new FoodListViewAdapter(mainList);
+        listview.setAdapter(adapter);
+
+        setTextChanged(); // 검색 기능
     }
 
     private void setTextChanged(){
@@ -70,84 +110,9 @@ public class FoodMain extends Fragment {
         }) ;
     }
 
-    public class XMLTask1 extends AsyncTask<String,Void, String> {
-        private String requestUrl;
-        private String serviceKey="3b0058815936482daa41";
-        // "http://openapi.foodsafetykorea.go.kr/api/3b0058815936482daa41/I2790/xml/1/5 "
-        @Override
-        protected String doInBackground(String... strings) {
 
-            requestUrl="http://openapi.foodsafetykorea.go.kr/api/"+serviceKey+"/I2790/xml/6/21";
-            try {
-                URL url = new URL(requestUrl);
 
-                InputStream is = url.openStream();
-               // Toast.makeText(FoodMain.this, is.toString());
-                XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
-                XmlPullParser parser = factory.newPullParser();
 
-                ((XmlPullParser) parser).setInput(new InputStreamReader(is, "UTF-8"));
-                boolean f_name=false;
-                boolean f_maker=false;
-                int eventType = parser.getEventType();
-                String preName=null;
-                FoodListItem item = null;
-                while(eventType != XmlPullParser.END_DOCUMENT){
-                    switch (eventType){
-                        case XmlPullParser.START_DOCUMENT:
-                            item=new FoodListItem();
-                            break;
-                        case XmlPullParser.END_DOCUMENT:
-                            break;
-                        case XmlPullParser.END_TAG:
-                            if(parser.getName().equals("DESC_KOR")) {
-                                mainList.add(item);
-                            }
-                            preName=null;
-                            break;
-                        case XmlPullParser.START_TAG:
-                            preName = parser.getName();
-                            if(preName.equals("DESC_KOR")){
-                                f_name=true;
-                            }
-                            else if(preName.equals("MAKER_NAME")){
-                                f_maker=true;
-                            }
-                            break;
-                        case XmlPullParser.TEXT:
-                            if(preName==null)  //혹시 preName이 null일수 있으니 처리
-                            {
 
-                            } else if(f_name) {
-                                item.setTitle(parser.getText());
-
-                            }else if(f_maker){
-                                item.setDesc(parser.getText());
-                            }
-                            break;
-
-                    }
-                    eventType = parser.next();
-                }
-               // FoodMain food=new FoodMain();
-              //  food.mainList=arrayList;
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            return null;
-        }
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-
-            adapter=new FoodListViewAdapter(mainList);
-
-            // 리스트뷰 참조 및 Adapter달기
-            listview.setAdapter(adapter);
-            //어답터 연결
-        }
-    }
 
 }

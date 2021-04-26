@@ -31,10 +31,11 @@
 
 
         <ImageView
+            android:id="@+id/iv1"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:adjustViewBounds="true"
-            android:src="@drawable/sleep1"
+
             android:scaleType="centerCrop"
             android:layout_marginLeft="1dp"
             android:layout_marginRight="1dp"
@@ -66,6 +67,7 @@
             android:layout_height="wrap_content"
             android:gravity="center" />
         <ImageView
+            android:id="@+id/iv2"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:adjustViewBounds="true"

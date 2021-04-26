@@ -52,13 +52,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         Intent data=result.getData();
                         getData();
                         initScreen();
-                        /*username=data.getStringExtra("name");
-                        userage=data.getStringExtra("age");
-                        userheight=data.getStringExtra("height");
-                        userweight=data.getStringExtra("weight");
-                        usermeta=data.getStringExtra("meta");
-                        usergender=data.getStringExtra("gender");*/
-
                     }
                 }
             });

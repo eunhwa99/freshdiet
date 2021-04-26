@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
@@ -24,6 +25,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
+import com.bumptech.glide.Glide;
 import com.example.freshdiet.PreferenceManager;
 import com.example.freshdiet.R;
 
@@ -130,6 +132,57 @@ public class ChallengeMain extends Fragment implements ViewFlipperAction.ViewFli
         view1 = inflater2.inflate(R.layout.viewflipper1, flipper, false);
         view2 = inflater2.inflate(R.layout.viewflipper2, flipper, false);
         view3 = inflater2.inflate(R.layout.viewflipper3, flipper, false);
+
+        ImageView imageView=view1.findViewById(R.id.iv1);
+        Glide.with(view1)
+                .load(R.drawable.sleep1)
+                .centerCrop()
+                .fitCenter()
+                .into(imageView);
+
+        imageView=view1.findViewById(R.id.iv2);
+       /* Glide.with(view1)
+                .load(R.drawable.sleep2)
+
+                .fitCenter()
+                .centerCrop()
+                .into(imageView);*/
+
+        imageView=view2.findViewById(R.id.iv1);
+        Glide.with(view2)
+                .load(R.drawable.health1)
+                .centerCrop()
+                .fitCenter()
+                .into(imageView);
+
+        imageView=view2.findViewById(R.id.iv2);
+        Glide.with(view2)
+                .load(R.drawable.health2)
+                .centerCrop()
+                .fitCenter()
+                .into(imageView);
+
+        imageView=view2.findViewById(R.id.iv3);
+        Glide.with(view2)
+                .load(R.drawable.health4)
+                .centerCrop()
+                .fitCenter()
+                .into(imageView);
+
+        imageView=view3.findViewById(R.id.iv1);
+        Glide.with(view2)
+                .load(R.drawable.eat1)
+                .centerCrop()
+                .fitCenter()
+                .into(imageView);
+
+        imageView=view3.findViewById(R.id.iv2);
+        Glide.with(view2)
+                .load(R.drawable.eat2)
+                .centerCrop()
+                .fitCenter()
+                .into(imageView);
+
 
         sleep1=view1.findViewById(R.id.sleeplayout1);
         sleep2=view1.findViewById(R.id.sleeplayout2);
