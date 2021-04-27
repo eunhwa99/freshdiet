@@ -21,7 +21,6 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.example.freshdiet.calorie.FoodMain;
-import com.example.freshdiet.calorie.XMLTask;
 import com.example.freshdiet.challenge.ChallengeMain;
 import com.example.freshdiet.plan.Calendar;
 import com.example.freshdiet.plan.MakePlan;
@@ -61,8 +60,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        XMLTask xmlTask=new XMLTask();
-        xmlTask.execute();
         getData();
         if(username.equals("Unknown")){
             Intent intent=new Intent(getApplicationContext(), MyProfile.class);
@@ -140,9 +137,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                 break;
             case 1:
-                //makeplanf=new MakePlan();
                 fragment = calendarf;
-                toolbar.setTitle("계획표");
+              //  toolbar.setTitle("계획표");
                 break;
 
             case 2:
@@ -150,7 +146,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case 3:
                 fragment = fooddessertf;
-                toolbar.setTitle("세 번째 화면");
+              //  toolbar.setTitle("세 번째 화면");
                 break;
             case 4:
                 fragment=challengef;

@@ -24,6 +24,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/textView1"
+        android:inputType="textNoSuggestions"
         android:id="@+id/editTextFilter"/>
 
     <ListView

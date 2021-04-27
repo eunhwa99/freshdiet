@@ -54,17 +54,11 @@ public class FoodListViewAdapter extends BaseAdapter implements Filterable {
             convertView = inflater.inflate(R.layout.food_listview_item, parent, false);
         }
 
-        // 화면에 표시될 View(Layout이 inflate된)으로부터 위젯에 대한 참조 획득
-        //Button bnt1 = convertView.findViewById(R.id.toppingadd);
-       // Button btn2 =  convertView.findViewById(R.id.foodadd) ;
         TextView titleTextView = (TextView) convertView.findViewById(R.id.textView1) ;
         TextView descTextView = (TextView) convertView.findViewById(R.id.textView2) ;
 
         // Data Set(filteredItemList)에서 position에 위치한 데이터 참조 획득
         FoodListItem listViewItem = filteredItemList.get(position);
-
-        // 아이템 내 각 위젯에 데이터 반영
-       // iconImageView1.setImageDrawable(listViewItem.getIcon());
 
         titleTextView.setText(listViewItem.getTitle());
         descTextView.setText(listViewItem.getDesc());
@@ -99,23 +93,24 @@ public class FoodListViewAdapter extends BaseAdapter implements Filterable {
         protected FilterResults performFiltering(CharSequence constraint) {
             FilterResults results = new FilterResults() ;
 
+            ArrayList<FoodListItem> itemList = new ArrayList<FoodListItem>();
             if (constraint == null || constraint.length() == 0) {
-                results.values = listViewItemList ;
-                results.count = listViewItemList.size() ;
-            } else {
-                ArrayList<FoodListItem> itemList = new ArrayList<FoodListItem>() ;
+                results.values = itemList ;
+                results.count = 0 ;
 
-                for (FoodListItem item : listViewItemList) {
-                    if (item.getTitle().toUpperCase().contains(constraint.toString().toUpperCase()) ||
-                            item.getDesc().toUpperCase().contains(constraint.toString().toUpperCase()))
-                    {
-                        itemList.add(item) ;
+            } else {
+
+                    for (FoodListItem item : listViewItemList) {
+                        if (item.getTitle().toUpperCase().contains(constraint.toString().toUpperCase()) ||
+                            item.getDesc().toUpperCase().contains(constraint.toString().toUpperCase())) {
+                            itemList.add(item);
+                        }
                     }
+
+                    results.values = itemList;
+                    results.count = itemList.size();
                 }
 
-                results.values = itemList ;
-                results.count = itemList.size() ;
-            }
             return results;
         }
 
