@@ -14,17 +14,27 @@ import android.widget.TextView;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.freshdiet.R;
+
+import java.util.ArrayList;
 
 public class FoodDetail extends AppCompatActivity {
     Toolbar toolbar;
     ActionBar actionBar;
+    RecyclerView toppinglv;
+    HorizontalAdapter mAdapter;
+    LinearLayoutManager mLayoutManager;
+
     TextView kal, carbo, protein, fat, foodname, foodname2;
     Button gram;
     Double amount, kal_amount, carbo_amount, protein_amount, fat_amount;
     String unit;
     String floating[]={"1","1/2","1/3","1/4","1/5","1/6","1/7","1/8"};
+    ArrayList<String> toppings;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +49,11 @@ public class FoodDetail extends AppCompatActivity {
         protein=findViewById(R.id.valtxt2);
         fat=findViewById(R.id.valtxt3);
         gram=findViewById(R.id.grambtn);
+        toppinglv=findViewById(R.id.toppinglv);
+
+        initRecylerView();
+
+        setClicklistview();
 
         setToolbar();
         setButtonClicked();
@@ -193,5 +208,33 @@ public class FoodDetail extends AppCompatActivity {
 
         d.show();
     }
+
+    public void initRecylerView(){
+        mLayoutManager = new LinearLayoutManager(FoodDetail.this);
+        mLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL); // 기본값이 VERTICAL
+
+        toppinglv.setLayoutManager(mLayoutManager);
+        mAdapter=new HorizontalAdapter();
+
+        ArrayList<HorizontalData> data = new ArrayList<>();
+        int i = 0;
+        while (i < 10) {
+            data.add(new HorizontalData(i+"번째 데이터"));
+            i++;
+        }
+
+        // set Data
+        mAdapter.setData(data);
+
+        // set Adapter
+        toppinglv.setAdapter(mAdapter);
+
+    }
+
+    public void setClicklistview(){
+
+    }
+
+
 
 }

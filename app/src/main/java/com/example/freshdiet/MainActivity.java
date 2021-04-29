@@ -76,6 +76,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
+        assert actionBar!=null;
         actionBar.setDisplayShowTitleEnabled(false); // 기존 title 지우기
         actionBar.setDisplayHomeAsUpEnabled(true); // 뒤로가기 버튼 만들기
         actionBar.setHomeAsUpIndicator(R.drawable.ic_baseline_dehaze_24); //뒤로가기 버튼 이미지 지정
