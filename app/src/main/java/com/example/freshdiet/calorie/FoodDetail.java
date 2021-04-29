@@ -41,7 +41,7 @@ public class FoodDetail extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fooddetail);
 
-        toolbar=findViewById(R.id.toolbar);
+        toolbar=findViewById(R.id.toolbar2);
         foodname=findViewById(R.id.foodtxt);
         foodname2=findViewById(R.id.foodtxt2);
         kal=findViewById(R.id.kaltxt);

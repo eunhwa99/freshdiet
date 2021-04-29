@@ -34,6 +34,10 @@
         <item name="android:paddingBottom">4dp</item>
     </style>
 
-
+<style name="MaterialTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+    <item name="colorPrimary">@color/purple_200</item>
+    <item name="colorPrimaryVariant">@color/purple_500</item>
+    <item name="colorOnPrimary">@color/white</item>
+</style>
 
 </resources>
