@@ -24,16 +24,19 @@ import java.util.ArrayList;
 public class FoodDetail extends AppCompatActivity {
     Toolbar toolbar;
     ActionBar actionBar;
-    RecyclerView toppinglv;
-    HorizontalAdapter mAdapter;
-    LinearLayoutManager mLayoutManager;
+    RecyclerView toppinglv,toppinglv2;
+    HorizontalAdapter mAdapter, mAdapter2;
+    LinearLayoutManager mLayoutManager, mLayoutManager2;
 
     TextView kal, carbo, protein, fat, foodname, foodname2;
     Button gram;
     Double amount, kal_amount, carbo_amount, protein_amount, fat_amount;
     String unit;
     String floating[]={"1","1/2","1/3","1/4","1/5","1/6","1/7","1/8"};
-    ArrayList<String> toppings;
+    String toppings[]={"치즈","크림", "둥근 당면","납작 당면","떡","치즈떡","납작만두","만두", "우동사리","라면사리",
+            "메추리알", "감자", "햄", "베이컨", "계란", "비엔나 소세지", "분모자"};
+    String toppings2[]={"생크림", "누텔라", "찹쌀떡", "씨리얼", "연유소스", "젤리", "팥", "우유", "잼", "오레오",
+    "로투스","딸기","바나나","사과","블루베리"};
 
 
     @Override
@@ -50,7 +53,9 @@ public class FoodDetail extends AppCompatActivity {
         fat=findViewById(R.id.valtxt3);
         gram=findViewById(R.id.grambtn);
         toppinglv=findViewById(R.id.toppinglv);
+        toppinglv2=findViewById(R.id.toppinglv2);
 
+       // toolbar.bringToFront();
         initRecylerView();
 
         setClicklistview();
@@ -211,24 +216,39 @@ public class FoodDetail extends AppCompatActivity {
 
     public void initRecylerView(){
         mLayoutManager = new LinearLayoutManager(FoodDetail.this);
+        mLayoutManager2=new LinearLayoutManager(FoodDetail.this);
         mLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL); // 기본값이 VERTICAL
+        mLayoutManager2.setOrientation(LinearLayoutManager.HORIZONTAL);
+
 
         toppinglv.setLayoutManager(mLayoutManager);
+        toppinglv2.setLayoutManager(mLayoutManager2);
+
         mAdapter=new HorizontalAdapter();
+        mAdapter2=new HorizontalAdapter();
 
         ArrayList<HorizontalData> data = new ArrayList<>();
+        ArrayList<HorizontalData> data2=new ArrayList<>();
         int i = 0;
-        while (i < 10) {
-            data.add(new HorizontalData(i+"번째 데이터"));
+
+        while (i < toppings.length) {
+            data.add(new HorizontalData(toppings[i]));
+            i++;
+        }
+
+        i=0;
+        while(i<toppings2.length){
+            data2.add(new HorizontalData(toppings2[i]));
             i++;
         }
 
         // set Data
         mAdapter.setData(data);
+        mAdapter2.setData(data2);
 
         // set Adapter
         toppinglv.setAdapter(mAdapter);
-
+        toppinglv2.setAdapter(mAdapter2);
     }
 
     public void setClicklistview(){

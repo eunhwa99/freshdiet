@@ -42,11 +42,6 @@
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity android:name=".plan.TodoList" />
-        <activity
-            android:name=".ColorPopup"
-            android:theme="@android:style/Theme.Holo.Dialog.NoActionBar"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait" />
         <activity android:name=".challenge.ChallengeSub"
             android:theme="@android:style/Theme.Holo.Dialog.NoActionBar"
             android:launchMode="singleTask"
