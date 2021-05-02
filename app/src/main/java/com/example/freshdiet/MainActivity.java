@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private Context context = this;
     public static String username, userage, userheight, userweight, usermeta, usergender;
 
-    Fragment calendarf, makeplanf, profilef, challengef,settingsf, foodmainf, fooddessertf;
+    Fragment calendarf, makeplanf, profilef, challengef,settingsf, foodmainf;
     Toolbar toolbar;
     static FragmentManager manager;
     private boolean isMembersVisible = false;
