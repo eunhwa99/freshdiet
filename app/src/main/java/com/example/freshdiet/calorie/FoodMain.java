@@ -24,10 +24,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /*
-- 토핑 추가, 토핑도 gram 조절
 - 추가했을 때 섭취 칼로리 증가 + 추가한 음식 보여주기
 - 검색 정보 없을 때 유사 리스트 띄우기
-
+- 사용자 음식 직접 입력
  */
 //  requestUrl="http://openapi.foodsafetykorea.go.kr/api/"+serviceKey+"/I2790/xml/6/21";
 //   String serviceKey="3b0058815936482daa41";

@@ -11,9 +11,17 @@ import com.example.freshdiet.R;
 
 import java.util.ArrayList;
 
-public  class HorizontalAdapter extends RecyclerView.Adapter<HorizontalViewHolder> {
+public  class HorizontalAdapter extends RecyclerView.Adapter<HorizontalAdapter.HorizontalViewHolder> {
 
-    private ArrayList<HorizontalData> HorizontalDatas;
+    public interface OnItemClickListener{
+        void onItemClick(View v, int pos);
+    }
+    private OnItemClickListener mListener=null;
+    public void setOnItemClickListener(OnItemClickListener listener){
+        this.mListener=listener;
+    }
+
+    public ArrayList<HorizontalData> HorizontalDatas;
 
     public void setData(ArrayList<HorizontalData> list){
         HorizontalDatas = list;
@@ -44,16 +52,35 @@ public  class HorizontalAdapter extends RecyclerView.Adapter<HorizontalViewHolde
     public int getItemCount() {
         return HorizontalDatas.size();
     }
-}
 
-class HorizontalViewHolder extends RecyclerView.ViewHolder {
+    public HorizontalData getItem(int position){
+        return HorizontalDatas.get(position);
+    }
 
-    public TextView description;
+    class HorizontalViewHolder extends RecyclerView.ViewHolder {
 
-    public HorizontalViewHolder(View itemView) {
-        super(itemView);
-        description = (TextView) itemView.findViewById(R.id.horizon_description);
+        public TextView description;
 
+        public HorizontalViewHolder(View itemView) {
+            super(itemView);
+              description = (TextView) itemView.findViewById(R.id.horizon_description);
+
+            itemView.setOnClickListener(new View.OnClickListener(){
+
+                @Override
+                public void onClick(View v) {
+                    int pos=getAdapterPosition();
+                    if(pos!=RecyclerView.NO_POSITION){
+                        //       HorizontalData data=HorizontalDatas.get(pos);
+                        if(mListener!=null){
+                            mListener.onItemClick(v,pos);
+                        }
+                    }
+                }
+            });
+        }
     }
 }
+
+
 

@@ -1,4 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/food_added"
+        android:title="추가된 음식"
+        android:icon="@drawable/ic_baseline_restaurant_24"
+        app:showAsAction="ifRoom"/>
 
+    <!-- Settings, should always be in the overflow -->
+    <item android:id="@+id/action_settings1"
+        android:title="Main Topping 추가"
+        app:showAsAction="never"/>
+
+    <item android:id="@+id/action_settings2"
+        android:title="Dessert Topping 추가"
+        app:showAsAction="never"/>
 </menu>

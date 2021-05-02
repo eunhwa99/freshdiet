@@ -98,9 +98,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // fooddessertf=new FoodDessert();
 
         manager = getSupportFragmentManager();
-        navigationView.getMenu().findItem(R.id.memberone).setVisible(false);
-        navigationView.getMenu().findItem(R.id.membertwo).setVisible(false);
-        //  navigationView.getMenu().setGroupVisible(R.id.members_group, false);
+
         // calendar 화면을 첫 번째 fragment로 설정
         getSupportFragmentManager().beginTransaction().replace(R.id.container, calendarf).commit();
     }
@@ -109,9 +107,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         public boolean onOptionsItemSelected(MenuItem item) {
             switch (item.getItemId()){
                 case android.R.id.home:{ // 왼쪽 상단 버튼 눌렀을 때
-                    navigationView.getMenu().findItem(R.id.memberone).setVisible(false);
-                    navigationView.getMenu().findItem(R.id.membertwo).setVisible(false);
-                    isMembersVisible = false;
+
                     mDrawerLayout.openDrawer(GravityCompat.START);
                     return true;
                 }
@@ -147,10 +143,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case 2:
                 fragment=foodmainf;
                 break;
-            case 3:
-                fragment = fooddessertf;
-              //  toolbar.setTitle("세 번째 화면");
-                break;
+
             case 4:
                 fragment=challengef;
 
@@ -180,27 +173,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
         else if(id==R.id.menu3){
-            if (!isMembersVisible) {
-                navigationView.getMenu().findItem(R.id.memberone).setVisible(true);
-                navigationView.getMenu().findItem(R.id.membertwo).setVisible(true);
-                isMembersVisible = true;
-            } else {
-                navigationView.getMenu().findItem(R.id.memberone).setVisible(false);
-                navigationView.getMenu().findItem(R.id.membertwo).setVisible(false);
-                isMembersVisible = false;
-            }
-            return true;
-           // mDrawerLayout.openDrawer(GravityCompat.START);
-          //  mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_OPEN);
+           onChangedFragment(2,null);
         }
-        else if(id==R.id.memberone){
-          //  Toast.makeText(MainActivity.this, "member one", Toast.LENGTH_SHORT).show();
-            onChangedFragment(2,null);
-        }
-        else if(id==R.id.membertwo){
-          //  Toast.makeText(MainActivity.this, "member two", Toast.LENGTH_SHORT).show();
-            onChangedFragment(3,null);
-        }
+
         else if(id==R.id.menu4){
             onChangedFragment(4, null);
         }
@@ -217,9 +192,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
 
         if (drawer.isDrawerOpen(GravityCompat.START)) {
-            navigationView.getMenu().findItem(R.id.memberone).setVisible(false);
-            navigationView.getMenu().findItem(R.id.membertwo).setVisible(false);
-            isMembersVisible = false;
+
             drawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();

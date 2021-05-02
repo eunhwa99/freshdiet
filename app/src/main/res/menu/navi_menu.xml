@@ -18,26 +18,9 @@
             android:id="@+id/menu3"
             android:icon="@drawable/ic_baseline_wb_incandescent_24"
             style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
-            android:title="칼로리 ▼"/>
-
-            <menu>
-                <item
-                    android:id="@+id/memberone"
-                    android:icon="@drawable/ic_baseline_flatware_24"
-                    style="@style/MenuTheme"
-                    android:title="본식" />
-
-                <item
-                    android:id="@+id/membertwo"
-                    android:icon="@drawable/ic_baseline_coffee_24"
-                    style="@style/MenuTheme"
-                    android:title="후식" />
+            android:title="칼로리"/>
 
 
-            </menu>
-
-
-    <group android:checkableBehavior="single">
             <item
                 android:id="@+id/menu4"
                 android:icon="@drawable/ic_baseline_local_fire_department_24"
@@ -50,6 +33,5 @@
                 style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
                 android:title="설정"
                 />
-    </group>
     </group>
 </menu>
