@@ -1,9 +1,10 @@
 package com.example.freshdiet.calorie;
 
-public class MultiHash {
+import java.io.Serializable;
+
+public class MultiHash implements Serializable {
     double val1, val3, val4, val5, val6;
     String val2; // 단위
-    String key;
 
     MultiHash(double a, String b, double c, double d, double e, double f){
         this.val1=a;

@@ -16,9 +16,12 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.freshdiet.MainActivity;
+import com.example.freshdiet.PreferenceManager;
 import com.example.freshdiet.R;
+import com.example.freshdiet.calorie.FoodInfo;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 public class Calendar extends Fragment {
@@ -26,9 +29,13 @@ public class Calendar extends Fragment {
     public String str=null;
     public CalendarView calendarView;
     public TextView diaryTextView,calendarText, meta_cal, act_cal, eat_cal, rest_cal;
-    public Button addbtn;
+    public Button addbtn, foodinfobtn;
     private String selectedDay, selectedDay2;
+
+    public ArrayList<FoodInfo> arrayList;
+
     public static String curDate2;
+    public static Context context;
     MainActivity mainActivity;
 
 
@@ -45,6 +52,10 @@ public class Calendar extends Fragment {
         act_cal=rootView.findViewById(R.id.cal_act);
         eat_cal=rootView.findViewById(R.id.cal_eat);
         rest_cal=rootView.findViewById(R.id.cal_rest);
+        foodinfobtn=rootView.findViewById(R.id.foodinfobtn);
+
+        context=getActivity();
+        arrayList= PreferenceManager.getFoodArrayList(context, curDate2+"food");
 
         setListener(); // button 이벤트 추가
         initScreen(); // 화면 초기화
@@ -80,6 +91,10 @@ public class Calendar extends Fragment {
                 transaction.commit();
             }
         });
+
+        foodinfobtn.setOnClickListener(view->{
+
+        });
     }
 
     public void initScreen() {
@@ -108,7 +123,7 @@ public class Calendar extends Fragment {
     }
 
     private void getData(String date){
-        Context context=getActivity();
+
         SharedPreferences sharedPreferences=context.getSharedPreferences(date+"act", Context.MODE_PRIVATE);
         String str=sharedPreferences.getString("act_calorie","0.0");
         double tmp=Double.parseDouble(str);

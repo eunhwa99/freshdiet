@@ -1,6 +1,9 @@
 package com.example.freshdiet.calorie;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -13,10 +16,16 @@ import android.widget.Filter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.example.freshdiet.PreferenceManager;
 import com.example.freshdiet.R;
+import com.example.freshdiet.plan.Calendar;
 import com.opencsv.CSVReader;
 
 import java.io.BufferedReader;
@@ -26,10 +35,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /*
-- 추가했을 때 섭취 칼로리 증가 + 추가한 음식 보여주기
-1) 추가한 음식 리스트로 팝업 --> X 버튼 만들기
-2) 추가할 때 칼로리 증가
-3) X 버튼 클릭시 칼로리 감소
+- calendar에서 그 날 추가한 음식 리스트 보여주기
 - 검색 정보 없을 때 유사 리스트 띄우기
 - 사용자 음식 직접 입력
  */
@@ -41,15 +47,37 @@ public class FoodMain extends Fragment{
     TextView resulttxt;
     ListView listview = null ;
     ArrayList<FoodListItem> mainList=new ArrayList<>();
-    String clicked_food, company;
+    String clicked_food, company, curdate;
     HashMap<String, MultiHash> infoMap=new HashMap<>();
+  //  HashMap<String, MultiHash> added_foodMap, first_Map;
+
+    ArrayList<FoodInfo> foodInfoArrayList1, foodInfoArrayList2;
+    Context context;
+
+    double eat_calorie, eat_carbo, eat_protein, eat_fat;
+
+    ActivityResultLauncher<Intent> startActivityResult = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override public void onActivityResult(ActivityResult result) {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        Intent data=result.getData();
+                        foodInfoArrayList2=(ArrayList<FoodInfo>) data.getSerializableExtra("added_foodinfo");
+                        calculate(foodInfoArrayList2);
+                    }
+                }
+            });
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootView = (ViewGroup)inflater.inflate(R.layout.foodmain, container, false);
         resulttxt=rootView.findViewById(R.id.resulttxt);
+        curdate= Calendar.curDate2;
+        context=Calendar.context;
 
         getFoodList();
+        getData();
+
 
         return rootView;
     }
@@ -136,7 +164,7 @@ public class FoodMain extends Fragment{
                 intent.putExtra("val4", multiHash.val4);
                 intent.putExtra("val5", multiHash.val5);
                 intent.putExtra("val6", multiHash.val6);
-                startActivity(intent);
+                startActivityResult.launch(intent);
 
             }
         });
@@ -180,8 +208,44 @@ public class FoodMain extends Fragment{
     }
 
 
+    public void calculate(ArrayList<FoodInfo> arrayList){
 
+        for(FoodInfo item:arrayList){
+            eat_calorie+=item.kal;
+            eat_carbo+=item.carbo;
+            eat_protein+=item.protein;
+            eat_fat+=item.fat;
+            foodInfoArrayList1.add(item);
+        }
 
+        saveData();
+    }
 
+    // 먹은 음식 저장
+    public void saveData(){
+        SharedPreferences sharedPreferences=context.getSharedPreferences(curdate+"act", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor=sharedPreferences.edit();
+        editor.putString("eat_calorie",String.valueOf(eat_calorie));
+        editor.putString("eat_carbo", String.valueOf(eat_carbo));
+        editor.putString("eat_protein",String.valueOf(eat_protein));
+        editor.putString("eat_fat", String.valueOf(eat_fat));
+        editor.apply();
+
+        PreferenceManager.setFoodArrayList(context,curdate+"food", foodInfoArrayList1);
+
+    }
+
+    public void getData(){
+        SharedPreferences sharedPreferences=context.getSharedPreferences(curdate+"act", Context.MODE_PRIVATE);
+        eat_calorie=Double.parseDouble(sharedPreferences.getString("eat_calorie","0.0"));
+        eat_carbo=Double.parseDouble(sharedPreferences.getString("eat_carbo","0.0"));
+        eat_protein=Double.parseDouble(sharedPreferences.getString("eat_protein","0.0"));
+        eat_fat=Double.parseDouble(sharedPreferences.getString("eat_fat","0.0"));
+
+       foodInfoArrayList1=PreferenceManager.getFoodArrayList(context,curdate+"food");
+       if(foodInfoArrayList1==null)
+           foodInfoArrayList1=new ArrayList<>();
+
+    }
 
 }

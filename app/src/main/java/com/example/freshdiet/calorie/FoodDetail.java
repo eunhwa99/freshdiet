@@ -2,9 +2,7 @@ package com.example.freshdiet.calorie;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -25,7 +23,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.freshdiet.R;
-import com.example.freshdiet.plan.Calendar;
 import com.opencsv.CSVReader;
 
 import java.io.BufferedReader;
@@ -55,9 +52,10 @@ public class FoodDetail extends AppCompatActivity{
 
     HashMap<String, MultiHash> toppingMap1=new HashMap<>();
     HashMap<String, MultiHash> toppingMap2=new HashMap<>();
+    //HashMap<String, MultiHash> foodinfoMap=new HashMap<>();
 
-    String curdate; //오늘 날짜
-    double eat_calorie;
+    ArrayList<FoodInfo> foodinfolist=new ArrayList<>();
+
     public static ArrayList<FoodListItem> foodlist=new ArrayList<>();
 
     @Override
@@ -103,8 +101,6 @@ public class FoodDetail extends AppCompatActivity{
 
         floating_btn=findViewById(R.id.floating_btn);
 
-        curdate= Calendar.curDate2;
-
        // toolbar.bringToFront();
         scrollDown();
         initRecylerView();
@@ -137,16 +133,26 @@ public class FoodDetail extends AppCompatActivity{
 
         addbtn1.setOnClickListener(view->{
             addFood(foodname.getText().toString(),amount, unit);
-            calculate(kal_amount);
+            foodinfolist.add(new FoodInfo(foodname.getText().toString(),amount,unit, kal_amount,carbo_amount,protein_amount,fat_amount));
+            //foodinfoMap.put(foodname.getText().toString(),new MultiHash(amount,unit, kal_amount,carbo_amount,protein_amount,fat_amount));
         });
         addbtn2.setOnClickListener(view->{
             addFood(toppingtxt.getText().toString(),amount2, unit2);
-            calculate(kal_amount2);
-
+            foodinfolist.add(new FoodInfo(toppingtxt.getText().toString(),amount2,unit2, kal_amount2,carbo_amount2,protein_amount2,fat_amount2));
+            //foodinfoMap.put(toppingtxt.getText().toString(),new MultiHash(amount2,unit2, kal_amount2,carbo_amount2,protein_amount2,fat_amount2));
         });
         addbtn3.setOnClickListener(view->{
             addFood(toppingtxt2.getText().toString(),amount3, unit3);
-            calculate(kal_amount3);
+            foodinfolist.add(new FoodInfo(toppingtxt2.getText().toString(),amount3,unit3, kal_amount3,carbo_amount3,protein_amount3,fat_amount3));
+           // foodinfoMap.put(toppingtxt2.getText().toString(),new MultiHash(amount3,unit3, kal_amount3,carbo_amount3,protein_amount3,fat_amount3));
+        });
+
+        floating_btn.setOnClickListener(view->{
+            Intent intent=new Intent();
+            intent.putExtra("added_foodinfo",foodinfolist);
+            Toast.makeText(FoodDetail.this, "추가되었습니다.",Toast.LENGTH_SHORT).show();
+            setResult(RESULT_OK, intent);
+            finish(); //팝업 닫기
         });
     }
 
@@ -492,28 +498,10 @@ public class FoodDetail extends AppCompatActivity{
         foodListItem.setTitle(name);
         foodListItem.setDesc(v1+v2);
         foodlist.add(foodListItem);
+
         Toast.makeText(FoodDetail.this, "추가되었습니다.",Toast.LENGTH_SHORT).show();
     }
 
-    public void calculate(double calorie){
-        eat_calorie+=calorie;
-        saveData();
-    }
 
-    // 먹은 음식 저장
-    public void saveData(){
-
-        SharedPreferences sharedPreferences=getSharedPreferences(curdate+"act", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor=sharedPreferences.edit();
-        editor.putString("eat_calorie",String.valueOf(eat_calorie));
-        editor.commit();
-
-
-    }
-
-    public void getData(){
-       // PreferenceManager.getArrayList(FoodDetail.this,"Added_Food");
-
-    }
 
 }

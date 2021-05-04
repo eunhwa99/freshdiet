@@ -3,9 +3,14 @@ package com.example.freshdiet;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.example.freshdiet.calorie.FoodInfo;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 //https://copycoding.tistory.com/90
@@ -95,6 +100,15 @@ public class PreferenceManager {
         editor.apply();
     }
 
+    public static void setFoodArrayList(Context context, String key, ArrayList<FoodInfo> values){
+        SharedPreferences sharedPrefs = android.preference.PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = sharedPrefs.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(values);
+        editor.putString(key, json);
+        editor.apply();
+    }
+
 
     public static String getString(Context context, String key) {
         SharedPreferences prefs = getPreferences(context);
@@ -164,6 +178,17 @@ public class PreferenceManager {
             }
         }
         return urls;
+    }
+
+    public static ArrayList<FoodInfo> getFoodArrayList(Context context, String key){
+        SharedPreferences sharedPrefs = android.preference.PreferenceManager.getDefaultSharedPreferences(context);
+        Gson gson = new Gson();
+        String json = sharedPrefs.getString(key, null);
+        Type type=new TypeToken<ArrayList<FoodInfo>>(){
+
+        }.getType();
+        ArrayList<FoodInfo> arrayList=gson.fromJson(json, type);
+        return arrayList;
     }
 
 

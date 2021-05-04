@@ -466,7 +466,7 @@ public class TodoList extends AppCompatActivity {
 
     public  HashMap<String,Double> getMap(String str){
         HashMap<String,Double> outputMap = new HashMap<String,Double>();
-        SharedPreferences pSharedPref =getSharedPreferences(str, MODE_PRIVATE);
+        SharedPreferences pSharedPref = getSharedPreferences(str, MODE_PRIVATE);
 
         try{
             if (pSharedPref != null){
