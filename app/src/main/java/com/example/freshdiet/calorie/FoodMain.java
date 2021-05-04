@@ -9,7 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.Filter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -36,6 +38,7 @@ import java.util.HashMap;
 public class FoodMain extends Fragment{
     ViewGroup rootView;
     FoodListViewAdapter adapter;
+    TextView resulttxt;
     ListView listview = null ;
     ArrayList<FoodListItem> mainList=new ArrayList<>();
     String clicked_food, company;
@@ -44,6 +47,7 @@ public class FoodMain extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootView = (ViewGroup)inflater.inflate(R.layout.foodmain, container, false);
+        resulttxt=rootView.findViewById(R.id.resulttxt);
 
         getFoodList();
 
@@ -139,13 +143,30 @@ public class FoodMain extends Fragment{
 
     }
 
+    //https://blog.daum.net/andro_java/419
     private void setTextChanged(){
+
         EditText editTextFilter = (EditText)rootView.findViewById(R.id.editTextFilter) ;
+
         editTextFilter.addTextChangedListener(new TextWatcher() {
             @Override
             public void afterTextChanged(Editable edit) {
-                String filterText = edit.toString() ;
-                ((FoodListViewAdapter)listview.getAdapter()).getFilter().filter(filterText) ;
+                //String filterText = edit.toString().split(" ") ;
+                String filterText = edit.toString();
+                if(filterText.length()>0) {
+                    adapter.getFilter().filter(filterText, new Filter.FilterListener() {
+                        @Override
+                        public void onFilterComplete(int count) {
+                            if (count == 0)
+                                resulttxt.setText("검색 결과가 없습니다.\n단어 사이에 공백을 추가해 검색하거나 기본 메뉴에 토핑을 추가해보세요.");
+                            else
+                                resulttxt.setText("검색 결과");
+                        }
+                    });
+                }
+                else
+                    resulttxt.setText("검색 결과");
+
             }
 
             @Override

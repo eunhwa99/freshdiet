@@ -66,7 +66,6 @@ public class Calendar extends Fragment {
 
     public void setListener(){
         addbtn.setOnClickListener(new View.OnClickListener(
-
         ) {
             @Override
             public void onClick(View view) {
@@ -112,11 +111,16 @@ public class Calendar extends Fragment {
         Context context=getActivity();
         SharedPreferences sharedPreferences=context.getSharedPreferences(date+"act", Context.MODE_PRIVATE);
         String str=sharedPreferences.getString("act_calorie","0.0");
+        double tmp=Double.parseDouble(str);
         act_cal.setText(str+"(kcal)");
         meta_cal.setText(MainActivity.usermeta+"(kcal)");
         /**
          * 섭취 칼로리, 잔여 칼로리 표시
          */
+        str=sharedPreferences.getString("eat_calorie","0.0");
+        double tmp2= Double.parseDouble(str);
+        eat_cal.setText(str+"(kcal)");
+        rest_cal.setText(String.valueOf(tmp2-tmp)+"(kcal)");
     }
 
 }

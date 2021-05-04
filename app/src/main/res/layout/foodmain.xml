@@ -15,7 +15,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="26sp"
+        android:textSize="25sp"
         android:layout_marginRight="8dp"
         android:id="@+id/textView1"
         android:text="검색" />
@@ -24,13 +24,25 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/textView1"
+        android:hint="음식을 입력하세요."
+        android:textSize="20sp"
         android:inputType="textNoSuggestions"
         android:id="@+id/editTextFilter"/>
+
+
+    <TextView
+        android:id="@+id/resulttxt"
+        android:layout_marginTop="15dp"
+        android:layout_below="@id/textView1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="검색 결과 "
+        android:textSize="15sp"/>
 
     <ListView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/editTextFilter"
+        android:layout_below="@id/resulttxt"
         android:textFilterEnabled="true"
         android:id="@+id/food_listview"/>
 

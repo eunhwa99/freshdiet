@@ -159,12 +159,6 @@ public class Popup2 extends Activity {
         calorie=Math.round(calorie*100)/100.0;
 
         MainActivity.changeText(-calorie);
-        //getSupportFragmentManager().executePendingTransactions();
-        //makePlan=(MakePlan)manager.findFragmentById(R.id.container);
-      //  MakePlan fragment=new MakePlan();
-     //   MakePlan.updateCalorie(-calorie);
-
-
     }
 
     private void deleteChecked(String[] curstr){

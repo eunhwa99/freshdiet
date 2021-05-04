@@ -2,7 +2,9 @@ package com.example.freshdiet.calorie;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -14,6 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.NumberPicker;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,6 +25,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.freshdiet.R;
+import com.example.freshdiet.plan.Calendar;
 import com.opencsv.CSVReader;
 
 import java.io.BufferedReader;
@@ -30,7 +34,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class FoodDetail extends AppCompatActivity {
+public class FoodDetail extends AppCompatActivity{
     ScrollView sv;
     Toolbar toolbar;
     ActionBar actionBar;
@@ -51,6 +55,10 @@ public class FoodDetail extends AppCompatActivity {
 
     HashMap<String, MultiHash> toppingMap1=new HashMap<>();
     HashMap<String, MultiHash> toppingMap2=new HashMap<>();
+
+    String curdate; //오늘 날짜
+    double eat_calorie;
+    ArrayList<FoodListItem> foodlist=new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,6 +103,8 @@ public class FoodDetail extends AppCompatActivity {
 
         floating_btn=findViewById(R.id.floating_btn);
 
+        curdate= Calendar.curDate2;
+
        // toolbar.bringToFront();
         scrollDown();
         initRecylerView();
@@ -123,6 +133,20 @@ public class FoodDetail extends AppCompatActivity {
         });
         gram3.setOnClickListener(view->{
             show(3);
+        });
+
+        addbtn1.setOnClickListener(view->{
+            addFood(foodname.getText().toString(),amount, unit);
+            calculate(kal_amount);
+        });
+        addbtn2.setOnClickListener(view->{
+            addFood(toppingtxt.getText().toString(),amount2, unit2);
+            calculate(kal_amount2);
+
+        });
+        addbtn3.setOnClickListener(view->{
+            addFood(toppingtxt2.getText().toString(),amount3, unit3);
+            calculate(kal_amount3);
         });
     }
 
@@ -450,8 +474,9 @@ public class FoodDetail extends AppCompatActivity {
                 finish();
                 return true;
             case R.id.food_added:
-                // User chose the "Settings" item, show the app settings UI...
-              //  Toast.makeText(getApplicationContext(), "환경설정 버튼 클릭됨", Toast.LENGTH_LONG).show();
+                Intent intent=new Intent(FoodDetail.this, FoodPopup.class);
+                intent.putExtra("foodlist",foodlist);
+                startActivity(intent);
                 return true;
 
             default:
@@ -461,6 +486,35 @@ public class FoodDetail extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
 
         }
+    }
+
+    public void addFood(String name, double v1, String v2){ // 음식 이름, 음식 양, 단위
+        FoodListItem foodListItem=new FoodListItem();
+        foodListItem.setTitle(name);
+        foodListItem.setDesc(v1+v2);
+        foodlist.add(foodListItem);
+        Toast.makeText(FoodDetail.this, "추가되었습니다.",Toast.LENGTH_SHORT).show();
+    }
+
+    public void calculate(double calorie){
+        eat_calorie+=calorie;
+        saveData();
+    }
+
+    // 먹은 음식 저장
+    public void saveData(){
+
+        SharedPreferences sharedPreferences=getSharedPreferences(curdate+"act", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor=sharedPreferences.edit();
+        editor.putString("eat_calorie",String.valueOf(eat_calorie));
+        editor.commit();
+
+
+    }
+
+    public void getData(){
+       // PreferenceManager.getArrayList(FoodDetail.this,"Added_Food");
+
     }
 
 }

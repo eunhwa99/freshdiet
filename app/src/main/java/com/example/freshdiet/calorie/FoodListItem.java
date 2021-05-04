@@ -1,6 +1,8 @@
 package com.example.freshdiet.calorie;
 
-public class FoodListItem {
+import java.io.Serializable;
+
+public class FoodListItem implements Serializable {
 
     private String titleStr ;
     private String descStr ;
