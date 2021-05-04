@@ -42,7 +42,8 @@ public class FoodPopup extends Activity {
 
     public void dealIntent(){
         intent=getIntent();
-        foodlist=(ArrayList<FoodListItem>)intent.getSerializableExtra("foodlist");
+        foodlist=FoodDetail.foodlist;
+       // foodlist=(ArrayList<FoodListItem>)intent.getSerializableExtra("foodlist");
     }
 
 

@@ -58,7 +58,7 @@ public class FoodDetail extends AppCompatActivity{
 
     String curdate; //오늘 날짜
     double eat_calorie;
-    ArrayList<FoodListItem> foodlist=new ArrayList<>();
+    public static ArrayList<FoodListItem> foodlist=new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -475,7 +475,6 @@ public class FoodDetail extends AppCompatActivity{
                 return true;
             case R.id.food_added:
                 Intent intent=new Intent(FoodDetail.this, FoodPopup.class);
-                intent.putExtra("foodlist",foodlist);
                 startActivity(intent);
                 return true;
 
