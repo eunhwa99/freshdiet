@@ -16,6 +16,7 @@ import java.util.ArrayList;
 public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodViewHolder> {
     int type;
     public ArrayList<FoodListItem> FoodDatas;
+    public ArrayList<FoodInfo> FoodDatas2;
 
 
     public interface OnItemClickListener{
@@ -37,6 +38,9 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodViewHolder
         if(type==1){
             view = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.food_popup_recyler_item, parent, false);
+        }
+        else if(type==2) {
+
         }
 
         FoodAdapter.FoodViewHolder holder = new FoodAdapter.FoodViewHolder(view);

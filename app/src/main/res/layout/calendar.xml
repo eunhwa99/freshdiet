@@ -46,13 +46,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="horizontal">
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="2"
-                android:orientation="vertical">
+            android:gravity="center">
     <TextView
         android:id="@+id/diaryTextView"
         android:layout_width="match_parent"
@@ -63,21 +57,6 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"/>
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center|start"
-                android:orientation="vertical">
-            <Button
-                android:id="@+id/addbtn"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-
-                android:background="@drawable/ic_baseline_schedule_24"
-                android:layout_gravity="center_horizontal" />
-            </LinearLayout>
 
         </LinearLayout>
     <ScrollView
@@ -92,6 +71,41 @@
         android:layout_marginTop="20dp"
         android:layout_marginBottom="10dp"
         android:visibility="visible">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:layout_marginBottom="20dp">
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center">
+                    <Button
+                        android:id="@+id/addbtn"
+                        android:layout_width="50dp"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/ic_baseline_schedule_24"
+                        android:layout_gravity="center_horizontal" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center">
+                    <Button
+                        android:id="@+id/foodinfobtn"
+                        android:background="@drawable/ic_baseline_flatware_24"
+                        android:layout_width="50dp"
+                        android:layout_height="wrap_content"/>
+                </LinearLayout>
+            </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -99,7 +113,7 @@
             android:orientation="horizontal">
             <LinearLayout
                 android:layout_weight="1"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:gravity="center"
@@ -112,6 +126,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:background="@drawable/circle_border"
                         android:gravity="center"
                         android:layout_weight="1"
                         android:text="기초 대사량 "/>
@@ -120,7 +135,9 @@
                         android:layout_weight="1"
                         android:gravity="left"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:paddingStart="10dp"
+                        android:paddingLeft="10dp" />
                 </LinearLayout>
                 <LinearLayout
                     android:layout_marginTop="10dp"
@@ -130,6 +147,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:background="@drawable/circle_border"
                         android:gravity="center"
                         android:layout_weight="1"
                         android:text="활동 대사량 "/>
@@ -138,27 +156,39 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="left"
-                        android:layout_weight="1"/>
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:orientation="horizontal">
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
                         android:layout_weight="1"
-                        android:text="섭취 칼로리 "/>
-                    <TextView
-                        android:id="@+id/cal_eat"
-                        android:layout_weight="1"
-                        android:gravity="left"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:paddingStart="10dp"
+                        android:paddingLeft="10dp"/>
                 </LinearLayout>
 
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/circle_border"
+                    android:gravity="center"
+                    android:layout_weight="1"
+                    android:text="섭취 칼로리 "/>
+                <TextView
+                    android:id="@+id/cal_eat"
+                    android:layout_weight="1"
+                    android:gravity="left"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="10dp"
+                    android:paddingLeft="10dp"/>
+            </LinearLayout>
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -168,6 +198,7 @@
                         android:layout_weight="1"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:background="@drawable/circle_border"
                         android:gravity="center"
                         android:text="잔여 칼로리 "/>
                     <TextView
@@ -175,24 +206,16 @@
                         android:layout_weight="1"
                         android:gravity="left"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:paddingStart="10dp"
+                        android:paddingLeft="10dp"/>
                 </LinearLayout>
 
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_weight="1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_gravity="center">
+        </LinearLayout>
 
-                <Button
-                    android:id="@+id/foodinfobtn"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"/>
 
-            </LinearLayout>
         </LinearLayout>
     </ScrollView>
     </LinearLayout>
