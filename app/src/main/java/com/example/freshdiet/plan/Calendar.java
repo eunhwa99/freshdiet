@@ -16,12 +16,9 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.freshdiet.MainActivity;
-import com.example.freshdiet.PreferenceManager;
 import com.example.freshdiet.R;
-import com.example.freshdiet.calorie.FoodInfo;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 
 public class Calendar extends Fragment {
@@ -31,8 +28,6 @@ public class Calendar extends Fragment {
     public TextView diaryTextView,calendarText, meta_cal, act_cal, eat_cal, rest_cal;
     public Button addbtn, foodinfobtn;
     private String selectedDay, selectedDay2;
-
-    public ArrayList<FoodInfo> arrayList;
 
     public static String curDate2;
     public static Context context;
@@ -55,7 +50,6 @@ public class Calendar extends Fragment {
         foodinfobtn=rootView.findViewById(R.id.foodinfobtn);
 
         context=getActivity();
-        arrayList= PreferenceManager.getFoodArrayList(context, curDate2+"food");
 
         setListener(); // button 이벤트 추가
         initScreen(); // 화면 초기화
