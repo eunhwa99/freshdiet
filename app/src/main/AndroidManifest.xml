@@ -46,6 +46,11 @@
             android:theme="@android:style/Theme.Holo.Dialog.NoActionBar"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".calorie.FoodInfoPopup"
+            android:theme="@style/popupTheme"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
 
         <activity android:name=".plan.TodoList"
             android:launchMode="singleTask"

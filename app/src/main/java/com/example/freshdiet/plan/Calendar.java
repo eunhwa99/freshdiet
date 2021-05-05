@@ -17,6 +17,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.freshdiet.MainActivity;
 import com.example.freshdiet.R;
+import com.example.freshdiet.calorie.ShowFoodList;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -87,7 +88,12 @@ public class Calendar extends Fragment {
         });
 
         foodinfobtn.setOnClickListener(view->{
-
+            FragmentTransaction transaction = ((MainActivity)getActivity()).getSupportFragmentManager().beginTransaction();
+            Bundle bundle=new Bundle();
+            ShowFoodList showFoodList=new ShowFoodList();
+            showFoodList.setArguments(bundle);
+            transaction.replace(R.id.container, showFoodList);
+            transaction.commit();
         });
 
 

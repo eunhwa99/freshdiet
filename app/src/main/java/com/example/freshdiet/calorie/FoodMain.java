@@ -35,8 +35,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /*
-- calendar에서 그 날 추가한 음식 리스트 보여주기
-- 검색 정보 없을 때 유사 리스트 띄우기
+- 홈버튼, 뒤로가기 만들기
 - 사용자 음식 직접 입력
  */
 //  requestUrl="http://openapi.foodsafetykorea.go.kr/api/"+serviceKey+"/I2790/xml/6/21";
@@ -171,7 +170,6 @@ public class FoodMain extends Fragment{
 
     }
 
-    //https://blog.daum.net/andro_java/419
     private void setTextChanged(){
 
         EditText editTextFilter = (EditText)rootView.findViewById(R.id.editTextFilter) ;

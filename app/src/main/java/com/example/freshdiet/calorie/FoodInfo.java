@@ -1,11 +1,14 @@
 package com.example.freshdiet.calorie;
 
-public class FoodInfo {
+import java.io.Serializable;
+
+public class FoodInfo implements Serializable {
     double kal, carbo, protein, fat, gram;
     String name, unit;
 
     public FoodInfo(String name, double gram, String unit, double kal, double carbo, double protein, double fat){
         this.name=name;
+        this.gram=gram;
         this.unit=unit;
         this.kal=kal;
         this.carbo=carbo;
@@ -13,16 +16,4 @@ public class FoodInfo {
         this.fat=fat;
     }
 
-    public double getKal(){
-        return kal;
-    }
-    public double getCarbo(){
-        return carbo;
-    }
-    public double getProtein(){
-        return protein;
-    }
-    public double getFat(){
-        return fat;
-    }
 }

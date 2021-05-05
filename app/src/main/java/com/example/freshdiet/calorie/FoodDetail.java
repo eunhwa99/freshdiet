@@ -103,7 +103,7 @@ public class FoodDetail extends AppCompatActivity{
 
        // toolbar.bringToFront();
         scrollDown();
-        initRecylerView();
+        initRecyclerView();
 
         setToolbar();
         setButtonClicked();
@@ -155,6 +155,7 @@ public class FoodDetail extends AppCompatActivity{
             finish(); //팝업 닫기
         });
     }
+
 
 
     @SuppressLint("SetTextI18n")
@@ -298,7 +299,7 @@ public class FoodDetail extends AppCompatActivity{
         return val;
     }
 
-    public void initRecylerView(){
+    public void initRecyclerView(){
         mLayoutManager = new LinearLayoutManager(FoodDetail.this);
         mLayoutManager2=new LinearLayoutManager(FoodDetail.this);
         mLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL); // 기본값이 VERTICAL
