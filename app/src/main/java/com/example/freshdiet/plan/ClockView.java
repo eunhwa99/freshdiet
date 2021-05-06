@@ -1,5 +1,6 @@
 package com.example.freshdiet.plan;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Canvas;
@@ -51,9 +52,10 @@ public class ClockView extends View{
 
 
 
+    @SuppressLint("ResourceAsColor")
     @Override
     protected void onDraw(Canvas canvas){
-        canvas.drawColor(Color.GRAY);
+        //canvas.drawColor(android.R.color.darker_gray);
         drawCircle(canvas);
         drawCenter(canvas);
         drawNumeral(canvas);
@@ -113,7 +115,7 @@ public class ClockView extends View{
             initClock();
         }
         paint.reset();
-        paint.setColor(getResources().getColor(android.R.color.white)); // 펜의 색깔
+        paint.setColor(getResources().getColor(android.R.color.black)); // 펜의 색깔
         paint.setStrokeWidth(5); // 펜의 두께
         paint.setStyle(Paint.Style.STROKE);
         paint.setAntiAlias(true); // antialias 적용 안하면 계단 현상, 적용하면 부드러워짐
