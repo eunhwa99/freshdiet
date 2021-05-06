@@ -23,6 +23,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.example.freshdiet.DoubleMath;
 import com.example.freshdiet.PreferenceManager;
 import com.example.freshdiet.R;
 import com.example.freshdiet.plan.Calendar;
@@ -35,11 +36,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /*
-- 홈버튼, 뒤로가기 만들기
 - 사용자 음식 직접 입력
  */
-//  requestUrl="http://openapi.foodsafetykorea.go.kr/api/"+serviceKey+"/I2790/xml/6/21";
-//   String serviceKey="3b0058815936482daa41";
+
 public class FoodMain extends Fragment{
     ViewGroup rootView;
     FoodListViewAdapter adapter;
@@ -48,10 +47,10 @@ public class FoodMain extends Fragment{
     ArrayList<FoodListItem> mainList=new ArrayList<>();
     String clicked_food, company, curdate;
     HashMap<String, MultiHash> infoMap=new HashMap<>();
-  //  HashMap<String, MultiHash> added_foodMap, first_Map;
 
     ArrayList<FoodInfo> foodInfoArrayList1, foodInfoArrayList2;
     Context context;
+    DoubleMath doubleMath=new DoubleMath();
 
     double eat_calorie, eat_carbo, eat_protein, eat_fat;
 
@@ -71,7 +70,7 @@ public class FoodMain extends Fragment{
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootView = (ViewGroup)inflater.inflate(R.layout.foodmain, container, false);
         resulttxt=rootView.findViewById(R.id.resulttxt);
-        curdate= Calendar.curDate2;
+        curdate= Calendar.selectedDay2;
         context=Calendar.context;
 
         getFoodList();
@@ -213,6 +212,12 @@ public class FoodMain extends Fragment{
             eat_carbo+=item.carbo;
             eat_protein+=item.protein;
             eat_fat+=item.fat;
+
+            eat_calorie=doubleMath.calc(eat_calorie);
+            eat_carbo=doubleMath.calc(eat_carbo);
+            eat_protein=doubleMath.calc(eat_protein);
+            eat_fat=doubleMath.calc(eat_fat);
+
             foodInfoArrayList1.add(item);
         }
 

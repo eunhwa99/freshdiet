@@ -19,6 +19,7 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.freshdiet.calorie.FoodMain;
 import com.example.freshdiet.challenge.ChallengeMain;
@@ -27,6 +28,8 @@ import com.example.freshdiet.plan.MakePlan;
 import com.example.freshdiet.profile.MyProfile;
 import com.example.freshdiet.profile.ShowProfile;
 import com.google.android.material.navigation.NavigationView;
+
+import java.util.Stack;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,FragmentCallback {
 
@@ -40,6 +43,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     static FragmentManager manager;
     private boolean isMembersVisible = false;
     NavigationView navigationView;
+    public static Stack<Fragment> fragmentStack;
 
 
     ActivityResultLauncher<Intent> startActivityResult = registerForActivityResult(
@@ -60,11 +64,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        fragmentStack=new Stack<>();
+
         getData();
         if(username.equals("Unknown")){
             Intent intent=new Intent(getApplicationContext(), MyProfile.class);
             startActivityResult.launch(intent);
-           // getData();
+
         }
 
         else {
@@ -129,6 +135,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void onChangedFragment(int position, Bundle bundle) {
         Fragment fragment = null;
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        fragmentStack.push(calendarf);
 
         switch (position){
             case 0:
@@ -137,6 +145,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case 1:
                 fragment = calendarf;
+                fragmentStack.pop();
               //  toolbar.setTitle("계획표");
                 break;
 
@@ -154,7 +163,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             default:
                 break;
         }
-        getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
+      //  getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
+        transaction.replace(R.id.container,fragment).commit();
+
     }
 
     @Override
@@ -162,11 +173,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         item.setChecked(true);
 
         int id = item.getItemId();
-        String title = item.getTitle().toString();
+      //  String title = item.getTitle().toString();
+        while(!fragmentStack.isEmpty())
+            fragmentStack.pop();
 
         if(id == R.id.menu0){
             onChangedFragment(0, null);
-
         }
         else if(id == R.id.menu1){
             onChangedFragment(1, null);
@@ -192,9 +204,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
 
         if (drawer.isDrawerOpen(GravityCompat.START)) {
-
             drawer.closeDrawer(GravityCompat.START);
-        } else {
+        } else if(!fragmentStack.isEmpty()){
+            Fragment nextFragment = fragmentStack.pop();
+            manager.beginTransaction().replace(R.id.container, nextFragment).commit();
+        }
+        else{
             super.onBackPressed();
         }
     }

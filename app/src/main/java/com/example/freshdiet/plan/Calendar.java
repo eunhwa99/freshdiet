@@ -1,5 +1,6 @@
 package com.example.freshdiet.plan;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -28,11 +29,14 @@ public class Calendar extends Fragment {
     public CalendarView calendarView;
     public TextView diaryTextView,calendarText, meta_cal, act_cal, eat_cal, rest_cal;
     public Button addbtn, foodinfobtn;
-    private String selectedDay, selectedDay2;
+    private String selectedDay;
 
-    public static String curDate2;
+    public String curDate2;
+    public static String selectedDay2;
+    @SuppressLint("StaticFieldLeak")
     public static Context context;
     MainActivity mainActivity;
+    Fragment curFragment;
 
 
     @Override
@@ -51,6 +55,7 @@ public class Calendar extends Fragment {
         foodinfobtn=rootView.findViewById(R.id.foodinfobtn);
 
         context=getActivity();
+        curFragment=getActivity().getSupportFragmentManager().findFragmentById(R.id.container);
 
         setListener(); // button 이벤트 추가
         initScreen(); // 화면 초기화
@@ -75,6 +80,7 @@ public class Calendar extends Fragment {
         ) {
             @Override
             public void onClick(View view) {
+                MainActivity.fragmentStack.push(curFragment);
 
                 FragmentTransaction transaction = ((MainActivity)getActivity()).getSupportFragmentManager().beginTransaction();
                 Bundle bundle=new Bundle();
@@ -88,6 +94,7 @@ public class Calendar extends Fragment {
         });
 
         foodinfobtn.setOnClickListener(view->{
+            MainActivity.fragmentStack.push(curFragment);
             FragmentTransaction transaction = ((MainActivity)getActivity()).getSupportFragmentManager().beginTransaction();
             Bundle bundle=new Bundle();
             ShowFoodList showFoodList=new ShowFoodList();

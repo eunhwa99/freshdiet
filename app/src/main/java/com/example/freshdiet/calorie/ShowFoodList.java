@@ -19,6 +19,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.freshdiet.DoubleMath;
 import com.example.freshdiet.PreferenceManager;
 import com.example.freshdiet.R;
 import com.example.freshdiet.plan.Calendar;
@@ -26,7 +27,7 @@ import com.example.freshdiet.plan.Calendar;
 import java.util.ArrayList;
 
 import static com.example.freshdiet.plan.Calendar.context;
-import static com.example.freshdiet.plan.Calendar.curDate2;
+import static com.example.freshdiet.plan.Calendar.selectedDay2;
 
 public class ShowFoodList extends Fragment {
     public ArrayList<FoodInfo> arrayList;
@@ -37,6 +38,7 @@ public class ShowFoodList extends Fragment {
     TextView infokal, infocarbo, infoprotein, infofat;
     double eat_calorie, eat_carbo, eat_protein, eat_fat;
     int position;
+    DoubleMath doubleMath=new DoubleMath();
 
     ActivityResultLauncher<Intent> startActivityResult = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
@@ -51,6 +53,11 @@ public class ShowFoodList extends Fragment {
                             eat_carbo-=foodInfo.carbo;
                             eat_protein-=foodInfo.protein;
                             eat_fat-=foodInfo.fat;
+
+                            eat_calorie=doubleMath.calc(eat_calorie);
+                            eat_carbo=doubleMath.calc(eat_carbo);
+                            eat_protein=doubleMath.calc(eat_protein);
+                            eat_fat=doubleMath.calc(eat_fat);
 
                             arrayList.remove(position);
                             mAdapter.notifyDataSetChanged();
@@ -113,19 +120,19 @@ public class ShowFoodList extends Fragment {
 
     }
     public void getData(){
-        SharedPreferences sharedPreferences= context.getSharedPreferences(curDate2+"act", Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences= context.getSharedPreferences(selectedDay2+"act", Context.MODE_PRIVATE);
         eat_calorie=Double.parseDouble(sharedPreferences.getString("eat_calorie","0.0"));
         eat_carbo=Double.parseDouble(sharedPreferences.getString("eat_carbo","0.0"));
         eat_protein=Double.parseDouble(sharedPreferences.getString("eat_protein","0.0"));
         eat_fat=Double.parseDouble(sharedPreferences.getString("eat_fat","0.0"));
 
-        arrayList= PreferenceManager.getFoodArrayList(Calendar.context, curDate2+"food");
+        arrayList= PreferenceManager.getFoodArrayList(Calendar.context, selectedDay2+"food");
         if(arrayList==null)
             arrayList=new ArrayList<>();
     }
 
     public void saveData(){
-        SharedPreferences sharedPreferences=context.getSharedPreferences(curDate2+"act", Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences=context.getSharedPreferences(selectedDay2+"act", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor=sharedPreferences.edit();
         editor.putString("eat_calorie",String.valueOf(eat_calorie));
         editor.putString("eat_carbo", String.valueOf(eat_carbo));
@@ -133,7 +140,7 @@ public class ShowFoodList extends Fragment {
         editor.putString("eat_fat", String.valueOf(eat_fat));
         editor.apply();
 
-        PreferenceManager.setFoodArrayList(context,curDate2+"food", arrayList);
+        PreferenceManager.setFoodArrayList(context,selectedDay2+"food", arrayList);
     }
 
 }
