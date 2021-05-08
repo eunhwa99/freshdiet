@@ -146,6 +146,7 @@
             android:gravity="right">
     <Button
         android:id="@+id/todoaddbtn"
+        android:background="@drawable/circle_border"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="추가" />
@@ -157,6 +158,7 @@
             android:layout_marginLeft="10dp"
             android:gravity="left">
             <Button
+                android:background="@drawable/circle_border"
                 android:id="@+id/todocancelbtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

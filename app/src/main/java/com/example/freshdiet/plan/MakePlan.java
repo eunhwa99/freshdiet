@@ -24,7 +24,6 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.example.freshdiet.MainActivity;
 import com.example.freshdiet.Popup;
 import com.example.freshdiet.PreferenceManager;
 import com.example.freshdiet.R;
@@ -33,6 +32,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import petrov.kristiyan.colorpicker.ColorPicker;
+
+import static android.content.Context.MODE_PRIVATE;
 
 public class MakePlan extends Fragment {
     private TextView startTime;
@@ -50,6 +51,8 @@ public class MakePlan extends Fragment {
     public static Context Mcontext;
 
     public int starthour,startmin,endhour, endmin;
+    public static String username, userage, userheight, userweight, usermeta;
+    public static String usergender; //성별
 
     public static int time;
 
@@ -74,7 +77,7 @@ public class MakePlan extends Fragment {
                         else if(curname.equals("공부")){
                             mets=1.8;
                         }
-                        CalculateActivity calculateActivity=new CalculateActivity(Double.parseDouble(MainActivity.userweight), time, mets);
+                        CalculateActivity calculateActivity=new CalculateActivity(Double.parseDouble(userweight), time, mets);
                         cal=calculateActivity.getCalorie();
                         cal=Math.round(cal*100)/100.0;
                         updateCalorie(cal);
@@ -120,8 +123,8 @@ public class MakePlan extends Fragment {
         String str;
         SharedPreferences sharedPreferences=getActivity().getSharedPreferences(curDate2+"act",Context.MODE_PRIVATE);
         str=sharedPreferences.getString("act_calorie", "0.0");
-
         calorietxt.setText(str);
+        getData2();
 
         initListView();
         getData(); // preference에 저장된 데이터 가지고 오기
@@ -450,6 +453,15 @@ public class MakePlan extends Fragment {
         editor.commit();
     }
 
+    private void getData2(){
+        SharedPreferences sharedPreferences=getActivity().getSharedPreferences("Profile",MODE_PRIVATE);
+        username=sharedPreferences.getString("UserName","Unknown");
+        userage = sharedPreferences.getString("UserAge", "Unknown");
+        userheight = sharedPreferences.getString( "UserHeight", "Unknown");
+        userweight = sharedPreferences.getString("UserWeight","Unknown");
+        usermeta = sharedPreferences.getString("UserMeta","Unknown");
+        usergender=sharedPreferences.getString("UserGender","Unknown");
+    }
 
 
 }

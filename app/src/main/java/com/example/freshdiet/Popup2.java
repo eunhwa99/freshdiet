@@ -136,7 +136,7 @@ public class Popup2 extends Activity {
             else if(curtext.equals("공부")){
                 mets=1.8;
             }
-            calculateActivity=new CalculateActivity(Double.parseDouble(MainActivity.userweight), time, mets);
+            calculateActivity=new CalculateActivity(Double.parseDouble(MakePlan.userweight), time, mets);
 
         }
         else {
@@ -152,7 +152,7 @@ public class Popup2 extends Activity {
             HashMap<String, Double> curMap=getMap(str);
             HashMap<String,Double> curMap2=getMap(str+"2");
 
-            calculateActivity=new CalculateActivity(Double.parseDouble(MainActivity.userweight), curType,time,curMap,curMap2);
+            calculateActivity=new CalculateActivity(Double.parseDouble(MakePlan.userweight), curType,time,curMap,curMap2);
 
         }
         calorie=calculateActivity.getCalorie();

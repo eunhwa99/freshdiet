@@ -107,12 +107,6 @@ public class MyProfile extends AppCompatActivity {
                     saveData();
                     Toast.makeText(view.getContext(), "저장되었습니다.", Toast.LENGTH_SHORT).show();
                     Intent intent=new Intent(MyProfile.this, MainActivity.class);
-                  /*  intent.putExtra("name",username);
-                    intent.putExtra("age",userage);
-                    intent.putExtra("gender",gender);
-                    intent.putExtra("height",userheight);
-                    intent.putExtra("weight",userweight);
-                    intent.putExtra("meta",usermeta);*/
                     setResult(RESULT_OK, intent);
                     finish();
                 }
@@ -124,9 +118,7 @@ public class MyProfile extends AppCompatActivity {
     private void makeAlertDialog(String title, String message) {
         AlertDialog.Builder builder;
         AlertDialog alertDialog;
-
         builder = new AlertDialog.Builder(MyProfile.this);
-
         builder.setTitle(title).setMessage(message);
 
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {

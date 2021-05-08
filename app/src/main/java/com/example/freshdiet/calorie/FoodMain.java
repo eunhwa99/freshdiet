@@ -37,7 +37,6 @@ import java.util.HashMap;
 
 /*
 - 사용자 음식 직접 입력
-- 시계 scrollview
 - UI 수정
  */
 

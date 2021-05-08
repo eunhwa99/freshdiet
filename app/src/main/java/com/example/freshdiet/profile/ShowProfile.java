@@ -1,6 +1,7 @@
 package com.example.freshdiet.profile;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -17,11 +18,14 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
-import com.example.freshdiet.MainActivity;
 import com.example.freshdiet.R;
 
 import org.json.JSONObject;
@@ -38,6 +42,23 @@ public class ShowProfile extends Fragment {
     TextView nametv, agetv, sextv, weighttv, heighttv, metatv;
     Button editbtn;
     HashMap<String, Long> challengeMap;
+    private String username, userage, userheight, userweight, usermeta;
+    private String usergender; //성별
+
+    ActivityResultLauncher<Intent> startActivityResult = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @RequiresApi(api = Build.VERSION_CODES.N)
+                @Override
+                public void onActivityResult(ActivityResult result) {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        getData();
+                        challengeMap=getMap();
+                        setClick();
+                        initScreen();
+                    }
+                }
+            });
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
@@ -54,6 +75,7 @@ public class ShowProfile extends Fragment {
         editbtn=rootView.findViewById(R.id.editprofile);
 
 
+        getData();
         challengeMap=getMap();
         setClick();
         initScreen();
@@ -63,19 +85,20 @@ public class ShowProfile extends Fragment {
     private void setClick(){
         editbtn.setOnClickListener(view -> {
             Intent intent=new Intent(getContext(), MyProfile.class);
-            startActivity(intent);
+            //startActivity(intent);
+            startActivityResult.launch(intent);
         });
     }
 
     @SuppressLint("SetTextI18n")
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void initScreen(){
-        nametv.setText(MainActivity.username);
-        agetv.setText(MainActivity.userage);
-        sextv.setText(MainActivity.usergender);
-        weighttv.setText(MainActivity.userweight);
-        heighttv.setText(MainActivity.userheight);
-        metatv.setText(MainActivity.usermeta);
+        nametv.setText(username);
+        agetv.setText(userage);
+        sextv.setText(usergender);
+        weighttv.setText(userweight);
+        heighttv.setText(userheight);
+        metatv.setText(usermeta);
 
         for(Map.Entry<String, Long> entry : challengeMap.entrySet()){
             Long today=getDay();
@@ -93,7 +116,6 @@ public class ShowProfile extends Fragment {
         DisplayMetrics dm=getResources().getDisplayMetrics();
         int size=Math.round(10*dm.density);
 
-        //txtview.setId(0);
         LinearLayout.LayoutParams param=new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT);
 
@@ -107,7 +129,7 @@ public class ShowProfile extends Fragment {
         txtview2.setTypeface(null, Typeface.BOLD);
 
        // txtview2.setId(0);
-       txtview2.setTextColor(Color.RED);
+        txtview2.setTextColor(Color.RED);
         txtview2.setLayoutParams(param);
         daytv.addView(txtview2);
 
@@ -144,4 +166,15 @@ public class ShowProfile extends Fragment {
 
         return outputMap;
     }
+
+    private void getData() {
+        SharedPreferences sharedPreferences=getActivity().getSharedPreferences("Profile",MODE_PRIVATE);
+        username=sharedPreferences.getString("UserName","Unknown");
+        userage = sharedPreferences.getString("UserAge", "Unknown");
+        userheight = sharedPreferences.getString( "UserHeight", "Unknown");
+        userweight = sharedPreferences.getString("UserWeight","Unknown");
+        usermeta = sharedPreferences.getString("UserMeta","Unknown");
+        usergender=sharedPreferences.getString("UserGender","Unknown");
+    }
+
 }

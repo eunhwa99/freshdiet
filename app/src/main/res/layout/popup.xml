@@ -19,7 +19,7 @@
             android:textSize="20sp"
             android:textColor="#fff"
             android:gravity="center"
-            android:background="#ff7a00"/>
+            android:background="#FF9800"/>
     </LinearLayout>
 
     <LinearLayout

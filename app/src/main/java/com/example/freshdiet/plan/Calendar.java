@@ -23,9 +23,9 @@ import com.example.freshdiet.calorie.ShowFoodList;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import static android.content.Context.MODE_PRIVATE;
+
 public class Calendar extends Fragment {
-    public String fname=null;
-    public String str=null;
     public CalendarView calendarView;
     public TextView diaryTextView,calendarText, meta_cal, act_cal, eat_cal, rest_cal;
     public Button addbtn, foodinfobtn;
@@ -37,6 +37,9 @@ public class Calendar extends Fragment {
     public static Context context;
     MainActivity mainActivity;
     Fragment curFragment;
+
+    private String username, userage, userheight, userweight, usermeta;
+    private String usergender; //성별
 
 
     @Override
@@ -57,6 +60,7 @@ public class Calendar extends Fragment {
         context=getActivity();
         curFragment=getActivity().getSupportFragmentManager().findFragmentById(R.id.container);
 
+        getData();
         setListener(); // button 이벤트 추가
         initScreen(); // 화면 초기화
 
@@ -107,7 +111,7 @@ public class Calendar extends Fragment {
     }
 
     public void initScreen() {
-        calendarText.setText(MainActivity.username+"님의 달력");
+        calendarText.setText(username+"님의 달력");
         SimpleDateFormat format = new SimpleDateFormat( "yyyy / M / d");
         SimpleDateFormat format2=new SimpleDateFormat("yyyyMd");
         Date time = new Date();
@@ -133,16 +137,27 @@ public class Calendar extends Fragment {
 
     private void getData(String date){
 
-        SharedPreferences sharedPreferences=context.getSharedPreferences(date+"act", Context.MODE_PRIVATE);
+
+        SharedPreferences sharedPreferences=context.getSharedPreferences(date+"act", MODE_PRIVATE);
         String str=sharedPreferences.getString("act_calorie","0.0");
         double tmp=Double.parseDouble(str);
         act_cal.setText(str+"(kcal)");
-        meta_cal.setText(MainActivity.usermeta+"(kcal)");
+        meta_cal.setText(usermeta+"(kcal)");
         str=sharedPreferences.getString("eat_calorie","0.0");
         double tmp2= Double.parseDouble(str);
         eat_cal.setText(str+"(kcal)");
         rest_cal.setText(String.valueOf(tmp2-tmp)+"(kcal)");
 
+    }
+
+    private void getData(){
+        SharedPreferences sharedPreferences=context.getSharedPreferences("Profile",MODE_PRIVATE);
+        username=sharedPreferences.getString("UserName","Unknown");
+        userage = sharedPreferences.getString("UserAge", "Unknown");
+        userheight = sharedPreferences.getString( "UserHeight", "Unknown");
+        userweight = sharedPreferences.getString("UserWeight","Unknown");
+        usermeta = sharedPreferences.getString("UserMeta","Unknown");
+        usergender=sharedPreferences.getString("UserGender","Unknown");
     }
 
 }

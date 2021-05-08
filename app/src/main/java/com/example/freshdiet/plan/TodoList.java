@@ -17,7 +17,6 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.freshdiet.MainActivity;
 import com.example.freshdiet.PreferenceManager;
 import com.example.freshdiet.R;
 
@@ -50,6 +49,7 @@ public class TodoList extends AppCompatActivity {
     private String name; //운동, 취미, 기타
     private LinearLayout editlayout,editlayout2;
     private boolean FLAG=false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,7 +89,7 @@ public class TodoList extends AppCompatActivity {
                 if(name.equals("운동")) curMap2=exerciseMap2;
                 else if(name.equals("취미/여가")) curMap2=hobbyMap2;
                 else curMap2=otherMap2;
-                CalculateActivity calculateActivity=new CalculateActivity(Double.parseDouble(MainActivity.userweight), curname, MakePlan.time,curMap,curMap2);
+                CalculateActivity calculateActivity=new CalculateActivity(Double.parseDouble(MakePlan.userweight), curname, MakePlan.time,curMap,curMap2);
 
                 double calorie=0.0;
                 calorie=calculateActivity.getCalorie();
@@ -488,4 +488,6 @@ public class TodoList extends AppCompatActivity {
 
         return outputMap;
     }
+
+
 }
