@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private Context context = this;
     public String username, userage, userheight, userweight, usermeta, usergender;
 
-    public static Fragment calendarf, makeplanf, profilef, challengef,settingsf, foodmainf;
+    public static Fragment calendarf, makeplanf, profilef, challengef, foodmainf;
     Toolbar toolbar;
     static FragmentManager manager;
     private boolean isMembersVisible = false;
@@ -155,11 +155,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             case 4:
                 fragment=challengef;
-
                 break;
-            case 5:
-                fragment=settingsf;
-
             default:
                 break;
         }
@@ -190,9 +186,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         else if(id==R.id.menu4){
             onChangedFragment(4, null);
-        }
-        else if(id==R.id.menu5){
-            onChangedFragment(5, null);
         }
 
         mDrawerLayout.closeDrawers();

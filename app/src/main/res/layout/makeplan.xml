@@ -72,7 +72,7 @@
                         android:gravity="center"
                         android:layout_weight="1"
                         android:clickable="true"
-                        android:background="@drawable/border"
+                        android:background="@drawable/complete_circle_border"
                         android:textSize="20sp"
                         android:text="--:--"/>
 
@@ -92,7 +92,7 @@
                         android:gravity="center"
                         android:clickable="true"
 
-                        android:background="@drawable/border"
+                        android:background="@drawable/complete_circle_border"
                         android:textSize="20sp"
                         android:text="--:--"/>
 
