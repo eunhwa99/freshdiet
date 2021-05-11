@@ -317,6 +317,7 @@ public class MakePlan extends Fragment {
             }
             time=endhour*60+endmin-starthour*60-startmin;
         }
+
         return false;
     }
 
@@ -375,18 +376,22 @@ public class MakePlan extends Fragment {
     }
 
     public void getData(){
-        timeArray=PreferenceManager.getArrayList(Mcontext,curDate);
-        timeArray2=PreferenceManager.getArrayList(Mcontext, curDate+"_2");
-        boolean[] temp=PreferenceManager.getBooleanArray(Mcontext, curDate+"check");
+        timeArray=PreferenceManager.getArrayList(Mcontext,curDate2);
+        timeArray2=PreferenceManager.getArrayList(Mcontext, curDate2+"_2");
+        boolean[] temp=PreferenceManager.getBooleanArray(Mcontext, curDate2+"check");
         if(temp.length!=0){
             checkArray=temp;
+        }
+        else {
+            checkArray = new boolean[1441];
+            Arrays.fill(checkArray,false);
         }
 
     }
     public static void saveData(){
-        PreferenceManager.setArrayList(Mcontext, curDate, timeArray);
-        PreferenceManager.setArrayList(Mcontext, curDate+"_2", timeArray2);
-        PreferenceManager.setBooleanArray(Mcontext, curDate+"check",checkArray);
+        PreferenceManager.setArrayList(Mcontext, curDate2, timeArray);
+        PreferenceManager.setArrayList(Mcontext, curDate2+"_2", timeArray2);
+        PreferenceManager.setBooleanArray(Mcontext, curDate2+"check",checkArray);
     }
 
     private void openColorPicker(int what){

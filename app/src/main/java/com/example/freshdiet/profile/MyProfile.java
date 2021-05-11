@@ -14,6 +14,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.freshdiet.DoubleMath;
 import com.example.freshdiet.MainActivity;
 import com.example.freshdiet.R;
 
@@ -173,10 +174,11 @@ public class MyProfile extends AppCompatActivity {
         double weight = Double.parseDouble(userweight);
         int age = Integer.parseInt(userage);
 
+        DoubleMath doubleMath=new DoubleMath();
         if (gender.equals("man")) {
-            return (66.47 + (13.75 * weight) + (5 * height) - (6.76 * age));
+            return doubleMath.calc((66.47 + (13.75 * weight) + (5 * height) - (6.76 * age)));
         } else if (gender.equals("woman")) {
-            return (665.1 + (9.56 * weight) + (1.85 * height) - (4.68 * age));
+            return doubleMath.calc((665.1 + (9.56 * weight) + (1.85 * height) - (4.68 * age)));
         }
         return -1;
 

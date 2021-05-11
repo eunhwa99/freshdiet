@@ -383,8 +383,6 @@ public class ChallengeMain extends Fragment implements ViewFlipperAction.ViewFli
         }
         else  daysArray=new int[CHALLENGE_NUM+1];
 
-
-
     }
     private void saveData(){
         PreferenceManager.setBooleanArray(Ccontext, "challenge_check",challenge);

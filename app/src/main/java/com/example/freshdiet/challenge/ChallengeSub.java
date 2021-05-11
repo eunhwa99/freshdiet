@@ -1,6 +1,5 @@
 package com.example.freshdiet.challenge;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -14,7 +13,6 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -65,6 +63,8 @@ public class ChallengeSub extends Activity implements TimePicker.OnTimeChangedLi
         dealIntent();
         registerListener();
 
+        timePicker.setCurrentHour(0);
+        timePicker.setCurrentMinute(0);
     }
 
     private void dealIntent(){
@@ -87,32 +87,38 @@ public class ChallengeSub extends Activity implements TimePicker.OnTimeChangedLi
         set_numberpicker_text_colour(hour_numberpicker,color);
         set_numberpicker_text_colour(minute_numberpicker,color);
         set_numberpicker_text_colour(ampm_numberpicker,color);
+
     }
 
-    @SuppressLint("LongLogTag")
+
+
     private void set_numberpicker_text_colour(NumberPicker number_picker, int color){
         final int count = number_picker.getChildCount();
         //final int color = getResources().getColor(R.color.text);
 
-        for(int i = 0; i < count; i++){
-            View child = number_picker.getChildAt(i);
+        if(Build.VERSION.SDK_INT>= Build.VERSION_CODES.Q){
+            number_picker.setTextColor(color);
+        }
+        else {
+            for (int i = 0; i < count; i++) {
+                View child = number_picker.getChildAt(i);
 
-            try{
-                Field wheelpaint_field = number_picker.getClass().getDeclaredField("mSelectorWheelPaint");
-                wheelpaint_field.setAccessible(true);
+                try {
+                    Field wheelpaint_field = number_picker.getClass().getDeclaredField("mSelectorWheelPaint");
+                    wheelpaint_field.setAccessible(true);
 
-                ((Paint)wheelpaint_field.get(number_picker)).setColor(color);
-                ((EditText)child).setTextColor(color);
-                number_picker.invalidate();
-            }
-            catch(NoSuchFieldException e){
-                Log.w("setNumberPickerTextColor", e);
-            }
-            catch(IllegalAccessException e){
-                Log.w("setNumberPickerTextColor", e);
-            }
-            catch(IllegalArgumentException e){
-                Log.w("setNumberPickerTextColor", e);
+                    ((Paint) wheelpaint_field.get(number_picker)).setColor(color);
+                    ((EditText) child).setTextColor(color);
+
+                    number_picker.invalidate();
+                } catch (NoSuchFieldException e) {
+                    //    Log.w("setNumberPickerTextColor", e);
+
+                } catch (IllegalAccessException e) {
+                    //   Log.w("setNumberPickerTextColor", e);
+                } catch (IllegalArgumentException e) {
+                    //  Log.w("setNumberPickerTextColor", e);
+                }
             }
         }
     }
@@ -128,13 +134,14 @@ public class ChallengeSub extends Activity implements TimePicker.OnTimeChangedLi
                 if (isChecked){
                     timepickerchecked=true;
                     set_timepicker_text_colour(Color.BLACK);
+
                     timePicker.setCurrentHour(0);
                     timePicker.setCurrentMinute(0);
                     timePicker.setEnabled(true);
                 }else{
                     timepickerchecked=false;
 
-                    set_timepicker_text_colour(Color.WHITE);
+                    set_timepicker_text_colour(Color.LTGRAY);
                     timePicker.setEnabled(false);
                 }
             }

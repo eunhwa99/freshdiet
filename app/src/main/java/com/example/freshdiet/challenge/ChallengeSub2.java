@@ -1,6 +1,5 @@
 package com.example.freshdiet.challenge;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -10,7 +9,6 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
@@ -84,7 +82,7 @@ public class ChallengeSub2 extends Activity implements TimePicker.OnTimeChangedL
         challengeDays=intent.getIntExtra("days",-1);
     }
 
-    private void set_timepicker_text_colour(int color){
+    private void set_timepicker_text_colour(){
         Resources system;
         system = Resources.getSystem();
         int hour_numberpicker_id = system.getIdentifier("hour", "id", "android");
@@ -95,40 +93,42 @@ public class ChallengeSub2 extends Activity implements TimePicker.OnTimeChangedL
         NumberPicker minute_numberpicker = (NumberPicker) timePicker.findViewById(minute_numberpicker_id);
         NumberPicker ampm_numberpicker = (NumberPicker) timePicker.findViewById(ampm_numberpicker_id);
 
-        set_numberpicker_text_colour(hour_numberpicker,color);
-        set_numberpicker_text_colour(minute_numberpicker,color);
-        set_numberpicker_text_colour(ampm_numberpicker,color);
+        set_numberpicker_text_colour(hour_numberpicker);
+        set_numberpicker_text_colour(minute_numberpicker);
+        set_numberpicker_text_colour(ampm_numberpicker);
     }
 
-    @SuppressLint("LongLogTag")
-    private void set_numberpicker_text_colour(NumberPicker number_picker, int color){
+    private void set_numberpicker_text_colour(NumberPicker number_picker){
         final int count = number_picker.getChildCount();
         //final int color = getResources().getColor(R.color.text);
 
-        for(int i = 0; i < count; i++){
-            View child = number_picker.getChildAt(i);
+        if(Build.VERSION.SDK_INT>= Build.VERSION_CODES.Q){
+            number_picker.setTextColor(Color.BLACK);
+        }
+        else {
+            for (int i = 0; i < count; i++) {
+                View child = number_picker.getChildAt(i);
 
-            try{
-                Field wheelpaint_field = number_picker.getClass().getDeclaredField("mSelectorWheelPaint");
-                wheelpaint_field.setAccessible(true);
+                try {
+                    Field wheelpaint_field = number_picker.getClass().getDeclaredField("mSelectorWheelPaint");
+                    wheelpaint_field.setAccessible(true);
 
-                ((Paint)wheelpaint_field.get(number_picker)).setColor(color);
-                ((EditText)child).setTextColor(color);
-                number_picker.invalidate();
-            }
-            catch(NoSuchFieldException e){
-                Log.w("setNumberPickerTextColor", e);
-            }
-            catch(IllegalAccessException e){
-                Log.w("setNumberPickerTextColor", e);
-            }
-            catch(IllegalArgumentException e){
-                Log.w("setNumberPickerTextColor", e);
+                    ((Paint) wheelpaint_field.get(number_picker)).setColor(Color.BLACK);
+                    ((EditText) child).setTextColor(Color.BLACK);
+
+                    number_picker.invalidate();
+                } catch (NoSuchFieldException e) {
+                    //    Log.w("setNumberPickerTextColor", e);
+
+                } catch (IllegalAccessException e) {
+                    //   Log.w("setNumberPickerTextColor", e);
+                } catch (IllegalArgumentException e) {
+                    //  Log.w("setNumberPickerTextColor", e);
+                }
             }
         }
     }
 
-    @SuppressLint("SetTextI18n")
     private void setTextView(){
         curtv.setText(curname);
         if(alarmTime!=-1) {
@@ -182,7 +182,7 @@ public class ChallengeSub2 extends Activity implements TimePicker.OnTimeChangedL
             if(!timepickervisible) {
                 timepickervisible=true;
                 timepickerlayout.setVisibility(View.VISIBLE);
-                set_timepicker_text_colour(Color.BLACK);
+                set_timepicker_text_colour();
                 if(alarmTime!=-1){
                     timePicker.setCurrentHour((int) hours);
                     timePicker.setCurrentMinute((int)minutes);
