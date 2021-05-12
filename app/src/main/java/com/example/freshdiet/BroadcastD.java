@@ -12,7 +12,10 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Vibrator;
 
+import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
+
+import com.example.freshdiet.challenge.AlarmHATT;
 
 public class BroadcastD extends BroadcastReceiver {
     NotificationCompat.Builder builder;
@@ -22,12 +25,19 @@ public class BroadcastD extends BroadcastReceiver {
     private String title, content;
     private int request;
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onReceive(Context context, Intent intent) {
+
         //알람 시간이 되었을때 onReceive를 호출함
         title = intent.getStringExtra("noti_title");
         content=intent.getStringExtra("noti_content");
         request=intent.getIntExtra("request",-1);
+
+
+        AlarmHATT alarmHATT=new AlarmHATT(context);
+        alarmHATT.Alarm(request, title, System.currentTimeMillis()+86400000);
+
 
         NotificationManager notificationmanager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, request, new Intent(context, MainActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);

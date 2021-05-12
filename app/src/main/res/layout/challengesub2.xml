@@ -106,9 +106,22 @@
                 android:layout_marginLeft="20dp"
                 android:background="@drawable/memo_border"
                 android:clickable="true"
+                android:text=" "
                 android:gravity="center"
                 android:textColor="#000"
-                android:textSize="13sp" />
+                android:textSize="13sp"
+                android:visibility="visible"/>
+
+            <com.kyleduo.switchbutton.SwitchButton
+                android:id="@+id/sb_use_listener2"
+                style="@style/SwitchButtonStyle"
+                android:layout_gravity="start"
+                android:layout_width="wrap_content"
+                android:layout_weight="1"
+                android:checked="false"
+                android:layout_height="wrap_content"
+               />
+
 
         </LinearLayout>
         <LinearLayout

@@ -13,7 +13,7 @@
         android:id="@+id/toolbar2"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:background="#BED7F4">
+        android:background="#a8d8ea">
 
         <TextView
             android:layout_width="wrap_content"
@@ -545,6 +545,7 @@
         android:layout_height="wrap_content"
         android:text="추가하기"
         android:icon="@drawable/circle_border"
+        android:backgroundTint="@color/main_color"
         android:gravity="center"
         android:theme="@style/MaterialTheme"/>
     </LinearLayout>

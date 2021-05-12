@@ -29,7 +29,7 @@ public class AlarmHATT {
 
         PendingIntent sender = PendingIntent.getBroadcast(context, request, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-      /*  if(Build.VERSION.SDK_INT<Build.VERSION_CODES.M){ //23
+       if(Build.VERSION.SDK_INT<Build.VERSION_CODES.M){ //23
             if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.KITKAT){ //19
                 am.setExact(AlarmManager.RTC_WAKEUP, timemills,sender);
             }
@@ -39,9 +39,9 @@ public class AlarmHATT {
         }
         else{
             am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, timemills,sender);
-        }*/
+        }
         Toast.makeText(context, "알람이 설정되었습니다.",Toast.LENGTH_SHORT).show();
-        am.setRepeating(AlarmManager.RTC_WAKEUP, timemills, AlarmManager.INTERVAL_DAY,sender);
+       // am.setRepeating(AlarmManager.RTC_WAKEUP, timemills, AlarmManager.INTERVAL_DAY,sender);
     }
 
     public void noAlarm(int request){
