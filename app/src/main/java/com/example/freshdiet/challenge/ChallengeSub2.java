@@ -163,6 +163,7 @@ public class ChallengeSub2 extends Activity implements TimePicker.OnTimeChangedL
                 if (timepickervisible) { // 알람설정
                     AlarmHATT alarmHATT = new AlarmHATT(ChallengeSub2.this);
                     alarmHATT.noAlarm(idx); // 기존 알람 삭제
+
                     alarmHATT.Alarm(idx, curname, millis); // 알람 다시 설정
                     Toast.makeText(getApplicationContext(), "알람이 설정되었습니다.", Toast.LENGTH_SHORT).show();
                 }
@@ -242,6 +243,7 @@ public class ChallengeSub2 extends Activity implements TimePicker.OnTimeChangedL
         nHourDay=hourOfDay;
         nMinute=minute;
         Calendar calendar=Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
         calendar.set(Calendar.HOUR,nHourDay);
         calendar.set(Calendar.MINUTE,nMinute);
 

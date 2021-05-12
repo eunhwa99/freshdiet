@@ -9,6 +9,8 @@ import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 
+import com.example.freshdiet.BroadcastD;
+
 public class AlarmHATT {
     private Context context;
     public AlarmHATT(Context context) {
@@ -18,25 +20,33 @@ public class AlarmHATT {
     public void Alarm(int request, String name, long timemills) {
         //AlarmManager는 device에 미래에 대한 알림같은 행위를 등록할 때 사용
         AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(context, ChallengeSub.BroadcastD.class);
+        Intent intent = new Intent(context, BroadcastD.class);
+        intent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
         intent.putExtra("noti_title","챌린지");
         intent.putExtra("noti_content", name);
         intent.putExtra("request",request);
         //알람이 발생했을 경우, BradcastD에게 방송을 해주기 위해서 명시적으로 알려줍니다.
 
-        PendingIntent sender = PendingIntent.getBroadcast(context, request, intent, 0);
-       // Calendar calendar = Calendar.getInstance();
-        //알람시간 calendar에 set해주기
+        PendingIntent sender = PendingIntent.getBroadcast(context, request, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-      //  calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DATE), 23, 12, 0);
-        //알람 예약
+      /*  if(Build.VERSION.SDK_INT<Build.VERSION_CODES.M){ //23
+            if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.KITKAT){ //19
+                am.setExact(AlarmManager.RTC_WAKEUP, timemills,sender);
+            }
+            else{
+                am.set(AlarmManager.RTC_WAKEUP,timemills,sender);
+            }
+        }
+        else{
+            am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, timemills,sender);
+        }*/
         Toast.makeText(context, "알람이 설정되었습니다.",Toast.LENGTH_SHORT).show();
         am.setRepeating(AlarmManager.RTC_WAKEUP, timemills, AlarmManager.INTERVAL_DAY,sender);
     }
 
     public void noAlarm(int request){
         AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        Intent intent=new Intent(context, ChallengeSub.BroadcastD.class);
+        Intent intent=new Intent(context, BroadcastD.class);
         PendingIntent sender=PendingIntent.getBroadcast(context, request, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         if(sender!=null) {
             am.cancel(sender);

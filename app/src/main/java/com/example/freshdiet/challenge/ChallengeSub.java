@@ -1,12 +1,6 @@
 package com.example.freshdiet.challenge;
 
 import android.app.Activity;
-import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
@@ -31,8 +25,11 @@ import com.kyleduo.switchbutton.SwitchButton;
 import java.lang.reflect.Field;
 import java.util.Calendar;
 
+/*
+알람: https://1d1cblog.tistory.com/48
+ */
 public class ChallengeSub extends Activity implements TimePicker.OnTimeChangedListener{
-// https://lcw126.tistory.com/289
+
 
     private TimePicker timePicker;
     private TextView  curtv;
@@ -158,8 +155,7 @@ public class ChallengeSub extends Activity implements TimePicker.OnTimeChangedLi
 
                 if (timepickerchecked) {
                     intent.putExtra("alarmtime", nHourDay * 3600 * 1000 + nMinute * 60 * 1000);
-                    AlarmHATT alarmHATT = new AlarmHATT(ChallengeSub.this);
-                    alarmHATT.Alarm(index, curname, millis); //alarm 설정
+                    setAlarm();
                 }
                 Toast.makeText(getApplicationContext(), "챌린지가 시작되었습니다.", Toast.LENGTH_SHORT).show();
                 setResult(RESULT_OK, intent);
@@ -172,6 +168,16 @@ public class ChallengeSub extends Activity implements TimePicker.OnTimeChangedLi
         });
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public void setAlarm(){
+        AlarmHATT alarmHATT = new AlarmHATT(ChallengeSub.this);
+        Calendar alarmCalendar = Calendar.getInstance();
+        alarmCalendar.setTimeInMillis(System.currentTimeMillis());
+        alarmCalendar.set(Calendar.HOUR_OF_DAY,nHourDay);
+        alarmCalendar.set(Calendar.MINUTE,nMinute);
+        millis=alarmCalendar.getTimeInMillis();
+        alarmHATT.Alarm(index, curname, millis); //alarm 설정
+    }
 
     @Override
     public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
@@ -200,46 +206,5 @@ public class ChallengeSub extends Activity implements TimePicker.OnTimeChangedLi
         return;
     }
 
-    public  class BroadcastD extends BroadcastReceiver {
-        Notification.Builder builder;
-        //오레오 이상은 반드시 채널을 설정해줘야 Notification이 작동함
-        private String CHANNEL_ID = "channel1";
-        private String CHANNEL_NAME = "Channel1";
-        private String title, content;
-        private int request;
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            //알람 시간이 되었을때 onReceive를 호출함
-            //NotificationManager 안드로이드 상태바에 메세지를 던지기위한 서비스 불러오고
-            NotificationManager notificationmanager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-            PendingIntent pendingIntent = PendingIntent.getActivity(context, (int) (System.currentTimeMillis() / 1000), new Intent(context, ChallengeMain.class), PendingIntent.FLAG_UPDATE_CURRENT);
-
-            Intent broadintent=getIntent();
-            title = broadintent.getStringExtra("noti_title");
-            content=broadintent.getStringExtra("noti_content");
-            request=broadintent.getIntExtra("request",-1);
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                notificationmanager.createNotificationChannel(
-                        new NotificationChannel(CHANNEL_ID, CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT)
-                );
-                builder = new Notification.Builder(context, CHANNEL_ID);
-            } else {
-                builder = new Notification.Builder(context);
-            }
-
-            builder.setSmallIcon(R.drawable.ic_launcher_background).setTicker("HETT")
-                    .setWhen(System.currentTimeMillis())
-                    .setNumber(1).setContentTitle(title).setContentText(content)
-                    .setAutoCancel(true)
-                    .setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE)
-                    .setContentIntent(pendingIntent)
-                    .setAutoCancel(true);
-
-            notificationmanager.notify(request, builder.build());
-
-        }
-    }
 
 }
