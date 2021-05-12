@@ -16,6 +16,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.example.freshdiet.DoubleMath;
 import com.example.freshdiet.MainActivity;
 import com.example.freshdiet.R;
 import com.example.freshdiet.calorie.ShowFoodList;
@@ -141,12 +142,21 @@ public class Calendar extends Fragment {
         SharedPreferences sharedPreferences=context.getSharedPreferences(date+"act", MODE_PRIVATE);
         String str=sharedPreferences.getString("act_calorie","0.0");
         double tmp=Double.parseDouble(str);
-        act_cal.setText(str+"(kcal)");
+        DoubleMath doubleMath=new DoubleMath();
+        tmp=doubleMath.calc(tmp);
+
+        act_cal.setText(tmp+"(kcal)");
         meta_cal.setText(usermeta+"(kcal)");
+
         str=sharedPreferences.getString("eat_calorie","0.0");
         double tmp2= Double.parseDouble(str);
-        eat_cal.setText(str+"(kcal)");
-        rest_cal.setText(String.valueOf(tmp2-tmp)+"(kcal)");
+        tmp2=doubleMath.calc(tmp2);
+
+        eat_cal.setText(tmp2+"(kcal)");
+
+        double tmp3=tmp2-tmp;
+        tmp3=doubleMath.calc(tmp3);
+        rest_cal.setText(tmp3+"(kcal)");
 
     }
 

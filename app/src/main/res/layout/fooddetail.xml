@@ -13,7 +13,7 @@
         android:id="@+id/toolbar2"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:background="#A400D4C2">
+        android:background="#BED7F4">
 
         <TextView
             android:layout_width="wrap_content"
@@ -213,6 +213,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/memo_border"
+
                 android:descendantFocusability="blocksDescendants"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
