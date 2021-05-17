@@ -40,7 +40,7 @@ public class AlarmHATT {
         else{
             am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, timemills,sender);
         }
-        Toast.makeText(context, "알람이 설정되었습니다.",Toast.LENGTH_SHORT).show();
+      //  Toast.makeText(context, "알람이 설정되었습니다.",Toast.LENGTH_SHORT).show();
        // am.setRepeating(AlarmManager.RTC_WAKEUP, timemills, AlarmManager.INTERVAL_DAY,sender);
     }
 
@@ -50,7 +50,12 @@ public class AlarmHATT {
         PendingIntent sender=PendingIntent.getBroadcast(context, request, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         if(sender!=null) {
             am.cancel(sender);
+            Toast.makeText(context, "알람이 취소되었습니다.", Toast.LENGTH_SHORT).show();
             sender.cancel();
+        }
+        sender=PendingIntent.getBroadcast(context, request, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        if(sender!=null){
+
         }
     }
 
