@@ -170,13 +170,17 @@ public class ChallengeSub extends Activity implements TimePicker.OnTimeChangedLi
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void setAlarm(){
-        AlarmHATT alarmHATT = new AlarmHATT(ChallengeSub.this);
+        AlarmHATT alarmHATT = new AlarmHATT(getApplicationContext());
         Calendar alarmCalendar = Calendar.getInstance();
         alarmCalendar.setTimeInMillis(System.currentTimeMillis());
         alarmCalendar.set(Calendar.HOUR_OF_DAY,nHourDay);
         alarmCalendar.set(Calendar.MINUTE,nMinute);
         millis=alarmCalendar.getTimeInMillis();
-        alarmHATT.Alarm(index, curname, millis); //alarm 설정
+
+        if(alarmCalendar.before(Calendar.getInstance()))
+            alarmCalendar.add(Calendar.DATE,1);
+
+        alarmHATT.Alarm(index, curname, alarmCalendar.getTimeInMillis()); //alarm 설정
     }
 
     @Override

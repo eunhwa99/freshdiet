@@ -5,7 +5,6 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
-import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 
@@ -26,6 +25,8 @@ public class AlarmHATT {
         intent.putExtra("noti_content", name);
         intent.putExtra("request",request);
         //알람이 발생했을 경우, BradcastD에게 방송을 해주기 위해서 명시적으로 알려줍니다.
+
+
 
         PendingIntent sender = PendingIntent.getBroadcast(context, request, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
@@ -50,13 +51,9 @@ public class AlarmHATT {
         PendingIntent sender=PendingIntent.getBroadcast(context, request, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         if(sender!=null) {
             am.cancel(sender);
-            Toast.makeText(context, "알람이 취소되었습니다.", Toast.LENGTH_SHORT).show();
             sender.cancel();
         }
-        sender=PendingIntent.getBroadcast(context, request, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        if(sender!=null){
 
-        }
     }
 
 }

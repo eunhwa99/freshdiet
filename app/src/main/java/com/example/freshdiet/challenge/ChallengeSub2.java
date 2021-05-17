@@ -160,6 +160,7 @@ public class ChallengeSub2 extends Activity implements TimePicker.OnTimeChangedL
                     timePicker.setCurrentHour((int)hours);
                     timePicker.setCurrentMinute((int)minutes);
                     timePicker.setEnabled(true);
+                    timepickerlayout.setVisibility(View.VISIBLE);
                 }else{
                     timePicker.setVisibility(View.GONE);
                     timePicker.setEnabled(false);
@@ -182,7 +183,8 @@ public class ChallengeSub2 extends Activity implements TimePicker.OnTimeChangedL
                     {
                         intent.putExtra("alarmtime", nHourDay * 3600 * 1000 + nMinute * 60 * 1000); // 새로운 알람 시간 저장
                         alarmHATT.noAlarm(idx); // 기존 알람 삭제
-                        alarmHATT.Alarm(idx, curname, millis); // 알람 다시 설정
+
+                        setAlarm();
                         Toast.makeText(getApplicationContext(), "알람이 설정되었습니다.", Toast.LENGTH_SHORT).show();
                     }
                     else //아니면 그대로 저장
@@ -192,6 +194,7 @@ public class ChallengeSub2 extends Activity implements TimePicker.OnTimeChangedL
                 else {
                     if (alarmtv.getText() != " ") { // 그 전에 알람 설정한 건데 취소한 경우
                         alarmHATT.noAlarm(idx); // 기존 알람 삭제
+                        Toast.makeText(getApplicationContext(), "알람이 취소되었습니다.", Toast.LENGTH_SHORT).show();
                     }
                     intent.putExtra("alarmtime",-1);
                 }
@@ -209,7 +212,7 @@ public class ChallengeSub2 extends Activity implements TimePicker.OnTimeChangedL
         //알람 시간
         alarmtv.setOnClickListener(view->{
             FrameLayout.LayoutParams params;
-            if(!timepickervisible&&switchButton.isChecked()) {
+            if(switchButton.isChecked()) {
                 timepickervisible=true;
                 timepickerlayout.setVisibility(View.VISIBLE);
                 set_timepicker_text_colour();
@@ -264,6 +267,21 @@ public class ChallengeSub2 extends Activity implements TimePicker.OnTimeChangedL
             alertDialog.show();
 
         });
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public void setAlarm(){
+        AlarmHATT alarmHATT = new AlarmHATT(getApplicationContext());
+        Calendar alarmCalendar = Calendar.getInstance();
+        alarmCalendar.setTimeInMillis(System.currentTimeMillis());
+        alarmCalendar.set(Calendar.HOUR_OF_DAY,nHourDay);
+        alarmCalendar.set(Calendar.MINUTE,nMinute);
+        millis=alarmCalendar.getTimeInMillis();
+
+        if(alarmCalendar.before(Calendar.getInstance()))
+            alarmCalendar.add(Calendar.DATE,1);
+
+        alarmHATT.Alarm(idx, curname, alarmCalendar.getTimeInMillis()); //alarm 설정
     }
 
 

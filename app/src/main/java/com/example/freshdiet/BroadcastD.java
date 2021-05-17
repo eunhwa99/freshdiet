@@ -10,7 +10,6 @@ import android.content.Intent;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
-import android.os.SystemClock;
 import android.os.Vibrator;
 
 import androidx.annotation.RequiresApi;
@@ -37,8 +36,9 @@ public class BroadcastD extends BroadcastReceiver {
 
 
         AlarmHATT alarmHATT=new AlarmHATT(context);
-        long firstTime = SystemClock.elapsedRealtime();
-        alarmHATT.Alarm(request, content, firstTime+24*60*60*1000);
+        long firstTime = System.currentTimeMillis();
+        firstTime+=24*60*60*1000;
+        alarmHATT.Alarm(request, content, firstTime);
 
 
         NotificationManager notificationmanager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
