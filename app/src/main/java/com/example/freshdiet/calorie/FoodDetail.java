@@ -1,9 +1,12 @@
 package com.example.freshdiet.calorie;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -16,6 +19,10 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -23,13 +30,17 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.freshdiet.R;
+import com.google.gson.Gson;
 import com.opencsv.CSVReader;
+
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 
 public class FoodDetail extends AppCompatActivity{
     ScrollView sv;
@@ -56,6 +67,22 @@ public class FoodDetail extends AppCompatActivity{
     ArrayList<FoodInfo> foodinfolist=new ArrayList<>();
 
     public static ArrayList<FoodListItem> foodlist=new ArrayList<>();
+
+    ActivityResultLauncher<Intent> startActivityResult1 = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override public void onActivityResult(ActivityResult result) {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        Intent data=result.getData();
+                        int type=data.getIntExtra("type",0);
+                        if(type==1)
+                            mAdapter.notifyDataSetChanged();
+                        else
+                            mAdapter2.notifyDataSetChanged();
+
+                    }
+                }
+            });
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -369,8 +396,45 @@ public class FoodDetail extends AppCompatActivity{
         } catch (IOException e) {
             e.printStackTrace();
         }
+        HashMap<String, MultiHash> temp=getMap(str);
+        Iterator<String> keys = temp.keySet().iterator();
+        while (keys.hasNext()){
+            String key = keys.next();
+            data.add(new HorizontalData(key));
+            map.put(key, temp.get(key));
+        }
+
         return data;
     }
+
+    public  HashMap<String,MultiHash> getMap(String str){
+        HashMap<String,MultiHash> outputMap = new HashMap<String,MultiHash>();
+        SharedPreferences pSharedPref = getSharedPreferences(str, MODE_PRIVATE);
+
+        try{
+            if (pSharedPref != null){
+                String jsonString = pSharedPref.getString(str+"Map", (new JSONObject()).toString());
+                JSONObject jsonObject = new JSONObject(jsonString);
+                Iterator<String> keysItr = jsonObject.keys();
+                while(keysItr.hasNext()) {
+                    String key = keysItr.next();
+                    String val=String.valueOf(jsonObject.get(key));
+                    Gson gson=new Gson();
+
+                    MultiHash value = gson.fromJson(val, MultiHash.class);
+                    outputMap.put(key, value);
+                }
+            }
+        }catch(Exception e){
+            String sr=e.getMessage();
+            Log.i("오류", sr);
+            e.printStackTrace();
+        }
+
+
+        return outputMap;
+    }
+
 
     public void setClick(){
         mAdapter.setOnItemClickListener(new HorizontalAdapter.OnItemClickListener() {
@@ -486,7 +550,7 @@ public class FoodDetail extends AppCompatActivity{
 
             case R.id.topping_added:
                 Intent intent1=new Intent(FoodDetail.this, Toppings.class);
-                startActivity(intent1);
+                startActivityResult1.launch(intent1);
                 return true;
 
             default:

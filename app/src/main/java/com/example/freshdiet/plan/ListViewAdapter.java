@@ -46,7 +46,7 @@ public class ListViewAdapter extends BaseAdapter {
             LayoutInflater inflater=(LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view=inflater.inflate(R.layout.plannerlist, viewGroup, false);
 
-           // view.setMinimumHeight(viewGroup.getHeight()/getCount());
+
         }
 
         TextView nameText=(TextView)view.findViewById(R.id.nameText);
