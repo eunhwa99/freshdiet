@@ -52,7 +52,6 @@ public class FoodDetail extends AppCompatActivity{
 
     HashMap<String, MultiHash> toppingMap1=new HashMap<>();
     HashMap<String, MultiHash> toppingMap2=new HashMap<>();
-    //HashMap<String, MultiHash> foodinfoMap=new HashMap<>();
 
     ArrayList<FoodInfo> foodinfolist=new ArrayList<>();
 
@@ -485,9 +484,12 @@ public class FoodDetail extends AppCompatActivity{
                 startActivity(intent);
                 return true;
 
+            case R.id.topping_added:
+                Intent intent1=new Intent(FoodDetail.this, Toppings.class);
+                startActivity(intent1);
+                return true;
+
             default:
-                // If we got here, the user's action was not recognized.
-                // Invoke the superclass to handle it.
               //  Toast.makeText(getApplicationContext(), "나머지 버튼 클릭됨", Toast.LENGTH_LONG).show();
                 return super.onOptionsItemSelected(item);
 

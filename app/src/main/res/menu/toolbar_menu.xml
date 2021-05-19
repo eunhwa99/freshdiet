@@ -7,4 +7,10 @@
         android:icon="@drawable/ic_baseline_restaurant_24"
         app:showAsAction="ifRoom"/>
 
+    <!-- Settings, should always be in the overflow -->
+    <item android:id="@+id/topping_added"
+        android:title="토핑 편집"
+        app:showAsAction="never"/>
+
+
 </menu>

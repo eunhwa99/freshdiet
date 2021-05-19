@@ -62,6 +62,7 @@ public class ChallengeSub extends Activity implements TimePicker.OnTimeChangedLi
 
         timePicker.setCurrentHour(0);
         timePicker.setCurrentMinute(0);
+        timePicker.setEnabled(false);
     }
 
     private void dealIntent(){

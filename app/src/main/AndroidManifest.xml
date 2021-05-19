@@ -71,6 +71,11 @@
             android:launchMode="singleTask"
             android:screenOrientation="portrait"/>
 
+        <activity android:name=".calorie.Toppings"
+            android:theme="@style/popupTheme"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"/>
+
         <receiver android:name=".BroadcastD"
             android:enabled="true"
             android:directBootAware="true"
