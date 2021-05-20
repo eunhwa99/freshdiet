@@ -15,6 +15,8 @@ import android.os.Vibrator;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 
+import com.example.freshdiet.challenge.AlarmHATT;
+
 public class BroadcastD extends BroadcastReceiver {
     NotificationCompat.Builder builder;
     //오레오 이상은 반드시 채널을 설정해줘야 Notification이 작동함
@@ -22,6 +24,7 @@ public class BroadcastD extends BroadcastReceiver {
     private String CHANNEL_NAME = "Channel1";
     private String title, content;
     private int request;
+    private int hour, min;
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
@@ -31,12 +34,12 @@ public class BroadcastD extends BroadcastReceiver {
         title = intent.getStringExtra("noti_title");
         content=intent.getStringExtra("noti_content");
         request=intent.getIntExtra("request",-1);
+        hour=intent.getIntExtra("hour",0);
+        min=intent.getIntExtra("min",0);
 
 
-    //   AlarmHATT alarmHATT=new AlarmHATT(context);
-     //   long firstTime = System.currentTimeMillis();
-     //   firstTime+=24*60*60*1000;
-     //   alarmHATT.Alarm(request, content, firstTime);
+        AlarmHATT alarmHATT=new AlarmHATT(context);
+        alarmHATT.Alarm(request, content, hour, min,-1);
 
         NotificationManager notificationmanager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, request, new Intent(context, MainActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);

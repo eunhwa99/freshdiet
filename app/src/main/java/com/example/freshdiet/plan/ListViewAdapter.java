@@ -12,8 +12,6 @@ import com.example.freshdiet.R;
 import java.util.ArrayList;
 
 public class ListViewAdapter extends BaseAdapter {
-    // Adapter에 추가된 데이터를 저장하기 위한 arraylist
-   // private ArrayList<ListViewItem> listViewItemList=new ArrayList<ListViewItem>();
     private ArrayList<String> listViewItemList=new ArrayList<>();
 
     public ListViewAdapter(ArrayList<String> listViewItemList){

@@ -73,12 +73,7 @@ public class FoodDetail extends AppCompatActivity{
             new ActivityResultCallback<ActivityResult>() {
                 @Override public void onActivityResult(ActivityResult result) {
                     if (result.getResultCode() == Activity.RESULT_OK) {
-                        Intent data=result.getData();
-                        int type=data.getIntExtra("type",0);
-                        if(type==1)
-                            mAdapter.notifyDataSetChanged();
-                        else
-                            mAdapter2.notifyDataSetChanged();
+                        initRecyclerView();
 
                     }
                 }
@@ -127,7 +122,6 @@ public class FoodDetail extends AppCompatActivity{
 
         floating_btn=findViewById(R.id.floating_btn);
 
-       // toolbar.bringToFront();
         scrollDown();
         initRecyclerView();
 
@@ -160,17 +154,14 @@ public class FoodDetail extends AppCompatActivity{
         addbtn1.setOnClickListener(view->{
             addFood(foodname.getText().toString(),amount, unit);
             foodinfolist.add(new FoodInfo(foodname.getText().toString(),amount,unit, kal_amount,carbo_amount,protein_amount,fat_amount));
-            //foodinfoMap.put(foodname.getText().toString(),new MultiHash(amount,unit, kal_amount,carbo_amount,protein_amount,fat_amount));
         });
         addbtn2.setOnClickListener(view->{
             addFood(toppingtxt.getText().toString(),amount2, unit2);
             foodinfolist.add(new FoodInfo(toppingtxt.getText().toString(),amount2,unit2, kal_amount2,carbo_amount2,protein_amount2,fat_amount2));
-            //foodinfoMap.put(toppingtxt.getText().toString(),new MultiHash(amount2,unit2, kal_amount2,carbo_amount2,protein_amount2,fat_amount2));
         });
         addbtn3.setOnClickListener(view->{
             addFood(toppingtxt2.getText().toString(),amount3, unit3);
             foodinfolist.add(new FoodInfo(toppingtxt2.getText().toString(),amount3,unit3, kal_amount3,carbo_amount3,protein_amount3,fat_amount3));
-           // foodinfoMap.put(toppingtxt2.getText().toString(),new MultiHash(amount3,unit3, kal_amount3,carbo_amount3,protein_amount3,fat_amount3));
         });
 
         floating_btn.setOnClickListener(view->{

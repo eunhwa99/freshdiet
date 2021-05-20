@@ -99,7 +99,6 @@ public class Toppings extends Activity {
                 setMap(typestring, toppingMap);
                 Toast.makeText(getApplicationContext(),"저장되었습니다.",Toast.LENGTH_SHORT).show();
 
-                intent.putExtra("type",type);
                 setResult(RESULT_OK, intent);
 
                 finish();

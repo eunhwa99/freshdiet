@@ -9,7 +9,7 @@
 
     <!-- Settings, should always be in the overflow -->
     <item android:id="@+id/topping_added"
-        android:title="토핑 편집"
+        android:title="토핑 추가"
         app:showAsAction="never"/>
 
 
