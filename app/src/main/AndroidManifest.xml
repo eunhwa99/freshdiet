@@ -76,7 +76,7 @@
             android:launchMode="singleTask"
             android:screenOrientation="portrait"/>
 
-        <receiver android:name=".BroadcastD"
+        <receiver android:name=".DeviceBootReceiver"
             android:enabled="true"
             android:directBootAware="true"
             android:exported="false">
@@ -85,6 +85,8 @@
                 <action android:name="android.intent.action.LOCKED_BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
+
+        <receiver android:name=".BroadcastD"/>
 
     </application>
 

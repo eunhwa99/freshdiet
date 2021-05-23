@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -48,6 +49,7 @@ public class ChallengeSub2 extends Activity implements TimePicker.OnTimeChangedL
     private boolean timepickervisible=false, clicked=false;
     private LinearLayout timepickerlayout,layout;
     SwitchButton switchButton;
+    private String[] alarmlist;
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
@@ -68,6 +70,8 @@ public class ChallengeSub2 extends Activity implements TimePicker.OnTimeChangedL
         switchButton = (SwitchButton) findViewById(R.id.sb_use_listener2);
 
         dealIntent();
+        alarmlist=new String[10];
+        alarmlist=getAlarm();
         setTextView(); // 가지고 온 정보 텍스뷰에 뿌리기
         setClickListener(); // 버튼 리스너 지정
     }
@@ -194,6 +198,9 @@ public class ChallengeSub2 extends Activity implements TimePicker.OnTimeChangedL
                 else {
                     if (alarmtv.getText() != " ") { // 그 전에 알람 설정한 건데 취소한 경우
                         alarmHATT.noAlarm(idx); // 기존 알람 삭제
+                        alarmlist[idx]="";
+                        saveAlarm();
+
                         Toast.makeText(getApplicationContext(), "알람이 취소되었습니다.", Toast.LENGTH_SHORT).show();
                     }
                     intent.putExtra("alarmtime",-1);
@@ -274,9 +281,28 @@ public class ChallengeSub2 extends Activity implements TimePicker.OnTimeChangedL
         AlarmHATT alarmHATT = new AlarmHATT(getApplicationContext());
 
         alarmHATT.Alarm(idx, curname, nHourDay, nMinute,0);
-     //   alarmHATT.Alarm(idx, curname, alarmCalendar.getTimeInMillis()); //alarm 설정
+        String alarminfo=curname+" "+nHourDay+" "+nMinute;
+        alarmlist[idx]=alarminfo;
+        saveAlarm();
     }
 
+    public String[] getAlarm(){
+        SharedPreferences prefs=getSharedPreferences("Alarm",MODE_PRIVATE);
+        int size = prefs.getInt("Alarmlist" + "_size", 10);
+        String array[] = new String[size];
+        for(int i=0;i<size;i++)
+            array[i] = prefs.getString("Alarmlist" + "_" + i, null);
+        return array;
+    }
+
+    public void saveAlarm(){
+        SharedPreferences prefs = getSharedPreferences("Alarm",MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putInt("Alarmlist"+"_size",alarmlist.length);
+        for(int i=0;i<alarmlist.length;i++)
+            editor.putString("Alarmlist"+"_"+i, alarmlist[i]);
+        editor.apply();
+    }
 
     @Override
     public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {

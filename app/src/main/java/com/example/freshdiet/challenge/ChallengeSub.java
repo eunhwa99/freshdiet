@@ -2,6 +2,7 @@ package com.example.freshdiet.challenge;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -41,6 +42,7 @@ public class ChallengeSub extends Activity implements TimePicker.OnTimeChangedLi
     Intent intent;
     SwitchButton switchButton;
     boolean timepickerchecked;
+    private String[] alarmlist=new String[10];
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
@@ -59,6 +61,8 @@ public class ChallengeSub extends Activity implements TimePicker.OnTimeChangedLi
         timepickerchecked=false;
         dealIntent();
         registerListener();
+
+        alarmlist=getAlarm();
 
         timePicker.setCurrentHour(0);
         timePicker.setCurrentMinute(0);
@@ -172,9 +176,28 @@ public class ChallengeSub extends Activity implements TimePicker.OnTimeChangedLi
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void setAlarm(){
         AlarmHATT alarmHATT = new AlarmHATT(getApplicationContext());
-
-
         alarmHATT.Alarm(index, curname, nHourDay,nMinute,0); //alarm 설정
+        String alarminfo=curname+" "+nHourDay+" "+nMinute;
+        alarmlist[index]=alarminfo;
+        saveAlarm();
+    }
+
+    public String[] getAlarm(){
+        SharedPreferences prefs=getSharedPreferences("Alarm",MODE_PRIVATE);
+        int size = prefs.getInt("Alarmlist" + "_size", 10);
+        String array[] = new String[size];
+        for(int i=0;i<size;i++)
+            array[i] = prefs.getString("Alarmlist" + "_" + i, null);
+        return array;
+    }
+
+    public void saveAlarm(){
+        SharedPreferences prefs = getSharedPreferences("Alarm",MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putInt("Alarmlist"+"_size",alarmlist.length);
+        for(int i=0;i<alarmlist.length;i++)
+            editor.putString("Alarmlist"+"_"+i, alarmlist[i]);
+        editor.apply();
     }
 
     @Override
