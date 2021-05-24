@@ -2,6 +2,7 @@ package com.example.freshdiet.challenge;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -287,7 +288,7 @@ public class ChallengeSub2 extends Activity implements TimePicker.OnTimeChangedL
     }
 
     public String[] getAlarm(){
-        SharedPreferences prefs=getSharedPreferences("Alarm",MODE_PRIVATE);
+        SharedPreferences prefs=getSharedPreferences("Alarm", Context.MODE_PRIVATE);
         int size = prefs.getInt("Alarmlist" + "_size", 10);
         String array[] = new String[size];
         for(int i=0;i<size;i++)
@@ -296,7 +297,7 @@ public class ChallengeSub2 extends Activity implements TimePicker.OnTimeChangedL
     }
 
     public void saveAlarm(){
-        SharedPreferences prefs = getSharedPreferences("Alarm",MODE_PRIVATE);
+        SharedPreferences prefs = getSharedPreferences("Alarm",Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
         editor.putInt("Alarmlist"+"_size",alarmlist.length);
         for(int i=0;i<alarmlist.length;i++)

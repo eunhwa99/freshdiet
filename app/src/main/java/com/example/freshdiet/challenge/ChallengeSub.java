@@ -1,6 +1,7 @@
 package com.example.freshdiet.challenge;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
@@ -43,6 +44,7 @@ public class ChallengeSub extends Activity implements TimePicker.OnTimeChangedLi
     SwitchButton switchButton;
     boolean timepickerchecked;
     private String[] alarmlist=new String[10];
+    public static Context challengContext;
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
@@ -59,6 +61,7 @@ public class ChallengeSub extends Activity implements TimePicker.OnTimeChangedLi
         switchButton = (SwitchButton) findViewById(R.id.sb_use_listener);
         timePicker=findViewById(R.id.tp_timepicker);
         timepickerchecked=false;
+        challengContext=getApplicationContext();
         dealIntent();
         registerListener();
 
@@ -183,7 +186,7 @@ public class ChallengeSub extends Activity implements TimePicker.OnTimeChangedLi
     }
 
     public String[] getAlarm(){
-        SharedPreferences prefs=getSharedPreferences("Alarm",MODE_PRIVATE);
+        SharedPreferences prefs=challengContext.getSharedPreferences("Alarm",Context.MODE_PRIVATE);
         int size = prefs.getInt("Alarmlist" + "_size", 10);
         String array[] = new String[size];
         for(int i=0;i<size;i++)
@@ -192,7 +195,7 @@ public class ChallengeSub extends Activity implements TimePicker.OnTimeChangedLi
     }
 
     public void saveAlarm(){
-        SharedPreferences prefs = getSharedPreferences("Alarm",MODE_PRIVATE);
+        SharedPreferences prefs = challengContext.getSharedPreferences("Alarm",Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
         editor.putInt("Alarmlist"+"_size",alarmlist.length);
         for(int i=0;i<alarmlist.length;i++)

@@ -9,6 +9,7 @@ import android.os.Build;
 import androidx.annotation.RequiresApi;
 
 import com.example.freshdiet.challenge.AlarmHATT;
+import com.example.freshdiet.challenge.ChallengeSub;
 
 public class DeviceBootReceiver extends BroadcastReceiver {
     String[] alarmlist;
@@ -16,9 +17,10 @@ public class DeviceBootReceiver extends BroadcastReceiver {
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onReceive(Context context, Intent intent) {
-        mcontext=context;
+        mcontext= ChallengeSub.challengContext;
         String action=intent.getAction();
         alarmlist=new String[10];
+
         if(action.equals("android.intent.action.BOOT_COMPLETED")){
             AlarmHATT alarmHATT = new AlarmHATT(context);
             alarmlist=getAlarm();
