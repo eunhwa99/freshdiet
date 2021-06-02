@@ -108,6 +108,7 @@ public class MyProfile extends AppCompatActivity {
                     saveData();
                     Toast.makeText(view.getContext(), "저장되었습니다.", Toast.LENGTH_SHORT).show();
                     Intent intent=new Intent(MyProfile.this, MainActivity.class);
+                    startActivity(intent);
                     setResult(RESULT_OK, intent);
                     finish();
                 }

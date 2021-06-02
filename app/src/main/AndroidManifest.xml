@@ -20,7 +20,11 @@
         android:networkSecurityConfig="@xml/network_config"
         android:theme="@style/Theme.Freshdiet"
         tools:targetApi="n">
-        <activity android:name=".MainActivity"
+        <activity android:name=".MainActivity">
+
+        </activity>
+
+        <activity android:name=".Splash"
             >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
