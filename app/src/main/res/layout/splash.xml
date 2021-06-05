@@ -3,43 +3,23 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/blueorange"
+    android:background="@drawable/clock"
+    android:layout_gravity="bottom"
     android:orientation="vertical">
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="120dp"
-        android:layout_gravity="center">
-        <TextView
-            android:id="@+id/start"
-            android:layout_width="wrap_content"
-            android:layout_height="95dp"
-            android:fontFamily="serif"
-            android:gravity="center"
-            android:text="Pre하다"
-            android:layout_gravity="center"
-            android:textColor="#FF80cbc4"
-            android:textSize="50sp"
-            android:textStyle="bold"/>
-    </LinearLayout>
 
 
-    <LinearLayout
+    <TextView
+        android:id="@+id/start"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="95dp"
         android:layout_gravity="center"
-        android:paddingTop="50dp"
-
-        android:layout_marginTop="100dp">
-
-    <!--   <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="wrap_content"
-            android:layout_height="120dp"
-            android:backgroundTint="#FF80cbc4"
-            android:src="@drawable/orange" />-->
-    </LinearLayout>
+        android:fontFamily="serif"
+        android:gravity="center"
+        android:text="Pre하다"
+        android:textColor="#FF80cbc4"
+        android:textSize="50sp"
+        android:textStyle="bold" />
 
 
 </LinearLayout>
