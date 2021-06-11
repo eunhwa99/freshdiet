@@ -308,7 +308,7 @@ public class MakePlan extends Fragment {
             for(int i=0;i<endhour*60+endmin;i++)
                 if(checkArray[i])
                     return true;
-            time=(endhour+12)*60+endmin-starthour*60-startmin;
+            time=(endhour+24)*60+endmin-starthour*60-startmin;
         }
         else {
             for (int i = starthour*60 + startmin+1; i < endhour*60+endmin; i++) {

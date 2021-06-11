@@ -178,9 +178,9 @@ public class Popup2 extends Activity {
         }
 
         if(starthour>endhour){
-            endhour+=12;
+            endhour+=24;
         }
-        time=endhour*60+endmin-starthour-startmin;
+        time=endhour*60+endmin-starthour*60-startmin;
     }
 
     public HashMap<String,Double> getMap(String str){
