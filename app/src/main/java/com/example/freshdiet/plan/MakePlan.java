@@ -59,6 +59,7 @@ public class MakePlan extends Fragment {
     int color=Color.WHITE;
 
     public static boolean[] checkArray=new boolean[24*60+1];
+    private double KALOORIE;
 
     ActivityResultLauncher<Intent> startActivityResult1 = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
@@ -69,18 +70,6 @@ public class MakePlan extends Fragment {
                         memotext=data.getStringExtra("EditText"); // 메모 내용 가지고 오기
                         // 계획표 추가
                         openColorPicker(0);
-
-                        double cal=0.0, mets=0.0;
-                        if(curname.equals("숙면")){
-                            mets=0.9;
-                        }
-                        else if(curname.equals("공부")){
-                            mets=1.8;
-                        }
-                        CalculateActivity calculateActivity=new CalculateActivity(Double.parseDouble(userweight), time, mets);
-                        cal=calculateActivity.getCalorie();
-                        cal=Math.round(cal*100)/100.0;
-                        updateCalorie(cal);
                     }
                 }
             });
@@ -94,11 +83,8 @@ public class MakePlan extends Fragment {
                         memotext=data.getStringExtra("EditText");
                         detail=data.getStringExtra("ToDo"); // detail 아무것도 없으면 표시 X
                         // 계획표 추가
-                        openColorPicker(1);
-
-                        double cal=0.0;
-                        cal=data.getDoubleExtra("calorie",0.0);
-                        updateCalorie(cal);
+                       openColorPicker(1);
+                       KALOORIE= data.getDoubleExtra("calorie", 0.0);
                     }
 
                 }
@@ -157,8 +143,16 @@ public class MakePlan extends Fragment {
                     Toast.makeText(getContext(),"종료 시간을 입력하세요!", Toast.LENGTH_SHORT).show();
                     return;
                 }
+                getTime();
+                if(time<30){
+                    Toast.makeText(getContext(),"최소 30분 이상으로 설정해주세요.", Toast.LENGTH_SHORT).show();
+                }
+                if(timenotAlright()){
+                    Toast.makeText(getContext(), "시작 시간과 끝 시간이 잘못되었습니다. 다시 설정해주세요.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 if(alreadyUsed()){
-                    Toast.makeText(getContext(), "시간이 중복됩니다. 다시 설정해주세요.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), "시간이 중복됩니다. 다시 설정해주세요.", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -180,33 +174,50 @@ public class MakePlan extends Fragment {
 
     }
 
+    public boolean timenotAlright(){
+        if(starthour>endhour){
+            if(((starthour>=12&&starthour<=23)&&(endhour>=12&&endhour<=23)) || ((starthour>=0&&starthour<=12)&&(endhour>=0&&endhour<=12))){
+                return true;
+            }
+        }
+        else if(starthour==endhour){
+            if(startmin>endmin){
+                return true;
+            }
+        }
+
+        return false;
+    }
 
 
 
     public void addSchedule(String memo, String nopop, int what){
 
-        if(starthour>endhour){
-            if(starthour>=12&&starthour<=23&&endhour>=12&&endhour<=23 || starthour>=0&&starthour<=12&&endhour>=0&&endhour<=12){
-                Toast.makeText(getContext(), "시작 시간과 끝 시간이 잘못되었습니다. 다시 설정해주세요.", Toast.LENGTH_LONG).show();
-                return;
-            }
-        }
-        else if(starthour==endhour){
-            if(startmin>endmin){
-                Toast.makeText(getContext(), "시작 시간과 끝 시간이 잘못되었습니다. 다시 설정해주세요.", Toast.LENGTH_LONG).show();
-                return;
-            }
-        }
-
             if (what == 0) {
                 timeArray.add(starthour + ":" + startmin + ":" + endhour + ":" + endmin + ":" + curname + ":" + memo + ":" + color);
+                double cal = 0.0, mets = 0.0;
+                if (curname.equals("숙면")) {
+                    mets = 0.9;
+                } else if (curname.equals("공부")) {
+                    mets = 1.8;
+                }
+                CalculateActivity calculateActivity = new CalculateActivity(Double.parseDouble(userweight), time, mets);
+                cal = calculateActivity.getCalorie();
+                cal = Math.round(cal * 100) / 100.0;
+                updateCalorie(cal);
+
             } else if (what == 1) {
                 timeArray2.add(starthour + ":" + startmin + ":" + endhour + ":" + endmin + ":" + curname + ":" + nopop + ":" + memo + ":" + color);
+
+                double cal = KALOORIE;
+                updateCalorie(cal);
+
             }
 
             //시간 중복 안되게 체크하기
             checkUsedTime();
             saveData();
+
     }
 
     private void setListener(){
@@ -217,8 +228,7 @@ public class MakePlan extends Fragment {
             pickTime(endTime);
         });
     }
-
-    private Boolean alreadyUsed(){
+    public void getTime(){
         String[] starttime= startTime.getText().toString().split(":");
         String[] endtime=endTime.getText().toString().split(":");
 
@@ -300,6 +310,16 @@ public class MakePlan extends Fragment {
         }
         starthour=start[0]; startmin=start[1];
         endhour=end[0]; endmin=end[1];
+        if(endhour<starthour){
+            time=(endhour+24)*60+endmin-starthour*60-startmin;
+        }
+        else{
+            time=endhour*60+endmin-starthour*60-startmin;
+        }
+    }
+
+    private Boolean alreadyUsed(){
+
 
         if(endhour<starthour){
             for(int i=starthour*60+startmin + 1;i<24*60;i++)
@@ -308,14 +328,13 @@ public class MakePlan extends Fragment {
             for(int i=0;i<endhour*60+endmin;i++)
                 if(checkArray[i])
                     return true;
-            time=(endhour+24)*60+endmin-starthour*60-startmin;
+
         }
         else {
             for (int i = starthour*60 + startmin+1; i < endhour*60+endmin; i++) {
                 if(checkArray[i])
                     return true;
             }
-            time=endhour*60+endmin-starthour*60-startmin;
         }
 
         return false;
@@ -395,6 +414,7 @@ public class MakePlan extends Fragment {
     }
 
     private void openColorPicker(int what){
+
         final ColorPicker colorPicker = new ColorPicker((Activity) getContext());  // ColorPicker 객체 생성
         ArrayList<String> colors = new ArrayList<>();  // Color 넣어줄 list
 
@@ -427,13 +447,15 @@ public class MakePlan extends Fragment {
                         else {
                             addSchedule(memotext, detail, what);
                         }
+
                     }
 
                     @Override
                     public void onCancel() {
-                        // Cancel 버튼 클릭 시 이벤트
+
                     }
                 }).show();  // dialog 생성
+
     }
 
     public  void updateCalorie(double cal){
