@@ -194,9 +194,9 @@ public class ClockView extends View{
         float rotateAngle=0.0f;
         canvas.save();
 
-        if (startAngle >= 90 && startAngle <=180) {
+        if (startAngle >= 90 && startAngle <180) {
             rotateAngle = 180 + endAngle;
-        } else if (startAngle >= 180 && startAngle <= 270) {
+        } else if (startAngle >= 180 && startAngle < 270) {
             rotateAngle = endAngle- 180;
         } else rotateAngle = startAngle;
 
