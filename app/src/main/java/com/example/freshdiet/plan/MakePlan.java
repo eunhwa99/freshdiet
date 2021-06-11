@@ -146,6 +146,7 @@ public class MakePlan extends Fragment {
                 getTime();
                 if(time<30){
                     Toast.makeText(getContext(),"최소 30분 이상으로 설정해주세요.", Toast.LENGTH_SHORT).show();
+                    return;
                 }
                 if(timenotAlright()){
                     Toast.makeText(getContext(), "시작 시간과 끝 시간이 잘못되었습니다. 다시 설정해주세요.", Toast.LENGTH_SHORT).show();
