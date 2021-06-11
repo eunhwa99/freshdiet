@@ -211,17 +211,17 @@ public class ClockView extends View{
         float centerX=width/2, centerY=height/2;
         float sinO=(y-centerY)/dist;
         float ceta=((float) Math.toDegrees(Math.asin(sinO))+360.0f)%360.0f;
-
         if(x<centerX){
-           ceta=(540-ceta)%360.0f;
+            ceta=(540-ceta)%360.0f;
         }
 
-        if(checkArray(MakePlan.timeArray, ceta)) return;
+        if(checkArray(MakePlan.timeArray, ceta,x)) return;
 
-        checkArray(MakePlan.timeArray2, ceta);
+        checkArray(MakePlan.timeArray2, ceta,x);
     }
 
-    private boolean checkArray(ArrayList<String> curlist, float ceta){
+    private boolean checkArray(ArrayList<String> curlist, float ceta, float x){
+        float centerX=width/2, centerY=height/2;
         int length=curlist.size();
         for(int i=0;i<length;i++){
             String t=curlist.get(i);
@@ -245,7 +245,7 @@ public class ClockView extends View{
 
             startAngle=offset[curpos]+startmin*0.25f;
             angle=distance*0.25f;
-            endAngle=startAngle+angle;
+            endAngle=(startAngle+angle)%360;
 
             if(startAngle>endAngle){
                 if(ceta>=startAngle&&ceta<360 || ceta>=0&&ceta<=endAngle){
@@ -256,15 +256,16 @@ public class ClockView extends View{
                     return true;
                 }
             }
-            else{
-                if(ceta>=startAngle&&ceta<=endAngle){
-                    if(templength==7)
-                        makePopup(i,1);
-                    else if(templength==8)
-                        makePopup(i,2);
-                    return true;
+                else {
+                    if (ceta >= startAngle && ceta <= endAngle) {
+                        if (templength == 7)
+                            makePopup(i, 1);
+                        else if (templength == 8)
+                            makePopup(i, 2);
+                        return true;
+                    }
                 }
-            }
+
         }
         return false;
     }
