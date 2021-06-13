@@ -15,6 +15,10 @@ import com.example.freshdiet.R;
 
 import java.util.ArrayList;
 
+/**
+ * 음식 추가 이름 너무 길면 x 표 없어짐 (하프앤하프 피자)
+ */
+
 public class FoodPopup extends Activity {
    Button closebtn;
    Intent intent;
@@ -22,6 +26,7 @@ public class FoodPopup extends Activity {
    LinearLayoutManager mLayoutManager, mLayoutManager2;
    RecyclerView foodrv;
    ArrayList<FoodListItem> foodlist;
+   ArrayList<FoodInfo> foodinfolist;
 
 
     @Override
@@ -33,8 +38,6 @@ public class FoodPopup extends Activity {
         foodrv=findViewById(R.id.food_rv1);
         closebtn=findViewById(R.id.closebtn);
 
-
-
         dealIntent();
         initRecylerView();
 
@@ -43,6 +46,7 @@ public class FoodPopup extends Activity {
     public void dealIntent(){
         intent=getIntent();
         foodlist=FoodDetail.foodlist;
+        foodinfolist=FoodDetail.foodinfolist;
     }
 
 
@@ -53,6 +57,7 @@ public class FoodPopup extends Activity {
             public void onItemClick(View v, int pos) {
             //    FoodListItem data=mAdapter.getItem(pos);
                 foodlist.remove(pos);
+                foodinfolist.remove(pos);
                 mAdapter.notifyDataSetChanged();
 
             }

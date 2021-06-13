@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private Context context = this;
     public String username, userage, userheight, userweight, usermeta, usergender;
 
-    public static Fragment calendarf, makeplanf, profilef, challengef, foodmainf;
+    public static Fragment calendarf, profilef, challengef, foodmainf;
     Toolbar toolbar;
     static FragmentManager manager;
     private boolean isMembersVisible = false;
@@ -94,14 +94,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-
-        calendarf = new Calendar();
-
-        profilef = new ShowProfile();
-        makeplanf = new MakePlan();
-        challengef = new ChallengeMain();
-        foodmainf = new FoodMain();
         // fooddessertf=new FoodDessert();
+        calendarf=new Calendar();
 
         manager = getSupportFragmentManager();
 
@@ -174,17 +168,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             fragmentStack.pop();
 
         if(id == R.id.menu0){
+
+            profilef = new ShowProfile();
             onChangedFragment(0, null);
         }
         else if(id == R.id.menu1){
+            calendarf = new Calendar();
             onChangedFragment(1, null);
         }
 
         else if(id==R.id.menu3){
+            foodmainf = new FoodMain();
            onChangedFragment(2,null);
         }
 
         else if(id==R.id.menu4){
+            challengef = new ChallengeMain();
             onChangedFragment(4, null);
         }
 

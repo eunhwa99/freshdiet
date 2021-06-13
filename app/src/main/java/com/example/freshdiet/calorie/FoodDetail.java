@@ -64,7 +64,7 @@ public class FoodDetail extends AppCompatActivity{
     HashMap<String, MultiHash> toppingMap1=new HashMap<>();
     HashMap<String, MultiHash> toppingMap2=new HashMap<>();
 
-    ArrayList<FoodInfo> foodinfolist=new ArrayList<>();
+    public static ArrayList<FoodInfo> foodinfolist=new ArrayList<>();
 
     public static ArrayList<FoodListItem> foodlist=new ArrayList<>();
 
@@ -512,6 +512,13 @@ public class FoodDetail extends AppCompatActivity{
                 sv.fullScroll(ScrollView.FOCUS_DOWN);
             }
         });
+    }
+
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        foodinfolist.clear();
+        foodlist.clear();
     }
 
     /**

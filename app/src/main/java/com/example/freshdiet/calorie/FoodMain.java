@@ -80,6 +80,7 @@ public class FoodMain extends Fragment{
 
         return rootView;
     }
+
     private void getFoodList(){
 
         try {

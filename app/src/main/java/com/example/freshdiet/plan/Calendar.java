@@ -155,7 +155,7 @@ public class Calendar extends Fragment {
         eat_cal.setText(tmp2+"(kcal)");
 
         double tmp3=tmp2-tmp;
-        tmp3=doubleMath.calc(tmp3);
+        tmp3=Math.round(tmp3*100)/100.0;
         rest_cal.setText(tmp3+"(kcal)");
 
     }
